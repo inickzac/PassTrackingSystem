@@ -12,14 +12,17 @@ namespace PassTrackingSystem.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDBContext _dBContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDBContext dBContext)
         {
             _logger = logger;
+            _dBContext = dBContext;
         }
 
         public IActionResult Index()
         {
+            var tmp = _dBContext.Visitors;
             return View();
         }
 

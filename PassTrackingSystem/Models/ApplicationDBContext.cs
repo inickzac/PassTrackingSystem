@@ -9,6 +9,8 @@ namespace PassTrackingSystem.Models
     public class ApplicationDBContext: DbContext
     {
         public DbSet<Visitor> Visitors { get; set; }
+        public DbSet<DocumentType> DocumentTypes { get; set; }
+        public DbSet<IssuingAuthority> IssuingAuthorities { get; set; }
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
             : base(options)
         {
