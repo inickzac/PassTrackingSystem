@@ -21,5 +21,6 @@ namespace PassTrackingSystem.Models
         public IssuingAuthority IssuingAuthority { get; set; }
         [Required]
         public Visitor Visitor { get; set; }
+        public int VisitorId { get; set; }
     }
 }

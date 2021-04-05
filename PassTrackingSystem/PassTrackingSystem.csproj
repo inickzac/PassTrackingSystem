@@ -5,7 +5,33 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\RandomGenerator\Company.txt" />
+    <None Remove="Resource\RandomGenerator\LastNamesFemale.txt" />
+    <None Remove="Resource\RandomGenerator\LastNamesMale.txt" />
+    <None Remove="Resource\RandomGenerator\NamesFemale.txt" />
+    <None Remove="Resource\RandomGenerator\NamesMale.txt" />
+    <None Remove="Resource\RandomGenerator\PatronymicFemale.txt" />
+    <None Remove="Resource\RandomGenerator\PatronymicMale.txt" />
+    <None Remove="Resource\RandomGenerator\Positions.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\RandomGenerator\Company.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\LastNamesFemale.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\LastNamesMale.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\NamesFemale.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\NamesMale.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\PatronymicFemale.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\PatronymicMale.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\Positions.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
