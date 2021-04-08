@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PassTrackingSystem.Models;
+using PassTrackingSystem.Models.Repositoryes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,11 @@ namespace PassTrackingSystem
             services.AddDbContext<ApplicationDBContext>(options =>
                options.UseSqlServer(connection));
             services.AddControllersWithViews();
+            services.AddTransient<IGenericRepository<Visitor>, GenericRepository<Visitor>>();
+            services.AddTransient<IGenericRepository<Document>, GenericRepository<Document>>();
+            services.AddTransient<IGenericRepository<DocumentType>, GenericRepository<DocumentType>>();
+            services.AddTransient<IGenericRepository<IssuingAuthority>, GenericRepository<IssuingAuthority>>();
         }
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

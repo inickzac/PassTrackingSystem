@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PassTrackingSystem.Infrastructure;
 using PassTrackingSystem.Models;
 using System;
 using System.Collections.Generic;
@@ -23,8 +22,6 @@ namespace PassTrackingSystem.Controllers
 
         public IActionResult Index()
         {
-            var r = new RandomDataGenerator(_dBContext);
-            r.CreateVisitors(100);
             return View();
         }
 

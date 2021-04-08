@@ -59,21 +59,21 @@ namespace PassTrackingSystem.Infrastructure
                     PlaceOfWork = GetRandomStringFromCollections(placeOfWorks),
                     Position = GetRandomStringFromCollections(positions)
                 };
-                var Random = new Random().Next(1, 1000)%2;
-                if (Random == 0)
+                var Random = new Random().Next(1, 2);
+                if (Random == 1)
                 {
                     visitor.Name = GetRandomStringFromCollections(namesFemales);
                     visitor.LastName = GetRandomStringFromCollections(lastNamesFemales);
                     visitor.Patronymic = GetRandomStringFromCollections(patronymicFemales);
                 }
-                if (Random == 1)
+                if (Random == 2)
                 {
                     visitor.Name = GetRandomStringFromCollections(namesMales);
                     visitor.LastName = GetRandomStringFromCollections(lastNamesMales);
                     visitor.Patronymic = GetRandomStringFromCollections(patronymicMales);
                 }
                 _dBContext.Visitors.Add(visitor);
-            }                       
+            }
             _dBContext.SaveChanges();
 
         }
@@ -133,7 +133,6 @@ namespace PassTrackingSystem.Infrastructure
             CreateDocumentTypes();
             CreateIssuingAuthority();
         }
-
     }
 
 
