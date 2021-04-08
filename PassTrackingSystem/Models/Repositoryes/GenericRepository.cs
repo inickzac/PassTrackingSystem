@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PassTrackingSystem.Models.SeparatorOnThePage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +40,11 @@ namespace PassTrackingSystem.Models.Repositoryes
         {
             context.Update<T>(changedDataObject); 
             context.SaveChanges();
+        }
+
+        public PagesDividedList<T> GetPagesDividedList(PageDividorOptions options)
+        {
+            return new PagesDividedList<T>(context.Set<T>(), options);
         }
     }
 }
