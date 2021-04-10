@@ -14,6 +14,7 @@ namespace PassTrackingSystem.Models.SeparatorOnThePage
         public bool HasNextPage => CurrentPage < TotalPages;
         public PagesDividedList(IQueryable<T> query, PageDividorOptions options = null)
         {
+            if (options == null) options = new PageDividorOptions();
             CurrentPage = options.CurrentPage;
             PageSize = options.PageSize;
             TotalPages = query.Count() / PageSize;

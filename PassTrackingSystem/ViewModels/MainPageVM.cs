@@ -1,5 +1,6 @@
 ﻿using PassTrackingSystem.Models;
 using PassTrackingSystem.Models.Repositoryes;
+using PassTrackingSystem.Models.SeparatorOnThePage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,10 @@ namespace PassTrackingSystem.ViewModels
     public class MainPageVM
     {
         private IGenericRepository<Visitor> visitorRep;
-        public 
-        public MainPageVM(IGenericRepository<Visitor> visitorRep)
-        {
+        public MainPageVM(IGenericRepository<Visitor> visitorRep, PageDividorOptions options=null)
+        {            
             this.visitorRep = visitorRep;
-            Visitors = visitorRep.GetAll();
+            Visitors = new PagesDividedList<Visitor>(visitorRep.GetAll().OrderBy(v => v.Name),options);
         }  
       public  IEnumerable<Visitor> Visitors { get; set; }   
     }

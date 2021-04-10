@@ -41,10 +41,5 @@ namespace PassTrackingSystem.Models.Repositoryes
             context.Update<T>(changedDataObject); 
             context.SaveChanges();
         }
-
-        public PagesDividedList<T> GetPagesDividedList(PageDividorOptions options)
-        {
-            return new PagesDividedList<T>(context.Set<T>(), options);
-        }
     }
 }

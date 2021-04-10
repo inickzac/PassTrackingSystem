@@ -13,6 +13,5 @@ namespace PassTrackingSystem.Models.Repositoryes
         void Create(T newDataObject);
         void Update(T changedDataObject);
         void Delete(int id);
-        PagesDividedList<T> GetPagesDividedList(PageDividorOptions options);
     }
 }
