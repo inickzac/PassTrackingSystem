@@ -50,7 +50,6 @@ namespace PassTrackingSystem.Infrastructure
         }
         public void CreateVisitors(int quantity)
         {
-
             for (int i = 0; i < quantity; i++)
             {
                 Visitor visitor = new Visitor
