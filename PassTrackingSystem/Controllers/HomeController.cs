@@ -26,9 +26,11 @@ namespace PassTrackingSystem.Controllers
             _dBContext = dBContext;
         }
 
-        public IActionResult Index()
+      
+        
+        public IActionResult Index(CommonListQuery commonListQuery)
         {
-            return View(new MainPageVM(_visitorsRepository));
+            return View(new MainPageVM(_visitorsRepository,commonListQuery));
         }
 
         public IActionResult Privacy()

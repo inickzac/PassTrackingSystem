@@ -11,14 +11,15 @@ namespace PassTrackingSystem.ViewModels
 {
     public class MainPageVM
     {
-        private IGenericRepository<Visitor> visitorRep;
-        public MainPageVM(IGenericRepository<Visitor> visitorRep, PageDividorOptions options=null)
+        public CommonListQuery Options { get; set; }
+        public List<string> HeadNames = new List<string>();
+        public MainPageVM(IGenericRepository<Visitor> visitorRep, CommonListQuery options = null)
         {
-            if (options == null) options = new PageDividorOptions(nameof(Visitor.Id)) { IsOrderByDescending=true };
-            this.visitorRep = visitorRep;
+            if (options == null) options = new CommonListQuery();
             Visitors = new PagesDividedList<Visitor>(visitorRep.GetAll()
-                .OrderByMember(options.OrderPropertyName, options.IsOrderByDescending), options);
+                .OrderByMember("Id", false), options.CurrentPage, options.PageSize);
         }  
-      public  IEnumerable<Visitor> Visitors { get; set; }   
+       
+        public PagesDividedList<Visitor> Visitors { get; set; }   
     }
 }
