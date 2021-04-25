@@ -4,31 +4,37 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col" class="th-sm">id</th>
-                <th scope="col">Фамилия</th>
-                <th scope="col">Имя</th>             
-                <th scope="col">Отчество</th>
-                <th scope="col">Место работы</th>
-                <th scope="col">Должность</th>
-                <th scope="col">Действующие пропуска</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var visitor in Model.Visitors)
-            {
-            <tr>
-                <td>@visitor.Id</td>
-                <td>@visitor.LastName</td>
-                <td>@visitor.Name</td>               
-                <td>@visitor.Patronymic</td>
-                <td>@visitor.PlaceOfWork</td>
-                <td>@visitor.Position</td>
-            </tr>           
-            }
+<div >
+    <form asp-action="index" id="info-option-group" method="get">
+        @await Html.PartialAsync("UpperOptionMenu", @Model)
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="th-sm">id</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Место работы</th>
+                    <th scope="col">Должность</th>
+                    <th scope="col">Действующие пропуска</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var visitor in Model.Visitors.Items)
+                {
+                    <tr>
+                        <td>@visitor.Id</td>
+                        <td>@visitor.LastName</td>
+                        <td>@visitor.Name</td>
+                        <td>@visitor.Patronymic</td>
+                        <td>@visitor.PlaceOfWork</td>
+                        <td>@visitor.Position</td>
+                    </tr>
+
+                }
             </tbody>
         </table>
-    </div>
+        @await Html.PartialAsync("Pages", @Model.Visitors.PageDividorInfo)
+    </form>
+    
+</div>

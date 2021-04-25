@@ -8,7 +8,7 @@ namespace PassTrackingSystem.Extensions
 {
     public static partial class QueryableExtensions
     {
-        public static IOrderedQueryable<T> OrderByMember<T>(this IQueryable<T> source, string memberPath, bool descending)
+        public static IQueryable<T> OrderByMember<T>(this IQueryable<T> source, string memberPath, bool descending)
         {
             var parameter = Expression.Parameter(typeof(T), "item");
             var member = memberPath.Split('.')
@@ -18,7 +18,31 @@ namespace PassTrackingSystem.Extensions
                 typeof(Queryable), descending ? "OrderByDescending" : "OrderBy",
                 new[] { parameter.Type, member.Type },
                 source.Expression, Expression.Quote(keySelector));
-            return (IOrderedQueryable<T>)source.Provider.CreateQuery(methodCall);
+            return (IQueryable<T>)source.Provider.CreateQuery(methodCall);
+        }
+
+        public static IQueryable<T> SearchByMember<T>(this IQueryable<T> query, string propertyName,
+                 string searchTerm)
+        {
+            if (!string.IsNullOrEmpty(searchTerm) && !string.IsNullOrEmpty(propertyName))
+            {
+                var parameter = Expression.Parameter(typeof(T), "x");
+                var source = propertyName.Split('.').Aggregate((Expression)parameter,
+                    Expression.Property);
+                if (source.Type.Equals(typeof(string)))
+                {
+                    var body = Expression.Call(source, "Contains", Type.EmptyTypes,
+                           Expression.Constant(searchTerm, typeof(string)));
+                    return query.Where(Expression.Lambda<Func<T, bool>>(body, parameter));
+                }
+                if (source.Type.Equals(typeof(Int32)))
+                {
+                    var body = Expression.Equal(source, Expression.Constant(Int32.Parse(searchTerm)));
+                    return query.Where(Expression.Lambda<Func<T, bool>>(body, parameter));
+                }
+                throw new InvalidOperationException("type not supported");
+            }
+            else return query;
         }
     }
 }
