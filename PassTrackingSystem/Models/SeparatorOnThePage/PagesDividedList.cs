@@ -16,6 +16,10 @@ namespace PassTrackingSystem.Models.SeparatorOnThePage
             PageDividorInfo.CurrentPage = currentPage;
             PageDividorInfo.PageSize = pageSize;
             PageDividorInfo.TotalPages = query.Count() / PageDividorInfo.PageSize;
+            if (PageDividorInfo.TotalPages < currentPage && PageDividorInfo.TotalPages > 0) 
+            { 
+                PageDividorInfo.CurrentPage = PageDividorInfo.TotalPages; 
+            }
             Items.AddRange(query
                 .Skip((PageDividorInfo.CurrentPage - 1) * PageDividorInfo.PageSize)
                 .Take(PageDividorInfo.PageSize));

@@ -4,7 +4,9 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div>
+<div >
+    <form asp-action="index" id="info-option-group" method="get">
+        @await Html.PartialAsync("UpperOptionMenu", @Model)
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -33,4 +35,6 @@
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.Visitors.PageDividorInfo)
+    </form>
+    
 </div>

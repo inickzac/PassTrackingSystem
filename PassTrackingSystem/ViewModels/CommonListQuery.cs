@@ -9,5 +9,8 @@ namespace PassTrackingSystem.ViewModels
     {
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 20;
+        public string SearchСolumn { get; set; }
+        public string SearchValue { get; set; }
     }
+
 }
