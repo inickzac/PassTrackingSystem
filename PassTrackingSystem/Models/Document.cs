@@ -13,7 +13,7 @@ namespace PassTrackingSystem.Models
         public string Series { get; set; }
         [Required]
         public string Number { get; set; }
-        [Required]
+        [Required, DataType(DataType.Date)]
         public DateTime DateOfIssue { get; set; }
         [Required]
         public  DocumentType DocumentType { get; set; }

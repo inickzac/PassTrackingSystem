@@ -14,7 +14,6 @@ namespace PassTrackingSystem.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDBContext _dBContext;
         private readonly IGenericRepository<Visitor> _visitorsRepository;
 
         public HomeController(ILogger<HomeController> logger, 
@@ -23,7 +22,6 @@ namespace PassTrackingSystem.Controllers
         {
             _visitorsRepository = visitorsRepository;
             _logger = logger;
-            _dBContext = dBContext;
         }
 
       
