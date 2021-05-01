@@ -22,7 +22,7 @@ namespace PassTrackingSystem.ViewModels
             {
                 Visitors = new PagesDividedList<Visitor>(visitorRep.GetAll()
                     .SearchByMember(options.SearchСolumn, options.SearchValue)
-                       .OrderByMember("Id", false), options.CurrentPage, options.PageSize); 
+                       .OrderByMember("Id", true), options.CurrentPage, options.PageSize); 
             }
             
             HeadNames = new Dictionary<string, string> { { "id	", nameof(Visitor.Id) },

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PassTrackingSystem.Migrations
 {
-    public partial class InitialModel : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,8 +59,8 @@ namespace PassTrackingSystem.Migrations
                     Series = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DocumentTypeId = table.Column<int>(type: "int", nullable: true),
-                    IssuingAuthorityId = table.Column<int>(type: "int", nullable: true),
+                    DocumentTypeId = table.Column<int>(type: "int", nullable: false),
+                    IssuingAuthorityId = table.Column<int>(type: "int", nullable: false),
                     VisitorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -71,13 +71,13 @@ namespace PassTrackingSystem.Migrations
                         column: x => x.DocumentTypeId,
                         principalTable: "DocumentTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Documents_IssuingAuthorities_IssuingAuthorityId",
                         column: x => x.IssuingAuthorityId,
                         principalTable: "IssuingAuthorities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Documents_Visitors_VisitorId",
                         column: x => x.VisitorId,

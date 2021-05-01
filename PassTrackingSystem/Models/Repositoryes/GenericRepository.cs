@@ -14,9 +14,9 @@ namespace PassTrackingSystem.Models.Repositoryes
         {
             this.context = context;
         }
-        public virtual T Get(int id)
+        public virtual ValueTask<T> Get(int id)
         {
-            return context.Set<T>().Find(id);
+            return context.Set<T>().FindAsync(id);
         }
 
         public virtual IQueryable<T> GetAll()
@@ -24,22 +24,22 @@ namespace PassTrackingSystem.Models.Repositoryes
             return context.Set<T>();
         }
 
-        public virtual void Create(T newDataObject)
+        public virtual Task Create(T newDataObject)
         {
             context.Add(newDataObject);
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
 
-        public virtual void Delete(int id)
+        public virtual Task Delete(int id)
         {
             context.Remove(Get(id));
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
 
-        public virtual void Update(T changedDataObject)
+        public virtual Task Update(T changedDataObject)
         {
             context.Update<T>(changedDataObject); 
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
     }
 }

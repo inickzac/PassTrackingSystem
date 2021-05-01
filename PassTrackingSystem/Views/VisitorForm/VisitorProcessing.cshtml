@@ -1,0 +1,136 @@
+﻿@model VisitorFormVM
+<form method="post">
+    <div class="container-fluid">
+        <input type="hidden" asp-for="Visitor.Id" />
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="Visitor.Name" class="form-label">Имя</label>
+                <input asp-for="Visitor.Name" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="Visitor.LastName" class="form-label">Фамилия</label>
+                <input asp-for="Visitor.LastName" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="Visitor.LastName" class="form-label">Отчество</label>
+                <input asp-for="Visitor.Patronymic" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <label asp-for="Visitor.PlaceOfWork" class="form-label">Место работы</label>
+                <textarea asp-for="Visitor.PlaceOfWork" class="form-control optional-field" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <label asp-for="Visitor.Position" class="form-label">Должность</label>
+                <textarea asp-for="Visitor.Position" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 pt-4">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true"
+                                    aria-controls="collapseOne">
+                                Документ
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show"
+                             aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="background-color: rgb(253, 253, 253);">
+                            <div class="accordion-body">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                       <input type="hidden" asp-for="@Model.Visitor.Document.Id" value="@Model.Visitor?.Document?.Id" />
+                                        <div class="col-md-6">
+                                            <label asp-for="Visitor.Document.Series" class="form-label">Серия</label>
+                                            <input asp-for="Visitor.Document.Series" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="Visitor.Document.Number" class="form-label">Номер</label>
+                                            <input asp-for="Visitor.Document.Number" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label asp-for="Visitor.Document.DateOfIssue" class="form-label">Дата выдачи</label>
+                                            <input asp-for="Visitor.Document.DateOfIssue" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label asp-for="Visitor.Document.DocumentType.Value" class="form-label">
+                                                Тип документа
+                                            </label>
+                                            <div class="input-group">
+                                                <select class="form-select"
+                                                        aria-label="Example select with button addon" asp-for="Visitor.Document.DocumentTypeId">
+
+                                                    <option disabled="" selected value="">Выберите...</option>
+                                                    @foreach (var item in Model.DocumentTypes)
+                                                    {
+
+                                                        if (item.Id == Model?.Visitor?.Document?.DocumentTypeId)
+                                                        {
+                                                            <option selected value="@item.Id">@item.Value</option>
+                                                        }
+
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Value</option>
+                                                        }
+                                                    }
+
+                                                </select>
+                                                <a class='btn btn-outline-secondary' href='#'>
+                                                    <img src='/more-deteils.png'
+                                                         style="width: 21px;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="Visitor.Document.IssuingAuthority.Value" class="form-label">Орган выдавший документ</label>
+                                            <div class="input-group">
+                                                <select class="form-select"
+                                                        aria-label="Example select with button addon" asp-for="Visitor.Document.IssuingAuthorityId">
+                                                    <option disabled="" selected value="">Выберите...</option>
+                                                    @foreach (var item in Model.IssuingAuthorities)
+                                                    {
+                                                        if (item.Id == Model?.Visitor?.Document?.IssuingAuthorityId)
+                                                        {
+                                                            <option selected value="@item.Id">@item.Value</option>
+                                                        }
+
+                                                        else
+                                                        {
+                                                            <option value="@item.Id">@item.Value</option>
+                                                        }
+                                                    }
+                                                </select>
+                                                <a class='btn btn-outline-secondary' href='#'>
+                                                    <img src='/more-deteils.png'
+                                                         style="width: 21px;">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+    <div class="py-5">
+        <button type="submit" class="btn btn-success">Отправить</button>
+        <button type="reset" class="btn btn-danger">Очистить</button>
+    </div>
+</form>
