@@ -10,8 +10,8 @@ using PassTrackingSystem.Models;
 namespace PassTrackingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210405165603_InitialModel")]
-    partial class InitialModel
+    [Migration("20210501110022_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,10 +31,10 @@ namespace PassTrackingSystem.Migrations
                     b.Property<DateTime>("DateOfIssue")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DocumentTypeId")
+                    b.Property<int>("DocumentTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IssuingAuthorityId")
+                    b.Property<int>("IssuingAuthorityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Number")
@@ -126,11 +126,15 @@ namespace PassTrackingSystem.Migrations
                 {
                     b.HasOne("PassTrackingSystem.Models.DocumentType", "DocumentType")
                         .WithMany()
-                        .HasForeignKey("DocumentTypeId");
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PassTrackingSystem.Models.IssuingAuthority", "IssuingAuthority")
                         .WithMany()
-                        .HasForeignKey("IssuingAuthorityId");
+                        .HasForeignKey("IssuingAuthorityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
                         .WithOne("Document")

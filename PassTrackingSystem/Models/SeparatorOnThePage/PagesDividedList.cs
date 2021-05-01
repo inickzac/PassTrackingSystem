@@ -14,8 +14,8 @@ namespace PassTrackingSystem.Models.SeparatorOnThePage
         public PagesDividedList(IQueryable<T> query, int currentPage, int pageSize)
         {
             PageDividorInfo.CurrentPage = currentPage;
-            PageDividorInfo.PageSize = pageSize;
-            PageDividorInfo.TotalPages = query.Count() / PageDividorInfo.PageSize;
+            PageDividorInfo.PageSize = pageSize;             
+            PageDividorInfo.TotalPages = (int)Math.Ceiling((float)query.Count() / PageDividorInfo.PageSize);
             if (PageDividorInfo.TotalPages < currentPage && PageDividorInfo.TotalPages > 0) 
             { 
                 PageDividorInfo.CurrentPage = PageDividorInfo.TotalPages; 

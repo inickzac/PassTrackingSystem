@@ -17,8 +17,8 @@ namespace PassTrackingSystem.Controllers
         IGenericRepository<DocumentType> documentTypesRepository;
         IGenericRepository<IssuingAuthority> issuingAuthoritiesRepository;
 
-        public VisitorFormController(IGenericRepository<Visitor> visitorsRepository, 
-            IGenericRepository<DocumentType> documentTypesRepository, 
+        public VisitorFormController(IGenericRepository<Visitor> visitorsRepository,
+            IGenericRepository<DocumentType> documentTypesRepository,
             IGenericRepository<IssuingAuthority> issuingAuthoritiesRepository)
         {
             this.visitorsRepository = visitorsRepository;
@@ -26,18 +26,34 @@ namespace PassTrackingSystem.Controllers
             this.issuingAuthoritiesRepository = issuingAuthoritiesRepository;
         }
 
+        [HttpGet]
         public async Task<ViewResult> VisitorProcessing(int id)
         {
-            var visitor = visitorsRepository.GetAll()
-                  .Where(v => v.Id == id)
-                  .Include(v => v.Document)
-                  .ThenInclude(i=> i.IssuingAuthority)
-                  .Include(v=> v.Document.DocumentType)
-                  .First();
+            Visitor visitor;
+            if (id != 0)
+            {
+                visitor = visitorsRepository.GetAll()
+                       .Where(v => v.Id == id)
+                       .Include(v => v.Document)
+                       .ThenInclude(i => i.IssuingAuthority)
+                       .Include(v => v.Document.DocumentType)
+                       .First();
+            }
 
-            return  View (new VisitorFormVM { Visitor = visitor, 
+            else visitor = new Visitor();
+            return View(new VisitorFormVM
+            {
+                Visitor = visitor,
                 DocumentTypes = await documentTypesRepository.GetAll().ToListAsync(),
-                IssuingAuthorities = await issuingAuthoritiesRepository.GetAll().ToListAsync() });
+                IssuingAuthorities = await issuingAuthoritiesRepository.GetAll().ToListAsync()
+            });
+        }
+        [HttpPost]
+        public async Task<RedirectToActionResult> VisitorProcessing(Visitor visitor)
+        {
+            await visitorsRepository.Update(visitor);           
+            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
+
         }
     }
 }

@@ -16,8 +16,10 @@ namespace PassTrackingSystem.Models
         [Required, DataType(DataType.Date)]
         public DateTime DateOfIssue { get; set; }
         [Required]
+        public int DocumentTypeId { get; set; }
         public  DocumentType DocumentType { get; set; }
         [Required]
+        public int IssuingAuthorityId { get; set; }
         public IssuingAuthority IssuingAuthority { get; set; }
         [Required]
         public Visitor Visitor { get; set; }

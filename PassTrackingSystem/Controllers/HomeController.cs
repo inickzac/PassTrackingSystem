@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PassTrackingSystem.Infrastructure;
 using PassTrackingSystem.Models;
 using PassTrackingSystem.Models.Repositoryes;
 using PassTrackingSystem.ViewModels;
@@ -15,20 +16,22 @@ namespace PassTrackingSystem.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGenericRepository<Visitor> _visitorsRepository;
+        private readonly ApplicationDBContext dBContext;
 
         public HomeController(ILogger<HomeController> logger, 
             ApplicationDBContext dBContext, 
             IGenericRepository<Visitor> visitorsRepository)
         {
+            this.dBContext = dBContext;
             _visitorsRepository = visitorsRepository;
             _logger = logger;
         }
-
-      
-        
+     
         public IActionResult Index(CommonListQuery commonListQuery)
         {
+            //new RandomDataGenerator(dBContext).CreateVisitors(1000);
             return View(new MainPageVM(_visitorsRepository,commonListQuery));
+            
         }
 
         public IActionResult Privacy()

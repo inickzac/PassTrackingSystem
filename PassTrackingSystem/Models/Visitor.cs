@@ -17,7 +17,6 @@ namespace PassTrackingSystem.Models
         public string Patronymic { get; set; }
         public string PlaceOfWork { get; set; }
         public string Position { get; set; }
-        [Required]
         public Document Document { get; set; }
     }
 }

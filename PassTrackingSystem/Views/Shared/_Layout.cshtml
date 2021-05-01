@@ -37,7 +37,7 @@
 
             <div class="dropdown ms-3">
                 <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                    <span class="d-none d-lg-inline">Разовый пропуск</span> 
+                    <span class="d-none d-lg-inline">Разовый пропуск</span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
                     <li><a class="dropdown-item current" aria-current="true" href="https://getbootstrap.com/docs/5.0/">Разовый пропуск</a></li>
@@ -59,14 +59,21 @@
                 <ul class="list-unstyled mb-0 py-3 pt-md-1">
                     <li class="mb-1">
                         <button class="btn d-inline-flex align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#getting-started-collapse" aria-expanded="true" aria-current="true">
-                            Пропуска
+                            Посетитель
                         </button>
 
                         <div class="collapse show" id="getting-started-collapse">
                             <ul class="list-unstyled fw-normal pb-1 small">
-                                <li><a href="https://getbootstrap.com/docs/5.0/getting-started/introduction/" class="d-inline-flex align-items-center rounded">Разовый</a></li>
-                                <li><a href="https://getbootstrap.com/docs/5.0/getting-started/download/" class="d-inline-flex align-items-center rounded active" aria-current="page">Временный</a></li>
-                                <li><a href="https://getbootstrap.com/docs/5.0/getting-started/contents/" class="d-inline-flex align-items-center rounded">Транспортный</a></li>
+                                <li>
+                                    <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
+                                       asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
+                                       asp-route-id="0" class="d-inline-flex align-items-center rounded">Добавить новый</a>
+                                </li>
+                                <li>
+                                    <a asp-action="@nameof(PassTrackingSystem.Controllers.HomeController.Index)"
+                                       asp-controller="@nameof(PassTrackingSystem.Controllers.HomeController).Replace("Controller", "")"
+                                       class="d-inline-flex align-items-center rounded active" aria-current="page">Просмотреть всех</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -101,7 +108,6 @@
 
 
     <footer class="bd-footer p-3 p-md-5 mt-5 bg-light text-center text-sm-start">
-       
     </footer>
 </body>
 </html>
