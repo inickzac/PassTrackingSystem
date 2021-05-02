@@ -59,19 +59,19 @@ namespace PassTrackingSystem
             //        pattern: "{controller=Home}/{action=Index}/{id?}");
             //});
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
-            //});
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=OneItemData}/{action=ShowOneItemData}/{oneItemTypeName=DocumentType}");
+                    pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=OneItemData}/{action=ShowOneItemData}/{oneItemTypeName=DocumentType}");
+            //});
 
         }
     }

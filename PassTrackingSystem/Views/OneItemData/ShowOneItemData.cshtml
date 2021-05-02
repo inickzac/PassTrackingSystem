@@ -1,0 +1,308 @@
+﻿@model PassTrackingSystem.ViewModels.OneItemDataVM
+@{
+    Layout = "";
+}
+
+<div>
+    <form id="info-option-group" method="get" action="/">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-9 mb-3" style="padding-left: 0px;">
+                    <div class="input-group">
+                        <button class="btn btn-outline-secondary" type="submit" id="search-pagedevidlist">Поиск</button>
+                        <select class="form-select" id="inputGroupSelect01" name="SearchСolumn">
+                            <option value="Id">id&#x9;</option>
+                            <option value="LNP">&#x424;&#x418;&#x41E;</option>
+                            <option value="PlaceOfWork">&#x41C;&#x435;&#x441;&#x442;&#x43E; &#x440;&#x430;&#x431;&#x43E;&#x442;&#x44B;</option>
+                            <option value="Position">&#x414;&#x43E;&#x43B;&#x436;&#x43D;&#x43E;&#x441;&#x442;&#x44C;</option>
+                            <option value="">&#x414;&#x435;&#x439;&#x441;&#x442;&#x432;&#x443;&#x44E;&#x449;&#x438;&#x435; &#x43F;&#x440;&#x43E;&#x43F;&#x443;&#x441;&#x43A;&#x430;</option>
+                        </select>
+                        <input type="text" aria-label="Last name" class="form-control" name="SearchValue">
+                    </div>
+                </div>
+            </div>
+            <script>
+        $('#search-pagedevidlist').click(function (e) {
+            $('#current-Page')
+                .attr('value', '1');
+        })
+            </script>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="th-sm">id</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Место работы</th>
+                    <th scope="col">Должность</th>
+                    <th scope="col">Действующие пропуска</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2005</td>
+                    <td>&#x430;&#x43F;&#x430;</td>
+                    <td>&#x43A;&#x430;&#x430;</td>
+                    <td>&#x430;&#x43F;&#x438;&#x430;</td>
+                    <td>&#x43F;&#x430;&#x438;</td>
+                    <td>&#x430;&#x43F;&#x438;&#x430;&#x43F;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/2005">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>2004</td>
+                    <td>rfvr</td>
+                    <td>rr</td>
+                    <td>fvr</td>
+                    <td>1</td>
+                    <td>6788577777777777</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/2004">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>2000</td>
+                    <td>&#x41C;&#x430;&#x43C;&#x43E;&#x43D;&#x442;&#x43E;&#x432;&#x430;</td>
+                    <td>&#x422;&#x430;&#x43C;&#x430;&#x440;&#x430;</td>
+                    <td>&#x41C;&#x438;&#x445;&#x430;&#x439;&#x43B;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x410;&#x441;&#x442;&#x43E;&#x43D;</td>
+                    <td>&#x41A;&#x43E;&#x441;&#x43C;&#x43E;&#x43D;&#x430;&#x432;&#x442;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/2000">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1999</td>
+                    <td>&#x41F;&#x430;&#x43D;&#x43E;&#x432;&#x430;</td>
+                    <td>&#x41F;&#x43E;&#x43B;&#x438;&#x43D;&#x430;</td>
+                    <td>&#x414;&#x43C;&#x438;&#x442;&#x440;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x421;&#x442;&#x430;&#x43B;&#x435;&#x43F;&#x440;&#x43E;&#x43C;&#x44B;&#x448;&#x43B;&#x435;&#x43D;&#x43D;&#x430;&#x44F; &#x43A;&#x43E;&#x43C;&#x43F;&#x430;&#x43D;&#x438;&#x44F;</td>
+                    <td>&#x41E;&#x440;&#x43D;&#x438;&#x442;&#x43E;&#x43B;&#x43E;&#x433;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1999">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1998</td>
+                    <td>&#x41F;&#x435;&#x440;&#x435;&#x434;&#x440;&#x438;&#x439;</td>
+                    <td>&#x421;&#x43E;&#x444;&#x438;&#x44F;</td>
+                    <td>&#x415;&#x432;&#x433;&#x435;&#x43D;&#x44C;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x412;&#x43E;&#x441;&#x442;&#x43E;&#x43A;-&#x421;&#x435;&#x440;&#x432;&#x438;&#x441;</td>
+                    <td>&#x422;&#x43E;&#x440;&#x441;&#x435;&#x434;&#x43E;&#x440;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1998">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1997</td>
+                    <td>&#x421;&#x44B;&#x43F;&#x447;&#x435;&#x43D;&#x43A;&#x43E;</td>
+                    <td>&#x42D;&#x43B;&#x43B;&#x430;</td>
+                    <td>&#x410;&#x43D;&#x430;&#x442;&#x43E;&#x43B;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x41E;&#x431;&#x44A;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x43A;&#x43E;&#x43D;&#x434;&#x438;&#x442;&#x435;&#x440;&#x44B;</td>
+                    <td>&#x421;&#x435;&#x43C;&#x435;&#x439;&#x43D;&#x44B;&#x439; &#x432;&#x440;&#x430;&#x447;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1997">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1996</td>
+                    <td>&#x411;&#x44B;&#x43A;&#x43E;&#x432;&#x430;</td>
+                    <td>&#x428;&#x443;&#x448;&#x430;&#x43D;&#x430;</td>
+                    <td>&#x411;&#x43E;&#x433;&#x434;&#x430;&#x43D;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x424;&#x43E;&#x441;&#x430;&#x433;&#x440;&#x43E;</td>
+                    <td>&#x41E;&#x440;&#x43D;&#x438;&#x442;&#x43E;&#x43B;&#x43E;&#x433;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1996">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1995</td>
+                    <td>&#x421;&#x430;&#x43C;&#x441;&#x43E;&#x43D;&#x43E;&#x432;&#x430;</td>
+                    <td>&#x414;&#x43E;&#x43C;&#x438;&#x43D;&#x438;&#x43A;&#x430;</td>
+                    <td>&#x421;&#x435;&#x440;&#x433;&#x435;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x41C;&#x435;&#x442;&#x430;&#x43B;&#x43B;&#x441;&#x435;&#x440;&#x432;&#x438;&#x441;</td>
+                    <td>&#x421;&#x435;&#x440;&#x43F;&#x435;&#x43D;&#x442;&#x43E;&#x43B;&#x43E;&#x433;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1995">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1994</td>
+                    <td>&#x411;&#x440;&#x430;&#x433;&#x438;&#x43D;&#x430;</td>
+                    <td>&#x416;&#x430;&#x441;&#x43C;&#x438;&#x43D;</td>
+                    <td>&#x411;&#x43E;&#x440;&#x438;&#x441;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x410;&#x421;&#x422;</td>
+                    <td>&#x41A;&#x43B;&#x438;&#x43D;&#x435;&#x440;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1994">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1993</td>
+                    <td>&#x412;&#x430;&#x441;&#x438;&#x43B;&#x435;&#x43D;&#x43A;&#x43E;</td>
+                    <td>&#x416;&#x430;&#x441;&#x43C;&#x438;&#x43D;</td>
+                    <td>&#x412;&#x438;&#x442;&#x430;&#x43B;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x413;&#x440;&#x443;&#x43F;&#x43F;&#x430; &#x427;&#x422;&#x41F;&#x417;</td>
+                    <td>&#x421;&#x43D;&#x430;&#x439;&#x43F;&#x435;&#x440;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1993">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1992</td>
+                    <td>&#x429;&#x443;&#x43A;&#x438;&#x43D;&#x430;</td>
+                    <td>&#x42E;&#x43D;&#x430;</td>
+                    <td>&#x412;&#x438;&#x442;&#x430;&#x43B;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x417;&#x410;&#x41E; &#xAB;&#x413;&#x41A; &#x201E;&#x42D;&#x43B;&#x435;&#x43A;&#x442;&#x440;&#x43E;&#x449;&#x438;&#x442;&#x201C;&#xBB;</td>
+                    <td>&#x414;&#x438;&#x430;&#x43A;&#x43E;&#x43D;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1992">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1991</td>
+                    <td>&#x424;&#x451;&#x434;&#x43E;&#x440;&#x43E;&#x432;&#x430;</td>
+                    <td>&#x42F;&#x43D;&#x438;&#x43D;&#x430;</td>
+                    <td>&#x41F;&#x435;&#x442;&#x440;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x413;&#x440;&#x443;&#x43F;&#x43F;&#x430; &#x43A;&#x43E;&#x43C;&#x43F;&#x430;&#x43D;&#x438;&#x439; &quot;&#x422;&#x430;&#x434;&#x435;&#x43C;&quot;</td>
+                    <td>&#x411;&#x440;&#x43E;&#x43A;&#x435;&#x440;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1991">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1990</td>
+                    <td>&#x41C;&#x443;&#x445;&#x438;&#x43D;&#x430;</td>
+                    <td>&#x424;&#x435;&#x434;&#x43E;&#x441;&#x44C;&#x44F;</td>
+                    <td>&#x414;&#x43C;&#x438;&#x442;&#x440;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x413;&#x440;&#x443;&#x43F;&#x43F;&#x430; &#x43A;&#x43E;&#x43C;&#x43F;&#x430;&#x43D;&#x438;&#x439; &quot;&#x41C;&#x435;&#x440;&#x43A;&#x443;&#x440;&#x438;&#x439;&quot;</td>
+                    <td>&#x41F;&#x440;&#x43E;&#x434;&#x430;&#x432;&#x435;&#x446;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1990">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1989</td>
+                    <td>&#x427;&#x443;&#x445;&#x440;&#x430;&#x439;</td>
+                    <td>&#x416;&#x430;&#x43D;&#x43D;&#x430;</td>
+                    <td>&#x424;&#x451;&#x434;&#x43E;&#x440;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>Major</td>
+                    <td>&#x41F;&#x440;&#x435;&#x434;&#x43F;&#x440;&#x438;&#x43D;&#x438;&#x43C;&#x430;&#x442;&#x435;&#x43B;&#x44C;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1989">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1988</td>
+                    <td>&#x41F;&#x430;&#x432;&#x43B;&#x438;&#x432;</td>
+                    <td>&#x415;&#x43B;&#x438;&#x437;&#x430;&#x432;&#x435;&#x442;&#x430;</td>
+                    <td>&#x41C;&#x430;&#x43A;&#x441;&#x438;&#x43C;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x41C;&#x424;&#x421;-6</td>
+                    <td>&#x41B;&#x43E;&#x446;&#x43C;&#x430;&#x43D;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1988">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1987</td>
+                    <td>&#x422;&#x430;&#x440;&#x430;&#x43D;&#x435;&#x446;</td>
+                    <td>&#x416;&#x430;&#x43D;&#x43D;&#x430;</td>
+                    <td>&#x414;&#x43C;&#x438;&#x442;&#x440;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x420;&#x443;&#x441;&#x441;&#x43D;&#x435;&#x444;&#x442;&#x44C;</td>
+                    <td>&#x41E;&#x43F;&#x435;&#x440;&#x430;&#x442;&#x43E;&#x440; &#x41F;&#x41A;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1987">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1986</td>
+                    <td>&#x427;&#x443;&#x43C;&#x430;&#x43A;</td>
+                    <td>&#x427;&#x435;&#x441;&#x43B;&#x430;&#x432;&#x430;</td>
+                    <td>&#x41B;&#x435;&#x43E;&#x43D;&#x438;&#x434;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x41A;&#x430;&#x440;&#x443;&#x441;&#x435;&#x43B;&#x44C;</td>
+                    <td>&#x410;&#x440;&#x445;&#x438;&#x432;&#x430;&#x440;&#x438;&#x443;&#x441;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1986">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1985</td>
+                    <td>&#x421;&#x438;&#x43B;&#x438;&#x43D;&#x430;</td>
+                    <td>&#x41E;&#x43A;&#x441;&#x430;&#x43D;&#x430;</td>
+                    <td>&#x421;&#x435;&#x440;&#x433;&#x435;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x424;&#x43E;&#x441;&#x430;&#x433;&#x440;&#x43E;</td>
+                    <td>&#x424;&#x43E;&#x442;&#x43E;&#x43C;&#x43E;&#x434;&#x435;&#x43B;&#x44C;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1985">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1984</td>
+                    <td>&#x422;&#x43E;&#x43B;&#x43E;&#x447;&#x43A;&#x43E;</td>
+                    <td>&#x41D;&#x430;&#x442;&#x430;&#x43B;&#x44C;&#x44F;</td>
+                    <td>&#x410;&#x43D;&#x430;&#x442;&#x43E;&#x43B;&#x438;&#x435;&#x432;&#x43D;&#x430;</td>
+                    <td>&#x410;&#x43B;&#x43F;&#x438;</td>
+                    <td>&#x421;&#x442;&#x43E;&#x43B;&#x44F;&#x440;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1984">Подробнее</a></td>
+                </tr>
+                <tr>
+                    <td>1983</td>
+                    <td>&#x428;&#x430;&#x440;&#x43E;&#x432;&#x430;</td>
+                    <td>&#x419;&#x43E;&#x441;&#x438;&#x444;&#x430;</td>
+                    <td>&#x41C;&#x438;&#x445;&#x430;&#x439;&#x43B;&#x43E;&#x432;&#x43D;&#x430;</td>
+                    <td>Major</td>
+                    <td>&#x42D;&#x43A;&#x441;&#x43F;&#x435;&#x434;&#x438;&#x442;&#x43E;&#x440; &#x43D;&#x430; &#x434;&#x430;&#x43B;&#x44C;&#x43D;&#x438;&#x445; &#x43F;&#x43E;&#x435;&#x437;&#x434;&#x43A;&#x430;&#x445;</td>
+                    <td>-</td>
+                    <td><a class="btn btn-outline-dark" href="/VisitorForm/VisitorProcessing/1983">Подробнее</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="container-fluid pading-left-z" id="PageGroup" style="padding-left: 0px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-5" style="padding-left: 0px;">
+                        <div class="input-group mb-3 " id="count-page-form">
+                            <input type="text" name="CurrentPage" class="form-control " placeholder="№" min="1" max="101" value="1" id="current-Page">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Перейти на страницу</button>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="input-group">
+                            <select class="form-select" id="inputGroupSelect04" name="PageSize" aria-label="Example select with button addon" style="box-sizing:unset;">
+                                <option selected value="20">20</option>
+                                <option value="40">40</option>
+                                <option value="80">80</option>
+                                <option value="160">160</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="submit" id="change-quantity-elem">сменить кол-во элементов</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button name="CurrentPage" class="btn btn-dark  change-page-button"
+                    value="1">
+                1
+            </button>
+            <button name="CurrentPage" class="btn btn-secondary  change-page-button"
+                    value="2">
+                2
+            </button>
+            <button name="CurrentPage" class="btn btn-secondary  change-page-button"
+                    value="3">
+                3
+            </button>
+            <button name="CurrentPage" class="btn btn-secondary  change-page-button"
+                    value="4">
+                4
+            </button>
+            <span>....</span>
+            <button name="CurrentPage" class="btn btn-secondary  change-page-button"
+                    value="101">
+                101
+            </button>
+            <button name="CurrentPage" class="btn btn-secondary  change-page-button" value="2">След</button>
+            <script>
+        $('.change-page-button').click(function (e) {
+            $('#current-Page')
+                .attr('value', $(this)
+                    .attr('value'));
+            $('#button-addon2')
+                .trigger('click');
+            e.preventDefault()
+        })
+            </script>
+        </div>
+
+
+
+    </form>
+
+</div>

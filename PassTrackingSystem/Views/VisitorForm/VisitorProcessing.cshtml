@@ -1,4 +1,15 @@
 ﻿@model VisitorFormVM
+<script>
+    $('document').ready(function () {
+        $('.one-item-data-request').click(function (e) {
+               $("#modal-body").load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItemData),
+                         oneItemTypeName = "DocumentType"
+                     })')
+        })
+
+    })
+</script>
 <form method="post">
     <div class="container-fluid">
         <input type="hidden" asp-for="Visitor.Id" />
@@ -48,7 +59,7 @@
                             <div class="accordion-body">
                                 <div class="container-fluid">
                                     <div class="row">
-                                       <input type="hidden" asp-for="@Model.Visitor.Document.Id" value="@Model.Visitor?.Document?.Id" />
+                                        <input type="hidden" asp-for="@Model.Visitor.Document.Id" value="@Model.Visitor?.Document?.Id" />
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.Series" class="form-label">Серия</label>
                                             <input asp-for="Visitor.Document.Series" class="form-control">
@@ -89,10 +100,10 @@
                                                     }
 
                                                 </select>
-                                                <a class='btn btn-outline-secondary' href='#'>
+                                                <button class='btn btn-outline-secondary one-item-data-request' data-bs-target="#exampleModal" data-bs-toggle="modal" type="button">
                                                     <img src='/more-deteils.png'
                                                          style="width: 21px;">
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -127,10 +138,37 @@
                     </div>
                 </div>
             </div>
-        </div>      
+        </div>
     </div>
     <div class="py-5">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
     </div>
 </form>
+<div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <select class="form-select" id="inputGroupSelect04"
+                        aria-label="Example select with button addon">
+                    <option selected>Choose...</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+    <script>
+   
+       
+</script>
+</div>
