@@ -2,14 +2,17 @@
 <script>
     $('document').ready(function () {
         $('.one-item-data-request').click(function (e) {
-            $("#modal-body")
-                .load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
-                         action = nameof(OneItemDataController.ShowOneItemData)
-                     })', { oneItemTypeName: $(this).attr('extend-button-purpose') })
+            updateModalWindow({ oneItemTypeName: $(this).attr('extend-button-purpose')}, 'gggg')
         })
         updateComboBoxes();
     }
     )
+    function updateModalWindow(options, headText) { $("#modal-body")
+        .load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItemData)
+                     })', options)          
+    }
+
     function updateComboBoxes() {
      $('.combobox-ontime-loader').not('.loaded').each(function () {
          let purposeItem = { oneItemName: $(this).next('button').attr('extend-button-purpose'), selectedId: $(this).attr('selected-value') }

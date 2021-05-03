@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.ViewModels
 {
-    interface ITableWithOptionsVM
+    public interface ITableWithOptionsVM
     {
+        Dictionary<string, string> HeadNames { get; set; }
+        CommonListQuery Options { get; set; }
     }
 }

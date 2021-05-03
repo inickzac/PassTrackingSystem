@@ -15,26 +15,25 @@ namespace PassTrackingSystem.Controllers
 {
     public class OneItemDataController : Controller
     {
-        private readonly IGenericRepository<DocumentType> documentTypeRepository;
-        private readonly IGenericRepository<IssuingAuthority> issuingAuthorityRepository;
         private readonly Dictionary<string, IoneValueActions> nameAndActionPairs;
 
         public OneItemDataController(IGenericRepository<DocumentType> documentTypeRepository, 
             IGenericRepository<IssuingAuthority> issuingAuthorityRepository)
         {
-            this.documentTypeRepository = documentTypeRepository;
             var documentTypeOption = new IoneValueActions
             {
                 GetAll = documentTypeRepository.GetAll().Select(v => v as IOneValueCommon),
                 AddValue = (oneValueObject) => documentTypeRepository.Update(oneValueObject as DocumentType),
-                DeleteValue = (oneValueObject) => documentTypeRepository.Delete(oneValueObject.Id)
+                DeleteValue = (oneValueObject) => documentTypeRepository.Delete(oneValueObject.Id),
+                OneValueName ="Тип документа"
             };
 
             var issuingAuthoritiesOption = new IoneValueActions
             {
                 GetAll = issuingAuthorityRepository.GetAll().Select(v => v as IOneValueCommon),
                 AddValue = (oneValueObject) => issuingAuthorityRepository.Update(oneValueObject as IssuingAuthority),
-                DeleteValue = (oneValueObject) => issuingAuthorityRepository.Delete(oneValueObject.Id)
+                DeleteValue = (oneValueObject) => issuingAuthorityRepository.Delete(oneValueObject.Id),
+                OneValueName ="Орган выдавший документ"
             };
 
             nameAndActionPairs = new Dictionary<string, IoneValueActions>
@@ -49,8 +48,9 @@ namespace PassTrackingSystem.Controllers
             if (nameAndActionPairs.ContainsKey(oneItemTypeName))
             {
                 var query = nameAndActionPairs[oneItemTypeName].GetAll;
-                var dividedListAsync = Task.Run(() => new PagesDividedList<IOneValueCommon>(query, options.CurrentPage, options.PageSize));
-                return View(new OneItemDataVM { OneValues = await dividedListAsync, Options = options });
+                var dividedList  = await Task.Run(() => new PagesDividedList<IOneValueCommon>(query, options.CurrentPage, options.PageSize));
+                return View(new OneItemDataVM { OneValues =  dividedList, Options = options, 
+                    ExtendMenuHeader= nameAndActionPairs[oneItemTypeName].OneValueName });
             }
             return BadRequest();
         }
@@ -60,7 +60,8 @@ namespace PassTrackingSystem.Controllers
             if (nameAndActionPairs.ContainsKey(oneItemName))
             {
                 var items = nameAndActionPairs[oneItemName].GetAll.ToListAsync();
-                return View("_OneItemComboBoxInner", new OneItemComboBoxVMInner { OptionsList = await items, SelectedId= selectedId });
+                return View("_OneItemComboBoxInner", 
+                    new OneItemComboBoxVMInner { OptionsList = await items, SelectedId= selectedId});
             }
             return BadRequest();
         }
@@ -70,6 +71,7 @@ namespace PassTrackingSystem.Controllers
             public IQueryable<IOneValueCommon> GetAll { get; set; }
             public Action<IOneValueCommon> AddValue { get; set; }
             public Action<IOneValueCommon> DeleteValue { get; set; }
+            public string OneValueName { get; set; }
         }
 
     }

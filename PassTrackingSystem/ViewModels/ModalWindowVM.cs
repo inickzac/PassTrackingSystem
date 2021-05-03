@@ -7,7 +7,6 @@ namespace PassTrackingSystem.ViewModels
 {
     public class ModalWindowVM
     {
-      
 
     }
 }

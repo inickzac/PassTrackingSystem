@@ -3,31 +3,26 @@
     Layout = "";
 }
 
-<form asp-action="index" id="info-option-group" method="get">
+<form asp-controller="@nameof(OneItemDataController).Replace("Controller", "")" 
+      asp-action="@nameof(OneItemDataController.ShowOneItemComboBox)"
+      id="info-option-group" method="get">
     @await Html.PartialAsync("UpperOptionMenu", @Model)
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col" class="th-sm">id</th>
                 <th scope="col">Фамилия</th>
-
             </tr>
         </thead>
         <tbody>
-            @foreach (var visitor in Model.Visitors.Items)
+            @foreach (var item in Model.OneValues.Items)
             {
                 <tr>
-                    <td>@visitor.Id</td>
-                    <td>@visitor.LastName</td>
-                    <td>@visitor.Name</td>
-                    <td>@visitor.Patronymic</td>
-                    <td>@visitor.PlaceOfWork</td>
-                    <td>@visitor.Position</td>
-                    <td>-</td>
+                    <td>@item.Id</td>
+                    <td>@item.Value</td>                 
                     <td>
                         <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
                            asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                           asp-route-id="@visitor.Id"
                            class="btn btn-outline-dark">Подробнее</a>
                     </td>
                 </tr>
@@ -35,5 +30,10 @@
             }
         </tbody>
     </table>
-    @await Html.PartialAsync("Pages", @Model.Visitors.PageDividorInfo)
+    @await Html.PartialAsync("Pages", @Model.OneValues.PageDividorInfo)
 </form>
+<script>
+    $('document').ready(function () {
+        $('#ModalLabel').text('@Html.Raw(Model.ExtendMenuHeader)')
+    })
+</script>
