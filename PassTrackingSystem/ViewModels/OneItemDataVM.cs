@@ -9,7 +9,7 @@ namespace PassTrackingSystem.ViewModels
 {
     public class OneItemDataVM
     {
-        public PagesDividedList<IOneValueCommon> oneValues { get; set; }
+        public PagesDividedList<IOneValueCommon> OneValues { get; set; }
         public CommonListQuery Options { get; set; }
     }
 }

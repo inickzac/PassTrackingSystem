@@ -2,13 +2,24 @@
 <script>
     $('document').ready(function () {
         $('.one-item-data-request').click(function (e) {
-               $("#modal-body").load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
-                         action = nameof(OneItemDataController.ShowOneItemData),
-                         oneItemTypeName = "DocumentType"
-                     })')
+            $("#modal-body")
+                .load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItemData)
+                     })', { oneItemTypeName: $(this).attr('extend-button-purpose') })
         })
-
-    })
+        updateComboBoxes();
+    }
+    )
+    function updateComboBoxes() {
+     $('.combobox-ontime-loader').not('.loaded').each(function () {
+         let purposeItem = { oneItemName: $(this).next('button').attr('extend-button-purpose'), selectedId: $(this).attr('selected-value') }
+         let elem =this
+         $(this).load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItemComboBox)
+                     })', purposeItem, function () { $(elem).addClass('loaded')
+         })
+        })
+    }
 </script>
 <form method="post">
     <div class="container-fluid">
@@ -80,56 +91,19 @@
                                             <label asp-for="Visitor.Document.DocumentType.Value" class="form-label">
                                                 Тип документа
                                             </label>
-                                            <div class="input-group">
-                                                <select class="form-select"
-                                                        aria-label="Example select with button addon" asp-for="Visitor.Document.DocumentTypeId">
-
-                                                    <option disabled="" selected value="">Выберите...</option>
-                                                    @foreach (var item in Model.DocumentTypes)
-                                                    {
-
-                                                        if (item.Id == Model?.Visitor?.Document?.DocumentTypeId)
-                                                        {
-                                                            <option selected value="@item.Id">@item.Value</option>
-                                                        }
-
-                                                        else
-                                                        {
-                                                            <option value="@item.Id">@item.Value</option>
-                                                        }
-                                                    }
-
-                                                </select>
-                                                <button class='btn btn-outline-secondary one-item-data-request' data-bs-target="#exampleModal" data-bs-toggle="modal" type="button">
-                                                    <img src='/more-deteils.png'
-                                                         style="width: 21px;">
-                                                </button>
-                                            </div>
+                                            @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
+                                            {
+                                                ExtendButtonPurpose = "DocumentType",
+                                                SelecterId = Model?.Visitor?.Document?.DocumentTypeId.ToString()
+                                            })
                                         </div>
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.IssuingAuthority.Value" class="form-label">Орган выдавший документ</label>
-                                            <div class="input-group">
-                                                <select class="form-select"
-                                                        aria-label="Example select with button addon" asp-for="Visitor.Document.IssuingAuthorityId">
-                                                    <option disabled="" selected value="">Выберите...</option>
-                                                    @foreach (var item in Model.IssuingAuthorities)
-                                                    {
-                                                        if (item.Id == Model?.Visitor?.Document?.IssuingAuthorityId)
-                                                        {
-                                                            <option selected value="@item.Id">@item.Value</option>
-                                                        }
-
-                                                        else
-                                                        {
-                                                            <option value="@item.Id">@item.Value</option>
-                                                        }
-                                                    }
-                                                </select>
-                                                <a class='btn btn-outline-secondary' href='#'>
-                                                    <img src='/more-deteils.png'
-                                                         style="width: 21px;">
-                                                </a>
-                                            </div>
+                                            @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
+                                           {
+                                               ExtendButtonPurpose = "IssuingAuthority",
+                                               SelecterId = Model?.Visitor?.Document?.IssuingAuthorityId.ToString()
+                                           })
                                         </div>
                                     </div>
                                 </div>
@@ -145,30 +119,5 @@
         <button type="reset" class="btn btn-danger">Очистить</button>
     </div>
 </form>
-<div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modal-body">
-                <select class="form-select" id="inputGroupSelect04"
-                        aria-label="Example select with button addon">
-                    <option selected>Choose...</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
-            </div>
-        </div>
-    </div>
-    <script>
-   
-       
-</script>
-</div>
+@await Html.PartialAsync("_ModalWindow", new ModalWindowVM())
+

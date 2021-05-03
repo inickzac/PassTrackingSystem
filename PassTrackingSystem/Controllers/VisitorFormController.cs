@@ -32,20 +32,18 @@ namespace PassTrackingSystem.Controllers
             Visitor visitor;
             if (id != 0)
             {
-                visitor = visitorsRepository.GetAll()
+                visitor = await visitorsRepository.GetAll()
                        .Where(v => v.Id == id)
                        .Include(v => v.Document)
                        .ThenInclude(i => i.IssuingAuthority)
                        .Include(v => v.Document.DocumentType)
-                       .First();
+                       .FirstAsync();
             }
 
             else visitor = new Visitor();
             return View(new VisitorFormVM
             {
                 Visitor = visitor,
-                DocumentTypes = await documentTypesRepository.GetAll().ToListAsync(),
-                IssuingAuthorities = await issuingAuthoritiesRepository.GetAll().ToListAsync()
             });
         }
         [HttpPost]
