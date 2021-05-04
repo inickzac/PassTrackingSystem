@@ -3,7 +3,7 @@
 }
 @model OneItemComboBoxVMExternal
 <div class="input-group">
-    <select class="form-select combobox-ontime-loader" selected-value="@Model.SelecterId"
+    <select class="form-select combobox-ontime-loader" selected-value="@Model.SelectedId" id="@Model.SelecterId"
             aria-label="Example select with button addon" asp-for=AspForValue>
     </select>
     <button class='btn btn-outline-secondary one-item-data-request'

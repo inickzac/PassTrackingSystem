@@ -2,12 +2,12 @@
 <script>
     $('document').ready(function () {
         $('.one-item-data-request').click(function (e) {
-            updateModalWindow({ oneItemTypeName: $(this).attr('extend-button-purpose')}, 'gggg')
+            updateModalWindow({ oneItemTypeName: $(this).attr('extend-button-purpose') })
         })
         updateComboBoxes();
     }
     )
-    function updateModalWindow(options, headText) { $("#modal-body")
+    function updateModalWindow(options, calledFieldName) { $("#modal-body")
         .load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
                          action = nameof(OneItemDataController.ShowOneItemData)
                      })', options)          
@@ -95,18 +95,18 @@
                                                 Тип документа
                                             </label>
                                             @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
-                                            {
-                                                ExtendButtonPurpose = "DocumentType",
-                                                SelecterId = Model?.Visitor?.Document?.DocumentTypeId.ToString()
-                                            })
+                                       {
+                                           ExtendButtonPurpose = "DocumentType",
+                                           SelectedId = Model?.Visitor?.Document?.DocumentTypeId.ToString()
+                                       })
                                         </div>
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.IssuingAuthority.Value" class="form-label">Орган выдавший документ</label>
                                             @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
-                                           {
-                                               ExtendButtonPurpose = "IssuingAuthority",
-                                               SelecterId = Model?.Visitor?.Document?.IssuingAuthorityId.ToString()
-                                           })
+                                       {
+                                           ExtendButtonPurpose = "IssuingAuthority",
+                                           SelectedId = Model?.Visitor?.Document?.IssuingAuthorityId.ToString()
+                                       })
                                         </div>
                                     </div>
                                 </div>
