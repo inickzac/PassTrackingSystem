@@ -7,8 +7,10 @@ namespace PassTrackingSystem.ViewModels.OneItemComboBoxVM
 {
     public class OneItemComboBoxVMExternal
     {
-       public string SelecterId { get; set; }
+       public string SelectedId { get; set; }
        public string ExtendButtonPurpose { get; set; }
        public string AspForValue { get; set; }
+       public string SelecterId { get; set; }
+
     }
 }
