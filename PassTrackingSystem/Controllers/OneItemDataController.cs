@@ -55,15 +55,13 @@ namespace PassTrackingSystem.Controllers
             return BadRequest();
         }
 
-        public async Task<IActionResult> ShowOneItemComboBox(string oneItemName, int selectedId)
+        public async Task<JsonResult> ShowOneItems(string oneItemName)
         {
             if (nameAndActionPairs.ContainsKey(oneItemName))
             {
-                var items = nameAndActionPairs[oneItemName].GetAll.ToListAsync();
-                return View("_OneItemComboBoxInner", 
-                    new OneItemComboBoxVMInner { OptionsList = await items, SelectedId= selectedId});
+              return new JsonResult(await nameAndActionPairs[oneItemName].GetAll.ToListAsync());
             }
-            return BadRequest();
+            return new JsonResult(new {BadRequest = "BadRequest" });
         }
 
         private class IoneValueActions

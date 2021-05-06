@@ -1,29 +1,5 @@
 ﻿@model VisitorFormVM
-<script>
-    $('document').ready(function () {
-        $('.one-item-data-request').click(function (e) {
-            updateModalWindow({ oneItemTypeName: $(this).attr('extend-button-purpose') })
-        })
-        updateComboBoxes();
-    }
-    )
-    function updateModalWindow(options, calledFieldName) { $("#modal-body")
-        .load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
-                         action = nameof(OneItemDataController.ShowOneItemData)
-                     })', options)          
-    }
 
-    function updateComboBoxes() {
-     $('.combobox-ontime-loader').not('.loaded').each(function () {
-         let purposeItem = { oneItemName: $(this).next('button').attr('extend-button-purpose'), selectedId: $(this).attr('selected-value') }
-         let elem =this
-         $(this).load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
-                         action = nameof(OneItemDataController.ShowOneItemComboBox)
-                     })', purposeItem, function () { $(elem).addClass('loaded')
-         })
-        })
-    }
-</script>
 <form method="post">
     <div class="container-fluid">
         <input type="hidden" asp-for="Visitor.Id" />

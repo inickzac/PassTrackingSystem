@@ -16,3 +16,45 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('document').ready(function () {
+        $('.one-item-data-request').click(function (e) {
+            updateModalWindow({ oneItemTypeName: $(this).attr('extend-button-purpose') })
+        })
+        updateComboBoxes()
+    }
+    )
+    function updateModalWindow(options, calledFieldName) { $("#modal-body")
+        .load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItemData)
+                     })', options)
+    }
+
+    function updateComboBoxes() {
+        $('.combobox-ontime-loader').each(function () {
+            let purposeItem = { oneItemName: $(this).next('button').attr('extend-button-purpose'), selectedId: $(this).attr('selected-value') }
+            $(this).not('.loaded').each(function () {
+                let elem = this
+                let selectedId= $(this).attr('selected-value')
+                $.getJSON('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItems)
+                     })', purposeItem, function (data) {
+                    $(elem).addClass('loaded');
+                    $(elem).addClass('updated');
+                    $('<option disabled="" selected value="">Выберите...</option>').appendTo(elem)
+                    $.each(data, function (key, val) {
+                        $('<option></option>').attr('value', val.id).appendTo(elem).text(val.value)
+                    })
+                    $(elem).find("option[value='" + selectedId + "']").attr('selected', '')
+                })
+            })
+            $(this).not('.updated').each(function () {
+                selectedId= $(this).attr('selected-value')
+                let elem = this
+                $(elem).find("option[value='" + selectedId + "']").attr('selected', '')
+                $(elem).addClass('updated');
+            })
+        })
+    }
+</script>
