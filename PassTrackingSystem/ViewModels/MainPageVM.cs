@@ -9,7 +9,7 @@ using PassTrackingSystem.Extensions;
 
 namespace PassTrackingSystem.ViewModels
 {
-    public class MainPageVM
+    public class MainPageVM : ITableWithOptionsVM
     {
         public CommonListQuery Options { get; set; }
         public Dictionary<string, string> HeadNames { get; set; }

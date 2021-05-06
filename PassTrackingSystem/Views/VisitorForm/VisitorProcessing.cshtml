@@ -1,4 +1,5 @@
 ﻿@model VisitorFormVM
+
 <form method="post">
     <div class="container-fluid">
         <input type="hidden" asp-for="Visitor.Id" />
@@ -48,7 +49,7 @@
                             <div class="accordion-body">
                                 <div class="container-fluid">
                                     <div class="row">
-                                       <input type="hidden" asp-for="@Model.Visitor.Document.Id" value="@Model.Visitor?.Document?.Id" />
+                                        <input type="hidden" asp-for="@Model.Visitor.Document.Id" value="@Model.Visitor?.Document?.Id" />
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.Series" class="form-label">Серия</label>
                                             <input asp-for="Visitor.Document.Series" class="form-control">
@@ -69,56 +70,19 @@
                                             <label asp-for="Visitor.Document.DocumentType.Value" class="form-label">
                                                 Тип документа
                                             </label>
-                                            <div class="input-group">
-                                                <select class="form-select"
-                                                        aria-label="Example select with button addon" asp-for="Visitor.Document.DocumentTypeId">
-
-                                                    <option disabled="" selected value="">Выберите...</option>
-                                                    @foreach (var item in Model.DocumentTypes)
-                                                    {
-
-                                                        if (item.Id == Model?.Visitor?.Document?.DocumentTypeId)
-                                                        {
-                                                            <option selected value="@item.Id">@item.Value</option>
-                                                        }
-
-                                                        else
-                                                        {
-                                                            <option value="@item.Id">@item.Value</option>
-                                                        }
-                                                    }
-
-                                                </select>
-                                                <a class='btn btn-outline-secondary' href='#'>
-                                                    <img src='/more-deteils.png'
-                                                         style="width: 21px;">
-                                                </a>
-                                            </div>
+                                            @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
+                                       {
+                                           ExtendButtonPurpose = "DocumentType",
+                                           SelectedId = Model?.Visitor?.Document?.DocumentTypeId.ToString()
+                                       })
                                         </div>
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.IssuingAuthority.Value" class="form-label">Орган выдавший документ</label>
-                                            <div class="input-group">
-                                                <select class="form-select"
-                                                        aria-label="Example select with button addon" asp-for="Visitor.Document.IssuingAuthorityId">
-                                                    <option disabled="" selected value="">Выберите...</option>
-                                                    @foreach (var item in Model.IssuingAuthorities)
-                                                    {
-                                                        if (item.Id == Model?.Visitor?.Document?.IssuingAuthorityId)
-                                                        {
-                                                            <option selected value="@item.Id">@item.Value</option>
-                                                        }
-
-                                                        else
-                                                        {
-                                                            <option value="@item.Id">@item.Value</option>
-                                                        }
-                                                    }
-                                                </select>
-                                                <a class='btn btn-outline-secondary' href='#'>
-                                                    <img src='/more-deteils.png'
-                                                         style="width: 21px;">
-                                                </a>
-                                            </div>
+                                            @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
+                                       {
+                                           ExtendButtonPurpose = "IssuingAuthority",
+                                           SelectedId = Model?.Visitor?.Document?.IssuingAuthorityId.ToString()
+                                       })
                                         </div>
                                     </div>
                                 </div>
@@ -127,10 +91,12 @@
                     </div>
                 </div>
             </div>
-        </div>      
+        </div>
     </div>
     <div class="py-5">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
     </div>
 </form>
+@await Html.PartialAsync("_ModalWindow", new ModalWindowVM())
+

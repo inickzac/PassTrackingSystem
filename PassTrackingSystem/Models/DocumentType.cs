@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Models
 {
-    public class DocumentType
+    public class DocumentType : IOneValueCommon
     {
         public int Id { get; set; }
         [Required]

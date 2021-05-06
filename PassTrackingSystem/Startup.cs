@@ -27,7 +27,7 @@ namespace PassTrackingSystem
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDBContext>(options =>
-               options.UseSqlServer(connection));
+               options.UseSqlServer(connection).EnableSensitiveDataLogging());
             services.AddControllersWithViews();
             services.AddTransient<IGenericRepository<Visitor>, GenericRepository<Visitor>>();
             services.AddTransient<IGenericRepository<Document>, GenericRepository<Document>>();
@@ -65,6 +65,14 @@ namespace PassTrackingSystem
             //        name: "default",
             //        pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
             //});
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=OneItemData}/{action=ShowOneItemData}/{oneItemTypeName=DocumentType}");
+            //});
+
         }
     }
 }

@@ -1,0 +1,37 @@
+﻿@model PassTrackingSystem.ViewModels.OneItemDataVM
+@{
+    Layout = "";
+}
+<form asp-controller="@nameof(OneItemDataController).Replace("Controller", "")" 
+      asp-action="@nameof(OneItemDataController.ShowOneItems)"
+      id="info-option-group" method="get">
+    @await Html.PartialAsync("UpperOptionMenu", @Model)
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col" class="th-sm">id</th>
+                <th scope="col">Фамилия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OneValues.Items)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Value</td>                 
+                    <td>
+                        <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
+                           asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
+                           class="btn btn-outline-dark">Подробнее</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @await Html.PartialAsync("Pages", @Model.OneValues.PageDividorInfo)
+</form>
+<script>
+    $('document').ready(function () {
+        $('#ModalLabel').text('@Html.Raw(Model.ExtendMenuHeader)')
+    })
+</script>
