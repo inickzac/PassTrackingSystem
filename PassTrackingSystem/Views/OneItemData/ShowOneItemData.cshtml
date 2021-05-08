@@ -1,6 +1,6 @@
 ﻿@model PassTrackingSystem.ViewModels.OneItemDataVM
 @{
-    Layout = "";
+    Layout = ""; 
 }
 <form asp-controller="@nameof(OneItemDataController).Replace("Controller", "")" 
       asp-action="@nameof(OneItemDataController.ShowOneItems)"
@@ -9,6 +9,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th></th>            
                 <th scope="col" class="th-sm">id</th>
                 <th scope="col">Фамилия</th>
             </tr>
@@ -16,15 +17,16 @@
         <tbody>
             @foreach (var item in Model.OneValues.Items)
             {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Value</td>                 
-                    <td>
-                        <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
-                           asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                           class="btn btn-outline-dark">Подробнее</a>
-                    </td>
-                </tr>
+            <tr>
+                <th><input class="form-check-input" type="radio" name="radio-choise" value="@item.Id"></th>
+                <td>@item.Id</td>
+                <td>@item.Value</td>
+                @*<td>
+            <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
+               asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
+               class="btn btn-outline-dark">Подробнее</a>
+        </td>*@
+            </tr>
             }
         </tbody>
     </table>
@@ -33,5 +35,5 @@
 <script>
     $('document').ready(function () {
         $('#ModalLabel').text('@Html.Raw(Model.ExtendMenuHeader)')
-    })
+    })  
 </script>

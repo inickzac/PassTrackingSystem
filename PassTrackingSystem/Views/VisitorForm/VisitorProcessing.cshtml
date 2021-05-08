@@ -1,5 +1,5 @@
 ﻿@model VisitorFormVM
-
+@await Html.PartialAsync("_OneItemSupportExtension", new ModalWindowVM())
 <form method="post">
     <div class="container-fluid">
         <input type="hidden" asp-for="Visitor.Id" />
@@ -73,7 +73,8 @@
                                             @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
                                        {
                                            ExtendButtonPurpose = "DocumentType",
-                                           SelectedId = Model?.Visitor?.Document?.DocumentTypeId.ToString()
+                                           SelectedId = Model?.Visitor?.Document?.DocumentTypeId.ToString(),
+                                           SelecterId = "DocumentType"
                                        })
                                         </div>
                                         <div class="col-md-6">
@@ -98,5 +99,5 @@
         <button type="reset" class="btn btn-danger">Очистить</button>
     </div>
 </form>
-@await Html.PartialAsync("_ModalWindow", new ModalWindowVM())
+
 
