@@ -16,10 +16,12 @@ namespace PassTrackingSystem.Controllers
     public class OneItemDataController : Controller
     {
         private readonly Dictionary<string, IoneValueActions> nameAndActionPairs;
+        ApplicationDBContext applicationDBContext;
 
         public OneItemDataController(IGenericRepository<DocumentType> documentTypeRepository, 
-            IGenericRepository<IssuingAuthority> issuingAuthorityRepository)
+            IGenericRepository<IssuingAuthority> issuingAuthorityRepository, ApplicationDBContext applicationDBContext)
         {
+            this.applicationDBContext = applicationDBContext;
             var documentTypeOption = new IoneValueActions
             {
                 GetAll = documentTypeRepository.GetAll().Select(v => v as IOneValueCommon),
@@ -43,14 +45,20 @@ namespace PassTrackingSystem.Controllers
             };
         }
 
-        public async Task<IActionResult> ShowOneItemData(string oneItemTypeName, CommonListQuery options)
+        public async Task<IActionResult> ShowOneItemData(string oneItemTypeName, CommonListQuery options, int selectedId)
         {
             if (nameAndActionPairs.ContainsKey(oneItemTypeName))
-            {
+            {               
                 var query = nameAndActionPairs[oneItemTypeName].GetAll;
                 var dividedList  = await Task.Run(() => new PagesDividedList<IOneValueCommon>(query, options.CurrentPage, options.PageSize));
+                if (!dividedList.Items.Where(v => v.Id == selectedId).Any() && selectedId!=0)
+                {
+                    var gg = nameAndActionPairs[oneItemTypeName].GetAll.Where(v => v.Id == selectedId).First();
+                    dividedList.Items.Add(nameAndActionPairs[oneItemTypeName].GetAll
+                        .Where(v => v.Id == selectedId).First());
+                }
                 return View(new OneItemDataVM { OneValues =  dividedList, Options = options, 
-                    ExtendMenuHeader= nameAndActionPairs[oneItemTypeName].OneValueName });
+                    ExtendMenuHeader= nameAndActionPairs[oneItemTypeName].OneValueName, SelectedItem =selectedId });
             }
             return BadRequest();
         }

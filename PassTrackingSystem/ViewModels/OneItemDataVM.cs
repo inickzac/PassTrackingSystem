@@ -16,6 +16,7 @@ namespace PassTrackingSystem.ViewModels
             new Dictionary<string, string> { 
                 { "id", "Id" },
                 { "Значение",  "Value"},
-            };
+            };  
+        public int SelectedItem { get; set; }
     }
 }

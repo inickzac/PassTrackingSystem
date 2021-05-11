@@ -18,7 +18,8 @@
             @foreach (var item in Model.OneValues.Items)
             {
             <tr>
-                <th><input class="form-check-input" type="radio" name="radio-choise" value="@item.Id"></th>
+                <th><input class="form-check-input" type="radio" name="radio-choise" @if(Model.SelectedItem == item.Id)
+                {<text>checked</text> } value="@item.Id"></th>
                 <td>@item.Id</td>
                 <td>@item.Value</td>
                 @*<td>

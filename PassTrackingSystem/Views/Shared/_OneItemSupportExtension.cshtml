@@ -21,22 +21,23 @@
         $('.one-item-data-request').click(function (e) {
             $("#modal-body").attr('purposeMenu', $(this).attr('extend-button-purpose'))
                 .attr('attachedSelector', $(this).siblings('select').attr('Id'))
-            updateModalWindow()
+            updateModalWindow($(this).siblings('select').attr('selected-value'))
         })
         updateComboBoxes()
     }
     )
-    function updateModalWindow() {            
+    function updateModalWindow(selectedId) {
         let options = {
             oneItemTypeName: $("#modal-body").attr('purposeMenu'),
             CurrentPage: $("#modal-body").find('#current-Page').val(),
             PageSize: $("#modal-body").find('select[name=PageSize]').val(),
             SearchСolumn: $("#modal-body").find('select[name=SearchСolumn]').val(),
-            SearchValue: $("#modal-body").find('input[name=SearchValue]').val()
+            SearchValue: $("#modal-body").find('input[name=SearchValue]').val(),
+            selectedId: selectedId
         }
         $("#modal-body").load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
                          action = nameof(OneItemDataController.ShowOneItemData)
-                     })', options, function () { 
+                     })', options, function () {
             onModalDataLoaded()
         })
     }
@@ -55,7 +56,8 @@
                     $('<option disabled="" selected value="">Выберите...</option>').appendTo(elem)
                     $.each(data, function (key, val) {
                         $('<option></option>').attr('value', val.id).appendTo(elem).text(val.value)
-                    })                 
+                    })
+                    $(elem).find("option[value='" + selectedId + "']").prop('selected', true);
                 })
             })
             $(this).not('.updated').each(function () {
@@ -69,16 +71,19 @@
     }
 
     function onModalDataLoaded() {
-        $('#exampleModal').find('#button-addon2').add('button[type=submit]').click(function (e) {
-            updateModalWindow()          
+        let modalSubmit = $('#exampleModal').find('button[type=submit]')
+        $('#exampleModal').find('#button-addon2').add(modalSubmit).click(function (e) {
+            updateModalWindow()
             e.preventDefault()
-        })           
+        })
         $('#submitChoise').click(function (e) {
              let calledComboBox = $('#modal-body').attr('attachedSelector')
             $($(`#${calledComboBox}`)).attr('selected-value', $("input[type='radio']:checked")
                 .val()).removeClass('updated')
             updateComboBoxes()
-            $('#submitChoise').unbind()           
+            $($(`#${calledComboBox}`)).removeClass('is-invalid')
+            $($(`#${calledComboBox}`)).removeAttr('aria-describedby')
+            $('#submitChoise').unbind()
         })
     }
 </script>
