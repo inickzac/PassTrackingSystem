@@ -15,6 +15,24 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="modal2" aria-hidden="true" aria-labelledby="..." tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel-inner"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-inner" purposeMenu="" attachedSelector="">
+                <label class="form-label">Значение</label>
+                <input class="form-control" id="modal-inner-value" value="">
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="#exampleModal" data-bs-toggle="modal" role="button" data-bs-dismiss="modal">Отмена</a>
+                <a class="btn btn-primary" href="#exampleModal" data-bs-toggle="modal" role="button" data-bs-dismiss="modal" id="modal-inner-save">Сохранить</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $('document').ready(function () {
@@ -38,7 +56,7 @@
         $("#modal-body").load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
                          action = nameof(OneItemDataController.ShowOneItemData)
                      })', options, function () {
-            onModalDataLoaded()
+            onModalDataLoaded()         
         })
     }
 
@@ -51,8 +69,7 @@
                 $.getJSON('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
                          action = nameof(OneItemDataController.ShowOneItems)
                      })', purposeItem, function (data) {
-                    $(elem).addClass('loaded')
-                    $(elem).addClass('updated')
+                    $(elem).addClass('loaded').addClass('updated').empty()
                     $('<option disabled="" selected value="">Выберите...</option>').appendTo(elem)
                     $.each(data, function (key, val) {
                         $('<option></option>').attr('value', val.id).appendTo(elem).text(val.value)
@@ -71,19 +88,55 @@
     }
 
     function onModalDataLoaded() {
+        initInnerModal()
         let modalSubmit = $('#exampleModal').find('button[type=submit]')
         $('#exampleModal').find('#button-addon2').add(modalSubmit).click(function (e) {
             updateModalWindow()
             e.preventDefault()
         })
         $('#submitChoise').click(function (e) {
-             let calledComboBox = $('#modal-body').attr('attachedSelector')
-            $($(`#${calledComboBox}`)).attr('selected-value', $("input[type='radio']:checked")
-                .val()).removeClass('updated')
-            updateComboBoxes()
-            $($(`#${calledComboBox}`)).removeClass('is-invalid')
-            $($(`#${calledComboBox}`)).removeAttr('aria-describedby')
+            $($(`#${$('#modal-body').attr('attachedSelector')}`))
+                .attr('selected-value', $("input[type='radio']:checked")
+                .val()).removeClass('updated').removeClass('is-invalid').removeAttr('aria-describedby')
             $('#submitChoise').unbind()
+            updateComboBoxes()
+        })
+        $('#add-new-item-in-modal').click(function (e) {
+          let val=  $(this).siblings('input').val();
+            if (val==undefined || val == '') {
+                $(this).siblings('input').addClass('is-invalid')
+            }
+            else {
+                $(this).siblings('input').removeClass('is-invalid')
+                $('#add-new-item-in-modal').unbind()
+                $.post('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.AddOneItem)
+                     })', { oneItemName: $("#modal-body").attr('purposeMenu'), value: val },
+                    function (e) {
+                        $($(`#${$('#modal-body').attr('attachedSelector')}`)).removeClass('loaded')
+                        updateComboBoxes()
+                        updateModalWindow()
+                    })
+            }
+        })
+    }
+    function initInnerModal() {
+        $('.more-details-inner').click(function (e) {
+            let valueInner = $(this).parent().siblings('.value-outer')
+            let idInner = $(this).parent().siblings('.id-outer')
+            $('#modal-inner-value').val(valueInner.text())
+            $('#modal-inner-save').click(function (e) {
+                let id= idInner.text()
+                $('#modal-inner-save').unbind()
+                $.post('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.AddOneItem)
+                     })', { oneItemName: $("#modal-body").attr('purposeMenu'), value: $('#modal-inner-value').val() , id: id },
+                    function (e) {
+                        $($(`#${$('#modal-body').attr('attachedSelector')}`)).removeClass('loaded')
+                        updateComboBoxes()
+                        updateModalWindow()
+                    })
+            })
         })
     }
 </script>
