@@ -1,0 +1,142 @@
+﻿@model ModalWindowVM
+<div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body" purposeMenu="" attachedSelector="">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary temp" id="submitChoise" data-bs-dismiss="modal">Выбрать</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal2" aria-hidden="true" aria-labelledby="..." tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel-inner"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-inner" purposeMenu="" attachedSelector="">
+                <label class="form-label">Значение</label>
+                <input class="form-control" id="modal-inner-value" value="">
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" href="#exampleModal" data-bs-toggle="modal" role="button" data-bs-dismiss="modal">Отмена</a>
+                <a class="btn btn-primary" href="#exampleModal" data-bs-toggle="modal" role="button" data-bs-dismiss="modal" id="modal-inner-save">Сохранить</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('document').ready(function () {
+        $('.one-item-data-request').click(function (e) {
+            $("#modal-body").attr('purposeMenu', $(this).attr('extend-button-purpose'))
+                .attr('attachedSelector', $(this).siblings('select').attr('Id'))
+            updateModalWindow($(this).siblings('select').attr('selected-value'))
+        })
+        updateComboBoxes()
+    }
+    )
+    function updateModalWindow(selectedId) {
+        let options = {
+            oneItemTypeName: $("#modal-body").attr('purposeMenu'),
+            CurrentPage: $("#modal-body").find('#current-Page').val(),
+            PageSize: $("#modal-body").find('select[name=PageSize]').val(),
+            SearchСolumn: $("#modal-body").find('select[name=SearchСolumn]').val(),
+            SearchValue: $("#modal-body").find('input[name=SearchValue]').val(),
+            selectedId: selectedId
+        }
+        $("#modal-body").load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItemData)
+                     })', options, function () {
+            onModalDataLoaded()         
+        })
+    }
+
+    function updateComboBoxes() {
+        $('.combobox-ontime-loader').each(function () {
+            let purposeItem = { oneItemName: $(this).next('button').attr('extend-button-purpose'), selectedId: $(this).attr('selected-value') }
+            $(this).not('.loaded').each(function () {
+                let elem = this
+                let selectedId= $(this).attr('selected-value')
+                $.getJSON('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.ShowOneItems)
+                     })', purposeItem, function (data) {
+                    $(elem).addClass('loaded').addClass('updated').empty()
+                    $('<option disabled="" selected value="">Выберите...</option>').appendTo(elem)
+                    $.each(data, function (key, val) {
+                        $('<option></option>').attr('value', val.id).appendTo(elem).text(val.value)
+                    })
+                    $(elem).find("option[value='" + selectedId + "']").prop('selected', true);
+                })
+            })
+            $(this).not('.updated').each(function () {
+                $(this).find('[selected]').removeAttr('selected')
+                selectedId = $(this).attr('selected-value')
+                let elem = this
+                $(elem).find("option[value='" + selectedId + "']").prop('selected', true);
+                $(elem).addClass('updated')
+            })
+        })
+    }
+
+    function onModalDataLoaded() {
+        initInnerModal()
+        let modalSubmit = $('#exampleModal').find('button[type=submit]')
+        $('#exampleModal').find('#button-addon2').add(modalSubmit).click(function (e) {
+            updateModalWindow()
+            e.preventDefault()
+        })
+        $('#submitChoise').click(function (e) {
+            $($(`#${$('#modal-body').attr('attachedSelector')}`))
+                .attr('selected-value', $("input[type='radio']:checked")
+                .val()).removeClass('updated').removeClass('is-invalid').removeAttr('aria-describedby')
+            $('#submitChoise').unbind()
+            updateComboBoxes()
+        })
+        $('#add-new-item-in-modal').click(function (e) {
+          let val=  $(this).siblings('input').val();
+            if (val==undefined || val == '') {
+                $(this).siblings('input').addClass('is-invalid')
+            }
+            else {
+                $(this).siblings('input').removeClass('is-invalid')
+                $('#add-new-item-in-modal').unbind()
+                $.post('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.AddOneItem)
+                     })', { oneItemName: $("#modal-body").attr('purposeMenu'), value: val },
+                    function (e) {
+                        $($(`#${$('#modal-body').attr('attachedSelector')}`)).removeClass('loaded')
+                        updateComboBoxes()
+                        updateModalWindow()
+                    })
+            }
+        })
+    }
+    function initInnerModal() {
+        $('.more-details-inner').click(function (e) {
+            let valueInner = $(this).parent().siblings('.value-outer')
+            let idInner = $(this).parent().siblings('.id-outer')
+            $('#modal-inner-value').val(valueInner.text())
+            $('#modal-inner-save').click(function (e) {
+                let id= idInner.text()
+                $('#modal-inner-save').unbind()
+                $.post('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.AddOneItem)
+                     })', { oneItemName: $("#modal-body").attr('purposeMenu'), value: $('#modal-inner-value').val() , id: id },
+                    function (e) {
+                        $($(`#${$('#modal-body').attr('attachedSelector')}`)).removeClass('loaded')
+                        updateComboBoxes()
+                        updateModalWindow()
+                    })
+            })
+        })
+    }
+</script>

@@ -26,11 +26,15 @@ namespace PassTrackingSystem.Infrastructure
         }
         private void CreateDocumentTypes()
         {
-            if (!_dBContext.DocumentTypes.Any())
+            if (_dBContext.DocumentTypes.Any())
             {
                 var values = new List<string> { "Паспорт",
                "Водительское удостовириение",
                "Удостоверение личности"};
+                for(int i=0; i<100; i++)
+                {
+                    values.Add(Guid.NewGuid().ToString());
+                }
 
                 values.ForEach(val => _dBContext.DocumentTypes.Add(new DocumentType { Value = val }));
                 _dBContext.SaveChanges();

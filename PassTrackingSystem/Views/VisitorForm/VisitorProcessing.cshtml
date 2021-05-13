@@ -1,5 +1,5 @@
 ﻿@model VisitorFormVM
-
+@await Html.PartialAsync("_OneItemSupportExtension", new ModalWindowVM())
 <form method="post">
     <div class="container-fluid">
         <input type="hidden" asp-for="Visitor.Id" />
@@ -70,19 +70,33 @@
                                             <label asp-for="Visitor.Document.DocumentType.Value" class="form-label">
                                                 Тип документа
                                             </label>
-                                            @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
-                                       {
-                                           ExtendButtonPurpose = "DocumentType",
-                                           SelectedId = Model?.Visitor?.Document?.DocumentTypeId.ToString()
-                                       })
+                                            <div class="input-group">
+                                                <select class="form-select combobox-ontime-loader" selected-value="@Model?.Visitor?.Document?.DocumentTypeId.ToString()" id="DocumentType"
+                                                        aria-label="Example select with button addon" asp-for="@Model.Visitor.Document.DocumentTypeId">
+                                                </select>
+                                                <button class='btn btn-outline-secondary one-item-data-request'
+                                                        extend-button-purpose="DocumentType"
+                                                        data-bs-target="#exampleModal"
+                                                        data-bs-toggle="modal" type="button">
+                                                    <img src='/more-deteils.png'
+                                                         style="width: 21px;">
+                                                </button>
+                                            </div>         
                                         </div>
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.IssuingAuthority.Value" class="form-label">Орган выдавший документ</label>
-                                            @await Html.PartialAsync("_OneItemComboBox", new OneItemComboBoxVMExternal
-                                       {
-                                           ExtendButtonPurpose = "IssuingAuthority",
-                                           SelectedId = Model?.Visitor?.Document?.IssuingAuthorityId.ToString()
-                                       })
+                                            <div class="input-group">
+                                                <select class="form-select combobox-ontime-loader" selected-value="@Model?.Visitor?.Document?.IssuingAuthorityId.ToString()" id="IssuingAuthority"
+                                                        aria-label="Example select with button addon" asp-for="@Model.Visitor.Document.IssuingAuthorityId">
+                                                </select>
+                                                <button class='btn btn-outline-secondary one-item-data-request'
+                                                        extend-button-purpose="IssuingAuthority"
+                                                        data-bs-target="#exampleModal"
+                                                        data-bs-toggle="modal" type="button">
+                                                    <img src='/more-deteils.png'
+                                                         style="width: 21px;">
+                                                </button>
+                                            </div>                     
                                         </div>
                                     </div>
                                 </div>
@@ -98,5 +112,5 @@
         <button type="reset" class="btn btn-danger">Очистить</button>
     </div>
 </form>
-@await Html.PartialAsync("_ModalWindow", new ModalWindowVM())
+
 

@@ -29,7 +29,7 @@ namespace PassTrackingSystem.Controllers
      
         public IActionResult Index(CommonListQuery commonListQuery)
         {
-            //new RandomDataGenerator(dBContext).CreateVisitors(1000);
+            //new RandomDataGenerator(dBContext).CreateVisitors(1);
             return View(new MainPageVM(_visitorsRepository,commonListQuery));
             
         }

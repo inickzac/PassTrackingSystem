@@ -41,5 +41,6 @@ namespace PassTrackingSystem.Models.Repositoryes
             context.Update<T>(changedDataObject); 
             return context.SaveChangesAsync();
         }
+    
     }
 }

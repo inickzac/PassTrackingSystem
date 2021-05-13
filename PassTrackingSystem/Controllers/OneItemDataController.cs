@@ -16,14 +16,17 @@ namespace PassTrackingSystem.Controllers
     public class OneItemDataController : Controller
     {
         private readonly Dictionary<string, IoneValueActions> nameAndActionPairs;
+        ApplicationDBContext applicationDBContext;
 
         public OneItemDataController(IGenericRepository<DocumentType> documentTypeRepository, 
-            IGenericRepository<IssuingAuthority> issuingAuthorityRepository)
+            IGenericRepository<IssuingAuthority> issuingAuthorityRepository, ApplicationDBContext applicationDBContext)
         {
+            this.applicationDBContext = applicationDBContext;
             var documentTypeOption = new IoneValueActions
             {
                 GetAll = documentTypeRepository.GetAll().Select(v => v as IOneValueCommon),
-                AddValue = (oneValueObject) => documentTypeRepository.Update(oneValueObject as DocumentType),
+                UpdateValue = (oneValueObject) => documentTypeRepository
+                .Update(new DocumentType {Id=oneValueObject.Id, Value=oneValueObject.Value }),
                 DeleteValue = (oneValueObject) => documentTypeRepository.Delete(oneValueObject.Id),
                 OneValueName ="Тип документа"
             };
@@ -31,7 +34,8 @@ namespace PassTrackingSystem.Controllers
             var issuingAuthoritiesOption = new IoneValueActions
             {
                 GetAll = issuingAuthorityRepository.GetAll().Select(v => v as IOneValueCommon),
-                AddValue = (oneValueObject) => issuingAuthorityRepository.Update(oneValueObject as IssuingAuthority),
+                UpdateValue = (oneValueObject) => issuingAuthorityRepository.
+                Update(new IssuingAuthority { Id = oneValueObject.Id, Value = oneValueObject.Value }),
                 DeleteValue = (oneValueObject) => issuingAuthorityRepository.Delete(oneValueObject.Id),
                 OneValueName ="Орган выдавший документ"
             };
@@ -43,19 +47,24 @@ namespace PassTrackingSystem.Controllers
             };
         }
 
-        public async Task<IActionResult> ShowOneItemData(string oneItemTypeName, CommonListQuery options)
+        public async Task<IActionResult> ShowOneItemData(string oneItemTypeName, CommonListQuery options, int selectedId)
         {
             if (nameAndActionPairs.ContainsKey(oneItemTypeName))
-            {
+            {               
                 var query = nameAndActionPairs[oneItemTypeName].GetAll;
                 var dividedList  = await Task.Run(() => new PagesDividedList<IOneValueCommon>(query, options.CurrentPage, options.PageSize));
+                if (!dividedList.Items.Where(v => v.Id == selectedId).Any() && selectedId!=0)
+                {
+                    dividedList.Items.Add(nameAndActionPairs[oneItemTypeName].GetAll
+                        .Where(v => v.Id == selectedId).First());
+                }
                 return View(new OneItemDataVM { OneValues =  dividedList, Options = options, 
-                    ExtendMenuHeader= nameAndActionPairs[oneItemTypeName].OneValueName });
+                    ExtendMenuHeader= nameAndActionPairs[oneItemTypeName].OneValueName, SelectedItem =selectedId });
             }
             return BadRequest();
         }
 
-        public async Task<JsonResult> ShowOneItems(string oneItemName)
+        public async Task<IActionResult> ShowOneItems(string oneItemName)
         {
             if (nameAndActionPairs.ContainsKey(oneItemName))
             {
@@ -64,11 +73,20 @@ namespace PassTrackingSystem.Controllers
             return new JsonResult(new {BadRequest = "BadRequest" });
         }
 
+        public async Task<IActionResult>AddOneItem (string oneItemName, string value, int id)
+        {
+            if (nameAndActionPairs.ContainsKey(oneItemName) && !string.IsNullOrEmpty(value))
+            {
+                await nameAndActionPairs[oneItemName].UpdateValue(new OneValueCommon { Value =value, Id=id });
+                return new OkObjectResult("success");
+            }
+            return new BadRequestResult();
+        }
         private class IoneValueActions
         {
             public IQueryable<IOneValueCommon> GetAll { get; set; }
-            public Action<IOneValueCommon> AddValue { get; set; }
-            public Action<IOneValueCommon> DeleteValue { get; set; }
+            public Func<IOneValueCommon, Task> UpdateValue { get; set; }
+            public Func<IOneValueCommon, Task> DeleteValue { get; set; }
             public string OneValueName { get; set; }
         }
 

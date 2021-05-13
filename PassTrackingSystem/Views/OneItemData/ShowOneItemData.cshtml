@@ -1,30 +1,33 @@
 ﻿@model PassTrackingSystem.ViewModels.OneItemDataVM
 @{
-    Layout = "";
+    Layout = ""; 
 }
 <form asp-controller="@nameof(OneItemDataController).Replace("Controller", "")" 
       asp-action="@nameof(OneItemDataController.ShowOneItems)"
       id="info-option-group" method="get">
     @await Html.PartialAsync("UpperOptionMenu", @Model)
+    <div class="input-group mb-3">
+        <button class="btn btn-outline-secondary" type="button" id="add-new-item-in-modal">Добавить</button>
+        <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+    </div>
     <table class="table table-striped">
         <thead>
             <tr>
+                <th></th>            
                 <th scope="col" class="th-sm">id</th>
-                <th scope="col">Фамилия</th>
+                <th scope="col">Значение</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.OneValues.Items)
             {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Value</td>                 
-                    <td>
-                        <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
-                           asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                           class="btn btn-outline-dark">Подробнее</a>
-                    </td>
-                </tr>
+            <tr>
+                <th><input class="form-check-input" type="radio" name="radio-choise" @if(Model.SelectedItem == item.Id)
+                {<text>checked</text> } value="@item.Id"></th>
+                <td class="id-outer">@item.Id</td>
+                <td class="value-outer">@item.Value</td>
+                <td><a class="btn btn-outline-dark more-details-inner" data-bs-toggle="modal" href="#modal2" role="button" data-bs-dismiss="modal">Изменить</a></td>
+            </tr>
             }
         </tbody>
     </table>
@@ -33,5 +36,5 @@
 <script>
     $('document').ready(function () {
         $('#ModalLabel').text('@Html.Raw(Model.ExtendMenuHeader)')
-    })
+    })  
 </script>
