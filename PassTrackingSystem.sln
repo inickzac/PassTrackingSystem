@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PassTrackingSystem", "PassTrackingSystem\PassTrackingSystem.csproj", "{8795B313-431E-4F5A-92C6-9F7BB2DA695B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PassTrackingSystem.Tests", "PassTrackingSystem.Tests\PassTrackingSystem.Tests.csproj", "{286E7502-BEA7-4C7C-9338-B5AF852E8D53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PassTrackingSystem.Tests", "PassTrackingSystem.Tests\PassTrackingSystem.Tests.csproj", "{286E7502-BEA7-4C7C-9338-B5AF852E8D53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

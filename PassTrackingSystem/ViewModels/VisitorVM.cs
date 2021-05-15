@@ -11,8 +11,5 @@ namespace PassTrackingSystem.ViewModels
     {
         [Required]
         Visitor Visitor { get; set; }
-        [Required]
-        Document Document { get; set; }
-
     }
 }

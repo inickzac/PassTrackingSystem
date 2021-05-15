@@ -1,3 +1,5 @@
+
+
 .modal {
     overflow-y: auto;
 }
@@ -408,7 +410,7 @@
 
 @media (min-width: 768px) {
     .bd-main {
-        display: grid;
+        display: flex;
         gap: inherit;
         grid-template-areas: "intro" "toc" "content";
         grid-template-rows: auto auto 1fr

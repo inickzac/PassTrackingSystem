@@ -33,6 +33,7 @@ namespace PassTrackingSystem
             services.AddTransient<IGenericRepository<Document>, GenericRepository<Document>>();
             services.AddTransient<IGenericRepository<DocumentType>, GenericRepository<DocumentType>>();
             services.AddTransient<IGenericRepository<IssuingAuthority>, GenericRepository<IssuingAuthority>>();
+            services.AddTransient<IGenericRepository<TemporaryPass>, GenericRepository<TemporaryPass>>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -59,12 +60,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=Home}/{action=Index}/{id?}");
             //});
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
+            //});
 
             //app.UseEndpoints(endpoints =>
             //{
@@ -73,6 +74,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=OneItemData}/{action=ShowOneItemData}/{oneItemTypeName=DocumentType}");
             //});
 
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=TemporaryPass}/{action=ShowAll}/{id?}");
+            });
         }
     }
 }

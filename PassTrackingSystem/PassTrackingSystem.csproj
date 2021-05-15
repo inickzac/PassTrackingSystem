@@ -13,6 +13,7 @@
     <None Remove="Resource\RandomGenerator\PatronymicFemale.txt" />
     <None Remove="Resource\RandomGenerator\PatronymicMale.txt" />
     <None Remove="Resource\RandomGenerator\Positions.txt" />
+    <None Remove="Resource\RandomGenerator\PurposeOfIssuance.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +25,7 @@
     <EmbeddedResource Include="Resource\RandomGenerator\PatronymicFemale.txt" />
     <EmbeddedResource Include="Resource\RandomGenerator\PatronymicMale.txt" />
     <EmbeddedResource Include="Resource\RandomGenerator\Positions.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\PurposeOfIssuance.txt" />
   </ItemGroup>
 
   <ItemGroup>
