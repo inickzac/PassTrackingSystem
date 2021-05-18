@@ -12,23 +12,19 @@ namespace PassTrackingSystem.Models
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<IssuingAuthority> IssuingAuthorities { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<StationFacility> StationFacilities { get; set; }
+        public DbSet<TemporaryPass>  TemporaryPasses { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<CarPass> CarPasses { get; set; }
+        public DbSet<SinglePass> SinglePasses { get; set; }
+        public DbSet<ShootingPermission> ShootingPermissions  { get; set; }
+
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
             : base(options)
         {
-            // Database.EnsureDeleted(); 
-        }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Visitor>().HasOne(t => t.Document)
-        //             .WithOne(t => t.Visitor)
-        //              .HasForeignKey<Document>(t => t.VisitorId);
-
-        //    modelBuilder.Entity<Document>().HasOne(t => t.Visitor)
-        //             .WithOne(t => t.Document)
-        //             .HasForeignKey<Visitor>(t => t.DocumentId)
-        //             .IsRequired();
-        //    base.OnModelCreating(modelBuilder);
-        //}
-
+        
+        }     
     }
 }

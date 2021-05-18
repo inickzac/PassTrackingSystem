@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Models
 {
-    public class Visitor
+    public class Employee
     {
         public int Id { get; set; }
         [Required]
-        public string LastName { get; set; }
-        [Required]
         public string Name { get; set; }
         [Required]
-        public string Patronymic { get; set; }
-        public string PlaceOfWork { get; set; }
+        public string LastName { get; set; }        
         public string Position { get; set; }
-        public Document Document { get; set; }
-        public IList<TemporaryPass> TemporaryPasses { get; set; }
-        public IList<SinglePass> SinglePasses { get; set; }
+        [Required]
+        public string Patronymic { get; set; }
+        public Department Department { get; set; }
+        [Required]
+        public int DepartmentId { get; set; }
     }
 }

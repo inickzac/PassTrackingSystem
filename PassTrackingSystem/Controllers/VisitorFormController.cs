@@ -37,6 +37,7 @@ namespace PassTrackingSystem.Controllers
                        .Include(v => v.Document)
                        .ThenInclude(i => i.IssuingAuthority)
                        .Include(v => v.Document.DocumentType)
+                       .Include(v=> v.TemporaryPasses)
                        .FirstAsync();
             }
 
