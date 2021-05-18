@@ -1,4 +1,6 @@
-
+.set-min-width {
+    min-width : 1000px   
+}
 
 .modal {
     overflow-y: auto;

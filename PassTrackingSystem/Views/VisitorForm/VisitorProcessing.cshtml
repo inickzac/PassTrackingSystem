@@ -1,6 +1,6 @@
 ﻿@model VisitorFormVM
 @await Html.PartialAsync("_OneItemSupportExtension", new ModalWindowVM())
-<form method="post">
+<form method="get">
     <div class="container-fluid">
         <input type="hidden" asp-for="Visitor.Id" />
         <div class="row">
@@ -81,7 +81,7 @@
                                                     <img src='/more-deteils.png'
                                                          style="width: 21px;">
                                                 </button>
-                                            </div>         
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <label asp-for="Visitor.Document.IssuingAuthority.Value" class="form-label">Орган выдавший документ</label>
@@ -96,12 +96,62 @@
                                                     <img src='/more-deteils.png'
                                                          style="width: 21px;">
                                                 </button>
-                                            </div>                     
+                                            </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-5">
+            <div class="col-3">
+                <div class="card" style="width: 16rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Временный пропуск</h5>
+                        <div class="card-text">
+                            <p>Всего пропусков:</p>
+                            <p>Действующих:</p>
+                            <p>Действует до:</p>
+                        </div>
+                        <a href="#" class="card-link">Добавить</a>
+                        <a href="#" class="card-link">Просматреть все</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Название карточки</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Название карточки</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Название карточки</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
                     </div>
                 </div>
             </div>

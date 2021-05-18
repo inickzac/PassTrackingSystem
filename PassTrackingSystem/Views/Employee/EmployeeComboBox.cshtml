@@ -1,0 +1,17 @@
+﻿@model string
+@{
+    Layout = "";
+}
+<label class="form-label">Орган выдавший документ</label>
+<div class="input-group">
+    <select class="form-select combobox-ontime-loader"
+            aria-label="Example select with button addon">
+    </select>
+    <button class='btn btn-outline-secondary'
+            extend-button-purpose="@Model"
+            data-bs-target="#exampleModal"
+            data-bs-toggle="modal" type="button">
+        <img src='/more-deteils.png'
+             style="width: 21px;">
+    </button>
+</div>

@@ -5,7 +5,7 @@
 }
 
 <div class="col-12">
-    <form asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.ShowAll)" 
+    <form asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.ShowAll)"
           asp-controller="@nameof(PassTrackingSystem.Controllers.TemporaryPassController).Replace("Controller", "")"
           id="info-option-group" method="get">
         @await Html.PartialAsync("UpperOptionMenu", @Model)
@@ -29,20 +29,21 @@
                         <td>@temporaryPass.ValidWith.ToShortDateString()</td>
                         <td>@temporaryPass.ValitUntil.ToShortDateString()</td>
                         <td>@temporaryPass.PurposeOfIssuance</td>
-                        <td>@foreach (var item in temporaryPass.StationFacilities)
-                        {
-                            <text>@item.Value<br></text>
-                        }                       
-                        </td>
-                        <td>@temporaryPass.TemporaryPassIssued.LastName @temporaryPass.TemporaryPassIssued.Name @temporaryPass.TemporaryPassIssued.Patronymic</td>
                         <td>
-                            <a asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.ShowAll)"
-                               asp-controller="@nameof(PassTrackingSystem.Controllers.TemporaryPassController).Replace("Controller", "")"
-                               asp-route-id="@temporaryPass.Id"
-                               class="btn btn-outline-dark">Подробнее</a>
-                        </td>
-                    </tr>
-                }
+                            @foreach (var item in temporaryPass.StationFacilities)
+                            {
+                                <text>@item.Value<br></text>
+                            }
+                    </td>
+                    <td>@temporaryPass.TemporaryPassIssued.LastName @temporaryPass.TemporaryPassIssued.Name @temporaryPass.TemporaryPassIssued.Patronymic</td>
+                    <td>
+                        <a asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.ShowAll)"
+                           asp-controller="@nameof(PassTrackingSystem.Controllers.TemporaryPassController).Replace("Controller", "")"
+                           asp-route-id="@temporaryPass.Id"
+                           class="btn btn-outline-dark">Подробнее</a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.TemporaryPasses.PageDividorInfo)

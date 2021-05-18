@@ -16,5 +16,6 @@ namespace PassTrackingSystem.ViewModels
                 { "Значение",  "Value"},
             };
         public PagesDividedList<TemporaryPass> TemporaryPasses { get; set; }
+        public TemporaryPass ProcessingTemporaryPass { get; set; }
     }
 }

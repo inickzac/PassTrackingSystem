@@ -173,9 +173,14 @@ namespace PassTrackingSystem.Migrations
                     b.Property<DateTime>("ValitUntil")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("VisitorId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TemporaryPassIssuedId");
+
+                    b.HasIndex("VisitorId");
 
                     b.ToTable("TemporaryPasses");
                 });
@@ -269,7 +274,15 @@ namespace PassTrackingSystem.Migrations
                         .WithMany()
                         .HasForeignKey("TemporaryPassIssuedId");
 
+                    b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
+                        .WithMany("TemporaryPasses")
+                        .HasForeignKey("VisitorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("TemporaryPassIssued");
+
+                    b.Navigation("Visitor");
                 });
 
             modelBuilder.Entity("StationFacilityTemporaryPass", b =>
@@ -290,6 +303,8 @@ namespace PassTrackingSystem.Migrations
             modelBuilder.Entity("PassTrackingSystem.Models.Visitor", b =>
                 {
                     b.Navigation("Document");
+
+                    b.Navigation("TemporaryPasses");
                 });
 #pragma warning restore 612, 618
         }

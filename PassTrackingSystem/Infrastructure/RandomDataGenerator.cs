@@ -38,8 +38,9 @@ namespace PassTrackingSystem.Infrastructure
                                ValitUntil = DateTime.Now.AddMonths(new Random().Next(1, 120)),
                                PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
                                StationFacilities = GetRandomObjectsFromCollections(_dBContext.StationFacilities.ToArray()),
-                               TemporaryPassIssued = GetRandomObjectFromCollections(_dBContext.Employees.ToArray())
-                           });
+                               TemporaryPassIssued = GetRandomObjectFromCollections(_dBContext.Employees.ToArray()),
+                               VisitorId = GetRandomObjectFromCollections(_dBContext.Visitors.ToArray()).Id                              
+                           });;
                 }
                 _dBContext.SaveChanges();
             }
@@ -131,7 +132,7 @@ namespace PassTrackingSystem.Infrastructure
                 _dBContext.SaveChanges();
             }
         }
-        public void CreateVisitors(int quantity)
+        private void CreateVisitors(int quantity)
         {
             if (!_dBContext.Visitors.Any())
             {
@@ -229,6 +230,7 @@ namespace PassTrackingSystem.Infrastructure
 
         private void AddInitDataToDB()
         {
+            CreateVisitors(1000);
             CreateDocumentTypes();
             CreateIssuingAuthority();
             CreateStationFacility();
