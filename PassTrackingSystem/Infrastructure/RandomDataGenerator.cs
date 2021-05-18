@@ -29,7 +29,10 @@ namespace PassTrackingSystem.Infrastructure
         {
             if (!_dBContext.TemporaryPasses.Any())
             {
-                for (int i = 0; i < 1000; i++)
+                var tpes = _dBContext.Visitors.ToArray();
+                var fasilitys = _dBContext.StationFacilities.ToArray();
+                var employees = _dBContext.Employees.ToArray();
+                for (int i = 0; i < 10000; i++)
                 {
                     _dBContext.TemporaryPasses.Add(
                            new TemporaryPass
@@ -37,9 +40,9 @@ namespace PassTrackingSystem.Infrastructure
                                ValidWith = DateTime.Now.AddMonths(new Random().Next(-120, -1)),
                                ValitUntil = DateTime.Now.AddMonths(new Random().Next(1, 120)),
                                PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
-                               StationFacilities = GetRandomObjectsFromCollections(_dBContext.StationFacilities.ToArray()),
-                               TemporaryPassIssued = GetRandomObjectFromCollections(_dBContext.Employees.ToArray()),
-                               VisitorId = GetRandomObjectFromCollections(_dBContext.Visitors.ToArray()).Id                              
+                               StationFacilities = GetRandomObjectsFromCollections(fasilitys),
+                               TemporaryPassIssued = GetRandomObjectFromCollections(employees),
+                               VisitorId = GetRandomObjectFromCollections(tpes).Id                              
                            });;
                 }
                 _dBContext.SaveChanges();

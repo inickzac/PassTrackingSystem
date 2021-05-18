@@ -19,5 +19,6 @@ namespace PassTrackingSystem.Models
         public string Position { get; set; }
         public Document Document { get; set; }
         public IList<TemporaryPass> TemporaryPasses { get; set; }
+        public IList<SinglePass> SinglePasses { get; set; }
     }
 }

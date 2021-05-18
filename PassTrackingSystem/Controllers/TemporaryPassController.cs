@@ -69,15 +69,19 @@ namespace PassTrackingSystem.Controllers
             return RedirectToAction("ShowAll");
         }
 
-        public async Task<IActionResult> ShowAll(CommonListQuery options = null)
+        public async Task<IActionResult> ShowAll(int? visitorId ,CommonListQuery options = null)
         {
-            var passes = Task.Run(() => new PagesDividedList<TemporaryPass>(passRepository.GetAll()
+            var query = visitorId == null ? passRepository.GetAll() : passRepository.GetAll()
+                .Where(v => v.VisitorId == visitorId);
+            var passes = Task.Run(() => new PagesDividedList<TemporaryPass>(query
                   .Include(v => v.StationFacilities)
                   .Include(v => v.TemporaryPassIssued)
                   .ThenInclude(v => v.Department)
                      .SearchByMember(options.SearchСolumn, options.SearchValue)
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
-            return View(new TemporaryPassVM { TemporaryPasses = await passes });
+
+            var TemporaryPasses = await passes;
+            return View(new TemporaryPassVM { TemporaryPasses = await passes, PurposeVisitorId =visitorId });
         }
 
         public async Task<IActionResult> GetAllowedList(int processingPass)

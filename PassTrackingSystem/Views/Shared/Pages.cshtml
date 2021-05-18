@@ -31,7 +31,7 @@
 
     @if (Model.TotalPages >= 4)
     {
-        var changePageClass = " change-page-button";
+        var changePageClass = "change-page-button";
         var CurrentPage = Model.CurrentPage;
         var CountSideButtom = 3;
         if (Model.HasPreviousPage)
@@ -41,14 +41,14 @@
         }
         var maxViewPage = 0;
 
-        if (CurrentPage > CountSideButtom +1)
+        if (CurrentPage > CountSideButtom + 1)
         {
             <button name="CurrentPage" class="btn btn-secondary @changePageClass"
                     value="1">
-                1               
+                1
             </button>
             <span>....</span>
-            }
+        }
 
         @for (int i = CurrentPage - CountSideButtom; i < CurrentPage; i++)
         {
@@ -90,6 +90,17 @@
             <button name="CurrentPage" class="btn btn-secondary @changePageClass" value="@prevPage">След</button>
         }
 
+    }
+    else
+    {
+        @if (Model.TotalPages>1)
+        {
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <button name="CurrentPage" class="btn btn-secondary change-page-button" value="@i">@i</button>
+            }       
+        
+        }
     }
     <script>
         $('.change-page-button').click(function (e) {

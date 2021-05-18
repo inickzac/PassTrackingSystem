@@ -113,12 +113,12 @@
                     <div class="card-body">
                         <h5 class="card-title">Временный пропуск</h5>
                         <div class="card-text">
-                            <p>Всего пропусков:</p>
-                            <p>Действующих:</p>
-                            <p>Действует до:</p>
+                            <p>Всего пропусков: @Model.AllTemporaryPasses</p>
+                            <p>Действующих: @Model.ValidTemporaryPasses</p>
+                            <p>Действует до: @Model.MaximumUntilTemporaryPasses</p>
                         </div>
                         <a href="#" class="card-link">Добавить</a>
-                        <a href="#" class="card-link">Просматреть все</a>
+                        <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                         <h5 class="card-title">Название карточки</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
+                        <a href="" class="card-link">Card link</a>
                         <a href="#" class="card-link">Another link</a>
                     </div>
                 </div>
