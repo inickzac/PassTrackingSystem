@@ -14,7 +14,7 @@ namespace PassTrackingSystem.Models
         [Required]
         public DateTime ValitUntil { get; set; }
         public string PurposeOfIssuance { get; set; }
-        public Employee TemporaryPassIssued { get; set; }
+        public Employee SinglePassIssued { get; set; }
         public IList<StationFacility> StationFacilities { get; set; }
         public Visitor Visitor { get; set; }
         public int VisitorId { get; set; }

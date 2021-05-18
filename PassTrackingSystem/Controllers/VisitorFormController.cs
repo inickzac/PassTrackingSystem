@@ -38,6 +38,9 @@ namespace PassTrackingSystem.Controllers
                        .ThenInclude(i => i.IssuingAuthority)
                        .Include(v => v.Document.DocumentType)
                        .Include(v=> v.TemporaryPasses)
+                       .Include(v => v.SinglePasses)
+                       .Include(v => v.ShootingPermissions)
+                       .Include(v => v.CarPasses).ThenInclude(v=> v.Car)
                        .FirstAsync();
             }
 

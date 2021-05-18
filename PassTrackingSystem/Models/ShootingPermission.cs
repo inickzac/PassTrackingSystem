@@ -15,6 +15,7 @@ namespace PassTrackingSystem.Models
         public string ShootingPurpose { get; set; }
         public string CameraType { get; set; }
         public IList<StationFacility> StationFacilities { get; set; }
+        public Employee ShootingPermissionIssued { get; set; }
         public Visitor Visitor { get; set; }
         public int VisitorId { get; set; }
     }

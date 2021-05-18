@@ -123,35 +123,44 @@
                 </div>
             </div>
             <div class="col-3">
-                <div class="card" style="width: 18rem;">
+                <div class="card" style="width: 16rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Название карточки</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">Разовый пропуск</h5>
+                        <div class="card-text">
+                            <p>Всего пропусков: @Model.AllSinglePasses</p>
+                            <p>Действующих: @Model.ValidSinglePasses</p>
+                            <p>Действует до: @Model.MaximumUntilSinglePasses</p>
+                        </div>
+                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="card" style="width: 18rem;">
+                <div class="card" style="width: 16rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Название карточки</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">Транспортный паспорт</h5>
+                        <div class="card-text">
+                            <p>Всего пропусков: @Model.AllCarPasses</p>
+                            <p>Действующих: @Model.ValidCarPasses</p>
+                            <p>Действует до: @Model.MaximumUntilCarPasses</p>
+                        </div>
+                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="card" style="width: 18rem;">
+                <div class="card" style="width: 16rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Название карточки</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Подзаголовок карты</h6>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <h5 class="card-title">Разрешение на съемку</h5>
+                        <div class="card-text">
+                            <p>Всего пропусков: @Model.AllShootingPermissions</p>
+                            <p>Действующих: @Model.ValidShootingPermissions</p>
+                            <p>Действует до: @Model.MaximumUntilShootingPermissions</p>
+                        </div>
+                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
             </div>
