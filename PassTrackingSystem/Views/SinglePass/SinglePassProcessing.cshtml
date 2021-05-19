@@ -1,0 +1,63 @@
+﻿@model SinglePassVM
+<form method="post" asp-controller="SinglePass" , asp-action="SinglePassProcessing">
+    <div class="container-fluid set-min-width">
+        <input type="hidden" asp-for="ProcessingSinglePass.Id" id="pass-id" />
+        <input type="hidden" asp-for="ProcessingSinglePass.VisitorId" />
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="ProcessingSinglePass.ValidWith" class="form-label">Действует с</label>
+                <input asp-for="ProcessingSinglePass.ValidWith" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="ProcessingSinglePass.ValitUntil" class="form-label">Действует по</label>
+                <input asp-for="ProcessingSinglePass.ValitUntil" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <label asp-for="ProcessingSinglePass.PurposeOfIssuance" class="form-label">Цель выдачи</label>
+                <textarea asp-for="ProcessingSinglePass.PurposeOfIssuance" class="form-control" rows="6"></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="access-list">
+    </div>
+    <div class="pt-4 bd-example">
+        <label>Сотрудник выдавший документ</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Подразделение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model?.ProcessingSinglePass?.SinglePassIssued?.LastName</td>
+                    <td>@Model?.ProcessingSinglePass?.SinglePassIssued?.Name</td>
+                    <td>@Model?.ProcessingSinglePass?.SinglePassIssued?.Position</td>
+                    <td>@Model?.ProcessingSinglePass?.SinglePassIssued?.Department?.Value</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="py-5 ">
+        <button type="submit" class="btn btn-success">Отправить</button>
+        <button type="reset" class="btn btn-danger">Очистить</button>
+    </div>
+
+</form>
+<script>
+    $('document').ready(function (e) {
+        $('#access-list').load('@Url.RouteUrl(new
+{
+    controller = nameof(SinglePassController).Replace("Controller", ""),
+                       action = nameof(SinglePassController.GetAllowedList)
+                   })', { processingPass: $('#pass-id').val() })
+    })
+</script>

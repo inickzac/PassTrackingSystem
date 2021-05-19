@@ -34,7 +34,7 @@ namespace PassTrackingSystem.Infrastructure
             CarLicensePlate =$"{new Random().Next(1000, 9999)} {GenerateSeries()}-{new Random().Next(0, 9)}",            
             };
         }
-        private void CreateCarPasses(int quatity = 1000)
+        private void CreateCarPasses(int quatity = 3000)
         {
             if (!_dBContext.CarPasses.Any())
             {
@@ -56,7 +56,7 @@ namespace PassTrackingSystem.Infrastructure
                 _dBContext.SaveChanges();
             }
         }
-        private void CreateShootingPermission(int quatity = 1000)
+        private void CreateShootingPermission(int quatity = 3000)
         {
             if (!_dBContext.ShootingPermissions.Any())
             {
@@ -80,7 +80,7 @@ namespace PassTrackingSystem.Infrastructure
                 _dBContext.SaveChanges();
             }
         }
-        private void CreateSinglePass(int quatity = 1000)
+        private void CreateSinglePass(int quatity = 3000)
         {
             if (!_dBContext.SinglePasses.Any())
             {
@@ -103,7 +103,7 @@ namespace PassTrackingSystem.Infrastructure
                 _dBContext.SaveChanges();
             }
         }
-        private void CreateTemporaryPass(int quatity =1000)
+        private void CreateTemporaryPass(int quatity =3000)
         {
             if (!_dBContext.TemporaryPasses.Any())
             {
@@ -311,11 +311,10 @@ namespace PassTrackingSystem.Infrastructure
 
         private void AddInitDataToDB()
         {
-            CreateVisitors(1000);
-            CreateDocumentTypes();
             CreateIssuingAuthority();
+            CreateDocumentTypes();
+            CreateVisitors(1000);                      
             CreateStationFacility();
-            CreateVisitors(1000);
             CreateDepartments();
             CreateEmployees();
             CreateSinglePass();

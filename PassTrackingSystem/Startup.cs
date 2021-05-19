@@ -20,7 +20,6 @@ namespace PassTrackingSystem
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -36,6 +35,10 @@ namespace PassTrackingSystem
             services.AddScoped<IGenericRepository<TemporaryPass>, GenericRepository<TemporaryPass>>();
             services.AddScoped<IGenericRepository<StationFacility>, GenericRepository<StationFacility>>();
             services.AddScoped<IGenericRepository<Employee>, GenericRepository<Employee>>();
+            services.AddScoped<IGenericRepository<SinglePass>, GenericRepository<SinglePass>>();
+            services.AddScoped<IGenericRepository<ShootingPermission>, GenericRepository<ShootingPermission>>();
+            services.AddScoped<IGenericRepository<CarPass>, GenericRepository<CarPass>>();
+            services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -62,12 +65,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=Home}/{action=Index}/{id?}");
             //});
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=VisitorForm}/{action=VisitorProcessing}/{id?}");
+            //});
 
             //app.UseEndpoints(endpoints =>
             //{
@@ -83,12 +86,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=TemporaryPass}/{action=ShowAll}/{id?}");
             //});
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=TemporaryPass}/{action=TemporaryPassProcessing}/{id=4}");
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=TemporaryPass}/{action=TemporaryPassProcessing}/{id=4}");
+            });
         }
     }
 }

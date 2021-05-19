@@ -55,18 +55,18 @@ namespace PassTrackingSystem.Controllers
             List<int> facilitiesId)
         {
             await passRepository.Update(ProcessingTemporaryPass);
-            passRepository.GetAll().Include(v => v.StationFacilities).
-                Where(v => v.Id == ProcessingTemporaryPass.Id)
+            passRepository.GetAll().Where(v => v.Id == ProcessingTemporaryPass.Id).
+                Include(v => v.StationFacilities)
                 .First();
 
             ProcessingTemporaryPass.StationFacilities = 
                 await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
+                .Where(v => v.Id == id)
                .Include(v => v.TemporaryPasses)
-              .Where(v => v.Id == id).First()).ToList());
+              .First()).ToList());
             
             await passRepository.Update(ProcessingTemporaryPass);
-            GC.Collect();
-            return RedirectToAction("ShowAll");
+            return RedirectToAction("TemporaryPassProcessing", ProcessingTemporaryPass.Id);
         }
 
         public async Task<IActionResult> ShowAll(int? visitorId ,CommonListQuery options = null)

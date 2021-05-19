@@ -265,21 +265,11 @@ namespace PassTrackingSystem.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ShootingPermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SinglePassId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ShootingPermissionId");
-
-                    b.HasIndex("SinglePassId");
 
                     b.ToTable("StationFacilities");
                 });
@@ -345,6 +335,36 @@ namespace PassTrackingSystem.Migrations
                     b.ToTable("Visitors");
                 });
 
+            modelBuilder.Entity("ShootingPermissionStationFacility", b =>
+                {
+                    b.Property<int>("ShootingPermissionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StationFacilitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShootingPermissionsId", "StationFacilitiesId");
+
+                    b.HasIndex("StationFacilitiesId");
+
+                    b.ToTable("ShootingPermissionStationFacility");
+                });
+
+            modelBuilder.Entity("SinglePassStationFacility", b =>
+                {
+                    b.Property<int>("SinglePassesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StationFacilitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SinglePassesId", "StationFacilitiesId");
+
+                    b.HasIndex("StationFacilitiesId");
+
+                    b.ToTable("SinglePassStationFacility");
+                });
+
             modelBuilder.Entity("StationFacilityTemporaryPass", b =>
                 {
                     b.Property<int>("StationFacilitiesId")
@@ -378,7 +398,7 @@ namespace PassTrackingSystem.Migrations
                         .HasForeignKey("CarPassIssuedId");
 
                     b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
-                        .WithMany()
+                        .WithMany("CarPasses")
                         .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -433,7 +453,7 @@ namespace PassTrackingSystem.Migrations
                         .HasForeignKey("ShootingPermissionIssuedId");
 
                     b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
-                        .WithMany()
+                        .WithMany("ShootingPermissions")
                         .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -460,17 +480,6 @@ namespace PassTrackingSystem.Migrations
                     b.Navigation("Visitor");
                 });
 
-            modelBuilder.Entity("PassTrackingSystem.Models.StationFacility", b =>
-                {
-                    b.HasOne("PassTrackingSystem.Models.ShootingPermission", null)
-                        .WithMany("StationFacilities")
-                        .HasForeignKey("ShootingPermissionId");
-
-                    b.HasOne("PassTrackingSystem.Models.SinglePass", null)
-                        .WithMany("StationFacilities")
-                        .HasForeignKey("SinglePassId");
-                });
-
             modelBuilder.Entity("PassTrackingSystem.Models.TemporaryPass", b =>
                 {
                     b.HasOne("PassTrackingSystem.Models.Employee", "TemporaryPassIssued")
@@ -486,6 +495,36 @@ namespace PassTrackingSystem.Migrations
                     b.Navigation("TemporaryPassIssued");
 
                     b.Navigation("Visitor");
+                });
+
+            modelBuilder.Entity("ShootingPermissionStationFacility", b =>
+                {
+                    b.HasOne("PassTrackingSystem.Models.ShootingPermission", null)
+                        .WithMany()
+                        .HasForeignKey("ShootingPermissionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PassTrackingSystem.Models.StationFacility", null)
+                        .WithMany()
+                        .HasForeignKey("StationFacilitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SinglePassStationFacility", b =>
+                {
+                    b.HasOne("PassTrackingSystem.Models.SinglePass", null)
+                        .WithMany()
+                        .HasForeignKey("SinglePassesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PassTrackingSystem.Models.StationFacility", null)
+                        .WithMany()
+                        .HasForeignKey("StationFacilitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StationFacilityTemporaryPass", b =>
@@ -508,19 +547,13 @@ namespace PassTrackingSystem.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("PassTrackingSystem.Models.ShootingPermission", b =>
-                {
-                    b.Navigation("StationFacilities");
-                });
-
-            modelBuilder.Entity("PassTrackingSystem.Models.SinglePass", b =>
-                {
-                    b.Navigation("StationFacilities");
-                });
-
             modelBuilder.Entity("PassTrackingSystem.Models.Visitor", b =>
                 {
+                    b.Navigation("CarPasses");
+
                     b.Navigation("Document");
+
+                    b.Navigation("ShootingPermissions");
 
                     b.Navigation("SinglePasses");
 

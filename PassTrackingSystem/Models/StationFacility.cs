@@ -12,5 +12,7 @@ namespace PassTrackingSystem.Models
         [Required]
         public string Value { get; set; }
         public IList<TemporaryPass> TemporaryPasses { get; set; }
+        public IList<SinglePass> SinglePasses { get; set; }
+        public IList<ShootingPermission> ShootingPermissions { get; set; }
     }
 }

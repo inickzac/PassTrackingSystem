@@ -10,8 +10,8 @@ using PassTrackingSystem.Models;
 namespace PassTrackingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210518164402_addModels")]
-    partial class addModels
+    [Migration("20210518203158_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,11 +52,11 @@ namespace PassTrackingSystem.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CarPassIssuedId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PurposeOfIssuance")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TemporaryPassIssuedId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("ValidWith")
                         .HasColumnType("datetime2");
@@ -69,7 +69,7 @@ namespace PassTrackingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TemporaryPassIssuedId");
+                    b.HasIndex("CarPassIssuedId");
 
                     b.HasIndex("VisitorId");
 
@@ -205,6 +205,9 @@ namespace PassTrackingSystem.Migrations
                     b.Property<string>("CameraType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShootingPermissionIssuedId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ShootingPurpose")
                         .HasColumnType("nvarchar(max)");
 
@@ -218,6 +221,8 @@ namespace PassTrackingSystem.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShootingPermissionIssuedId");
 
                     b.HasIndex("VisitorId");
 
@@ -234,7 +239,7 @@ namespace PassTrackingSystem.Migrations
                     b.Property<string>("PurposeOfIssuance")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TemporaryPassIssuedId")
+                    b.Property<int?>("SinglePassIssuedId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ValidWith")
@@ -248,7 +253,7 @@ namespace PassTrackingSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TemporaryPassIssuedId");
+                    b.HasIndex("SinglePassIssuedId");
 
                     b.HasIndex("VisitorId");
 
@@ -262,21 +267,11 @@ namespace PassTrackingSystem.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ShootingPermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SinglePassId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ShootingPermissionId");
-
-                    b.HasIndex("SinglePassId");
 
                     b.ToTable("StationFacilities");
                 });
@@ -342,6 +337,36 @@ namespace PassTrackingSystem.Migrations
                     b.ToTable("Visitors");
                 });
 
+            modelBuilder.Entity("ShootingPermissionStationFacility", b =>
+                {
+                    b.Property<int>("ShootingPermissionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StationFacilitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShootingPermissionsId", "StationFacilitiesId");
+
+                    b.HasIndex("StationFacilitiesId");
+
+                    b.ToTable("ShootingPermissionStationFacility");
+                });
+
+            modelBuilder.Entity("SinglePassStationFacility", b =>
+                {
+                    b.Property<int>("SinglePassesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StationFacilitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SinglePassesId", "StationFacilitiesId");
+
+                    b.HasIndex("StationFacilitiesId");
+
+                    b.ToTable("SinglePassStationFacility");
+                });
+
             modelBuilder.Entity("StationFacilityTemporaryPass", b =>
                 {
                     b.Property<int>("StationFacilitiesId")
@@ -370,17 +395,17 @@ namespace PassTrackingSystem.Migrations
 
             modelBuilder.Entity("PassTrackingSystem.Models.CarPass", b =>
                 {
-                    b.HasOne("PassTrackingSystem.Models.Employee", "TemporaryPassIssued")
+                    b.HasOne("PassTrackingSystem.Models.Employee", "CarPassIssued")
                         .WithMany()
-                        .HasForeignKey("TemporaryPassIssuedId");
+                        .HasForeignKey("CarPassIssuedId");
 
                     b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
-                        .WithMany()
+                        .WithMany("CarPasses")
                         .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TemporaryPassIssued");
+                    b.Navigation("CarPassIssued");
 
                     b.Navigation("Visitor");
                 });
@@ -425,20 +450,26 @@ namespace PassTrackingSystem.Migrations
 
             modelBuilder.Entity("PassTrackingSystem.Models.ShootingPermission", b =>
                 {
-                    b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
+                    b.HasOne("PassTrackingSystem.Models.Employee", "ShootingPermissionIssued")
                         .WithMany()
+                        .HasForeignKey("ShootingPermissionIssuedId");
+
+                    b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
+                        .WithMany("ShootingPermissions")
                         .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ShootingPermissionIssued");
 
                     b.Navigation("Visitor");
                 });
 
             modelBuilder.Entity("PassTrackingSystem.Models.SinglePass", b =>
                 {
-                    b.HasOne("PassTrackingSystem.Models.Employee", "TemporaryPassIssued")
+                    b.HasOne("PassTrackingSystem.Models.Employee", "SinglePassIssued")
                         .WithMany()
-                        .HasForeignKey("TemporaryPassIssuedId");
+                        .HasForeignKey("SinglePassIssuedId");
 
                     b.HasOne("PassTrackingSystem.Models.Visitor", "Visitor")
                         .WithMany("SinglePasses")
@@ -446,20 +477,9 @@ namespace PassTrackingSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TemporaryPassIssued");
+                    b.Navigation("SinglePassIssued");
 
                     b.Navigation("Visitor");
-                });
-
-            modelBuilder.Entity("PassTrackingSystem.Models.StationFacility", b =>
-                {
-                    b.HasOne("PassTrackingSystem.Models.ShootingPermission", null)
-                        .WithMany("StationFacilities")
-                        .HasForeignKey("ShootingPermissionId");
-
-                    b.HasOne("PassTrackingSystem.Models.SinglePass", null)
-                        .WithMany("StationFacilities")
-                        .HasForeignKey("SinglePassId");
                 });
 
             modelBuilder.Entity("PassTrackingSystem.Models.TemporaryPass", b =>
@@ -477,6 +497,36 @@ namespace PassTrackingSystem.Migrations
                     b.Navigation("TemporaryPassIssued");
 
                     b.Navigation("Visitor");
+                });
+
+            modelBuilder.Entity("ShootingPermissionStationFacility", b =>
+                {
+                    b.HasOne("PassTrackingSystem.Models.ShootingPermission", null)
+                        .WithMany()
+                        .HasForeignKey("ShootingPermissionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PassTrackingSystem.Models.StationFacility", null)
+                        .WithMany()
+                        .HasForeignKey("StationFacilitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SinglePassStationFacility", b =>
+                {
+                    b.HasOne("PassTrackingSystem.Models.SinglePass", null)
+                        .WithMany()
+                        .HasForeignKey("SinglePassesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PassTrackingSystem.Models.StationFacility", null)
+                        .WithMany()
+                        .HasForeignKey("StationFacilitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StationFacilityTemporaryPass", b =>
@@ -499,19 +549,13 @@ namespace PassTrackingSystem.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("PassTrackingSystem.Models.ShootingPermission", b =>
-                {
-                    b.Navigation("StationFacilities");
-                });
-
-            modelBuilder.Entity("PassTrackingSystem.Models.SinglePass", b =>
-                {
-                    b.Navigation("StationFacilities");
-                });
-
             modelBuilder.Entity("PassTrackingSystem.Models.Visitor", b =>
                 {
+                    b.Navigation("CarPasses");
+
                     b.Navigation("Document");
+
+                    b.Navigation("ShootingPermissions");
 
                     b.Navigation("SinglePasses");
 

@@ -55,7 +55,6 @@ namespace PassTrackingSystem.Controllers
         {
             await visitorsRepository.Update(visitor);           
             return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
-
         }
     }
 }
