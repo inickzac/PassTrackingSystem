@@ -1,0 +1,71 @@
+﻿@model ShootingPermissionVM
+<form method="post" asp-controller="ShootingPermission" , asp-action="ShootingPermissionProcessing">
+    <div class="container-fluid set-min-width">
+        <input type="hidden" asp-for="ProcessingShootingPermission.Id" id="pass-id" />
+        <input type="hidden" asp-for="ProcessingShootingPermission.VisitorId" />
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="ProcessingShootingPermission.ValidWith" class="form-label">Действует с</label>
+                <input asp-for="ProcessingShootingPermission.ValidWith" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="ProcessingShootingPermission.ValitUntil" class="form-label">Действует по</label>
+                <input asp-for="ProcessingShootingPermission.ValitUntil" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <label asp-for="ProcessingShootingPermission.ShootingPurpose" class="form-label">Цель съемки</label>
+                <textarea asp-for="ProcessingShootingPermission.ShootingPurpose" class="form-control" rows="8"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <label asp-for="ProcessingShootingPermission.CameraType" class="form-label">Модель камеры</label>
+                <textarea asp-for="ProcessingShootingPermission.CameraType" class="form-control" rows="2"></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="access-list">
+    </div>
+    <div class="pt-4 bd-example">
+        <label>Сотрудник выдавший документ</label>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Подразделение</th>
+                    <th scope="col">Должность</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model?.ProcessingShootingPermission?.ShootingPermissionIssued?.LastName</td>
+                    <td>@Model?.ProcessingShootingPermission?.ShootingPermissionIssued?.Name</td>
+                    <td>@Model?.ProcessingShootingPermission?.ShootingPermissionIssued?.Patronymic</td>
+                    <td>@Model?.ProcessingShootingPermission?.ShootingPermissionIssued?.Department?.Value</td>
+                    <td>@Model?.ProcessingShootingPermission?.ShootingPermissionIssued?.Position</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="py-5 ">
+        <button type="submit" class="btn btn-success">Отправить</button>
+        <button type="reset" class="btn btn-danger">Очистить</button>
+    </div>
+
+</form>
+<script>
+    $('document').ready(function (e) {
+        $('#access-list').load('@Url.RouteUrl(new
+{
+    controller = nameof(ShootingPermissionController).Replace("Controller", ""),
+                       action = nameof(ShootingPermissionController.GetAllowedList)
+                   })', { processingPass: $('#pass-id').val() })
+    })
+</script>

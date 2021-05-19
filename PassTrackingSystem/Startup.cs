@@ -86,11 +86,19 @@ namespace PassTrackingSystem
             //        pattern: "{controller=TemporaryPass}/{action=ShowAll}/{id?}");
             //});
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=TemporaryPass}/{action=TemporaryPassProcessing}/{id=4}");
+            //});
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=TemporaryPass}/{action=TemporaryPassProcessing}/{id=4}");
+                    pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
             });
         }
     }

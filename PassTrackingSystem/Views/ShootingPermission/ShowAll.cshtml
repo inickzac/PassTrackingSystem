@@ -1,0 +1,53 @@
+﻿@model ShootingPermissionVM
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="col-12">
+    <form asp-action="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController.ShowAll)"
+          asp-controller="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController).Replace("Controller", "")"
+          id="info-option-group" method="get">
+        @await Html.PartialAsync("UpperOptionMenu", @Model)
+        <input type="hidden" value="@Model.PurposeVisitorId" name="visitorId" />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="th-sm">id</th>
+                    <th scope="col">Действует с</th>
+                    <th scope="col">Действует по</th>
+                    <th scope="col">Цель съемки</th>
+                    <th scope="col">Места для посещения</th>
+                    <th scope="col">Лицо выдавшее пропуск</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ShootingPermission in Model.ShootingPermissions.Items)
+                {
+                    <tr>
+                        <td>@ShootingPermission.Id</td>
+                        <td>@ShootingPermission.ValidWith.ToShortDateString()</td>
+                        <td>@ShootingPermission.ValitUntil.ToShortDateString()</td>
+                        <td>@ShootingPermission.ShootingPurpose</td>
+                        <td>
+                            @foreach (var item in ShootingPermission.StationFacilities)
+                            {
+                                <text>@item.Value<br></text>
+                            }
+                        </td>
+                        <td>@ShootingPermission.ShootingPermissionIssued.LastName @ShootingPermission.ShootingPermissionIssued.Name @ShootingPermission.ShootingPermissionIssued.Patronymic</td>
+                        <td>
+                            <a asp-action="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController.ShootingPermissionProcessing)"
+                               asp-controller="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController).Replace("Controller", "")"
+                               asp-route-id="@ShootingPermission.Id"
+                               class="btn btn-outline-dark">Подробнее</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @await Html.PartialAsync("Pages", @Model.ShootingPermissions.PageDividorInfo)
+    </form>
+
+</div>

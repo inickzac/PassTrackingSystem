@@ -117,7 +117,7 @@
                             <p>Действующих: @Model.ValidTemporaryPasses</p>
                             <p>Действует до: @Model.MaximumUntilTemporaryPasses</p>
                         </div>
-                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="TemporaryPass" asp-action="TemporaryPassProcessing" asp-route-visitorId="@Model.Visitor.Id" asp-route-Id="0" class="card-link">Добавить</a>
                         <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
                             <p>Действует до: @Model.MaximumUntilCarPasses</p>
                         </div>
                         <a href="#" class="card-link">Добавить</a>
-                        <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
+                        <a asp-controller="CarPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                             <p>Действует до: @Model.MaximumUntilShootingPermissions</p>
                         </div>
                         <a href="#" class="card-link">Добавить</a>
-                        <a asp-controller="TemporaryPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
+                        <a asp-controller="ShootingPermission" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
             </div>
