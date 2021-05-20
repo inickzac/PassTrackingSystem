@@ -19,26 +19,104 @@ namespace PassTrackingSystem.Infrastructure
         private static string[] lastNamesMales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.LastNamesMale.txt");
         private static string[] patronymicMales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.PatronymicMale.txt");
         private static string[] purposeOfIssuances = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.PurposeOfIssuance.txt");
+        private static string[] cameras = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.Cameras.txt");
+        private static string[] cars = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.Cars.txt");
         public RandomDataGenerator(ApplicationDBContext dBContext)
         {
             _dBContext = dBContext;
 
             AddInitDataToDB();
         }
-        private void CreateTemporaryPass()
+
+        private Car CreateCar()
+        {
+            return new Car {CarBrand =  GetRandomStringFromCollections(cars), 
+            CarLicensePlate =$"{new Random().Next(1000, 9999)} {GenerateSeries()}-{new Random().Next(0, 9)}",            
+            };
+        }
+        private void CreateCarPasses(int quatity = 3000)
+        {
+            if (!_dBContext.CarPasses.Any())
+            {
+                var tpes = _dBContext.Visitors.ToArray();
+                var employees = _dBContext.Employees.ToArray();
+                for (int i = 0; i < quatity; i++)
+                {
+                    _dBContext.CarPasses.Add(
+                           new CarPass
+                           {
+                               ValidWith = DateTime.Now.AddMonths(new Random().Next(-120, -1)),
+                               ValitUntil = DateTime.Now.AddMonths(new Random().Next(-119, 120)),
+                               PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
+                               CarPassIssued = GetRandomObjectFromCollections(employees),
+                               VisitorId = GetRandomObjectFromCollections(tpes).Id,
+                               Car = CreateCar()
+                           }); ;
+                }
+                _dBContext.SaveChanges();
+            }
+        }
+        private void CreateShootingPermission(int quatity = 3000)
+        {
+            if (!_dBContext.ShootingPermissions.Any())
+            {
+                var tpes = _dBContext.Visitors.ToArray();
+                var fasilitys = _dBContext.StationFacilities.ToArray();
+                var employees = _dBContext.Employees.ToArray();
+                for (int i = 0; i < quatity; i++)
+                {
+                    _dBContext.ShootingPermissions.Add(
+                           new ShootingPermission
+                           {
+                               ValidWith = DateTime.Now.AddMonths(new Random().Next(-120, -1)),
+                               ValitUntil = DateTime.Now.AddMonths(new Random().Next(-119, 120)),
+                               ShootingPurpose = GetRandomStringFromCollections(purposeOfIssuances),
+                               StationFacilities = GetRandomObjectsFromCollections(fasilitys),
+                               ShootingPermissionIssued = GetRandomObjectFromCollections(employees),
+                               VisitorId = GetRandomObjectFromCollections(tpes).Id,
+                               CameraType = GetRandomStringFromCollections(cameras),                              
+                           }); ;
+                }
+                _dBContext.SaveChanges();
+            }
+        }
+        private void CreateSinglePass(int quatity = 3000)
+        {
+            if (!_dBContext.SinglePasses.Any())
+            {
+                var tpes = _dBContext.Visitors.ToArray();
+                var fasilitys = _dBContext.StationFacilities.ToArray();
+                var employees = _dBContext.Employees.ToArray();
+                for (int i = 0; i < quatity; i++)
+                {
+                    _dBContext.SinglePasses.Add(
+                           new SinglePass
+                           {
+                               ValidWith = DateTime.Now.AddMonths(new Random().Next(-120, -1)),
+                               ValitUntil = DateTime.Now.AddMonths(new Random().Next(-119, 120)),
+                               PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
+                               StationFacilities = GetRandomObjectsFromCollections(fasilitys),
+                               SinglePassIssued = GetRandomObjectFromCollections(employees),
+                               VisitorId = GetRandomObjectFromCollections(tpes).Id                               
+                           }); ;
+                }
+                _dBContext.SaveChanges();
+            }
+        }
+        private void CreateTemporaryPass(int quatity =3000)
         {
             if (!_dBContext.TemporaryPasses.Any())
             {
                 var tpes = _dBContext.Visitors.ToArray();
                 var fasilitys = _dBContext.StationFacilities.ToArray();
                 var employees = _dBContext.Employees.ToArray();
-                for (int i = 0; i < 10000; i++)
+                for (int i = 0; i < quatity; i++)
                 {
                     _dBContext.TemporaryPasses.Add(
                            new TemporaryPass
                            {
                                ValidWith = DateTime.Now.AddMonths(new Random().Next(-120, -1)),
-                               ValitUntil = DateTime.Now.AddMonths(new Random().Next(1, 120)),
+                               ValitUntil = DateTime.Now.AddMonths(new Random().Next(-119, 120)),
                                PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
                                StationFacilities = GetRandomObjectsFromCollections(fasilitys),
                                TemporaryPassIssued = GetRandomObjectFromCollections(employees),
@@ -233,14 +311,16 @@ namespace PassTrackingSystem.Infrastructure
 
         private void AddInitDataToDB()
         {
-            CreateVisitors(1000);
-            CreateDocumentTypes();
             CreateIssuingAuthority();
+            CreateDocumentTypes();
+            CreateVisitors(1000);                      
             CreateStationFacility();
-            CreateVisitors(1000);
             CreateDepartments();
             CreateEmployees();
+            CreateSinglePass();
             CreateTemporaryPass();
+            CreateShootingPermission();
+            CreateCarPasses();
         }
     }
 

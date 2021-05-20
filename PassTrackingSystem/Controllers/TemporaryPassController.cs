@@ -27,7 +27,7 @@ namespace PassTrackingSystem.Controllers
             this.passRepository = passRepository;
         }
 
-        public async Task<ViewResult> TemporaryPassProcessing(int id)
+        public async Task<IActionResult> TemporaryPassProcessing(int id, int visitorId)
         {
             TemporaryPass temporaryPass;
             if (id != 0)
@@ -40,10 +40,15 @@ namespace PassTrackingSystem.Controllers
                     .FirstAsync();
             }
             else
-            {
-                temporaryPass = new TemporaryPass();
-                temporaryPass.ValidWith = DateTime.Now;
-                temporaryPass.ValitUntil = DateTime.Now;
+            {              
+                if (visitorId != 0)
+                {
+                    temporaryPass = new TemporaryPass();
+                    temporaryPass.ValidWith = DateTime.Now;
+                    temporaryPass.ValitUntil = DateTime.Now;
+                    temporaryPass.VisitorId = visitorId;
+                }
+                else return new BadRequestResult();
             }
             return View(new TemporaryPassVM
             {
@@ -55,18 +60,19 @@ namespace PassTrackingSystem.Controllers
             List<int> facilitiesId)
         {
             await passRepository.Update(ProcessingTemporaryPass);
-            passRepository.GetAll().Include(v => v.StationFacilities).
-                Where(v => v.Id == ProcessingTemporaryPass.Id)
+            passRepository.GetAll().Where(v => v.Id == ProcessingTemporaryPass.Id).
+                Include(v => v.StationFacilities)
                 .First();
 
             ProcessingTemporaryPass.StationFacilities = 
-                await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
+                facilitiesId.Select(id => stationFacilitysRepository.GetAll()
+                .Where(v => v.Id == id)
                .Include(v => v.TemporaryPasses)
-              .Where(v => v.Id == id).First()).ToList());
+              .First()).ToList();
             
             await passRepository.Update(ProcessingTemporaryPass);
-            GC.Collect();
-            return RedirectToAction("ShowAll");
+            int id = ProcessingTemporaryPass.Id;
+            return RedirectToAction("TemporaryPassProcessing", new {id =id});
         }
 
         public async Task<IActionResult> ShowAll(int? visitorId ,CommonListQuery options = null)
@@ -88,7 +94,13 @@ namespace PassTrackingSystem.Controllers
         {
             var pass = await passRepository.GetAll()
                 .Where(v => v.Id == processingPass)
-                .Include(v => v.StationFacilities).FirstAsync();
+                .Include(v => v.StationFacilities).FirstOrDefaultAsync();           
+            if(pass==null)
+            {
+                pass = new TemporaryPass();
+                pass.StationFacilities = new List<StationFacility>();
+                
+            }
             var allPass = await stationFacilitysRepository.GetAll().ToListAsync();
             var accessPairs = allPass.Select(s => new
             {

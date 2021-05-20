@@ -1,0 +1,50 @@
+﻿@model CarPassVM
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="col-12">
+    <form asp-action="@nameof(PassTrackingSystem.Controllers.CarPassController.ShowAll)"
+          asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
+          id="info-option-group" method="get">
+        @await Html.PartialAsync("UpperOptionMenu", @Model)
+        <input type="hidden" value="@Model.PurposeVisitorId" name="visitorId" />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" class="th-sm">id</th>
+                    <th scope="col">Действует с</th>
+                    <th scope="col">Действует по</th>
+                    <th scope="col">Цель выдачи</th>
+                    <th scope="col">Марка автомобиля</th>
+                    <th scope="col">Номерной знак</th>
+                    <th scope="col">Лицо выдавшее пропуск</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var CarPass in Model.CarPasses.Items)
+                {
+                <tr>
+                    <td>@CarPass.Id</td>
+                    <td>@CarPass?.ValidWith.ToShortDateString()</td>
+                    <td>@CarPass?.ValitUntil.ToShortDateString()</td>
+                    <td>@CarPass?.PurposeOfIssuance</td>
+                    <td>@CarPass?.Car?.CarBrand</td>
+                    <td>@CarPass?.Car?.CarLicensePlate</td>
+                    <td>@CarPass?.CarPassIssued?.LastName @CarPass.CarPassIssued?.Name @CarPass.CarPassIssued?.Patronymic</td>
+                    <td>
+                        <a asp-action="@nameof(PassTrackingSystem.Controllers.CarPassController.CarPassProcessing)"
+                           asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
+                           asp-route-id="@CarPass.Id"
+                           class="btn btn-outline-dark">Подробнее</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        @await Html.PartialAsync("Pages", @Model.CarPasses.PageDividorInfo)
+    </form>
+
+</div>

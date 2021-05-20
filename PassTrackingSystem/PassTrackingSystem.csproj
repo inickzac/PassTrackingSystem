@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resource\RandomGenerator\Cameras.txt" />
+    <None Remove="Resource\RandomGenerator\Cars.txt" />
     <None Remove="Resource\RandomGenerator\Company.txt" />
     <None Remove="Resource\RandomGenerator\LastNamesFemale.txt" />
     <None Remove="Resource\RandomGenerator\LastNamesMale.txt" />
@@ -17,6 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resource\RandomGenerator\Cameras.txt" />
+    <EmbeddedResource Include="Resource\RandomGenerator\Cars.txt" />
     <EmbeddedResource Include="Resource\RandomGenerator\Company.txt" />
     <EmbeddedResource Include="Resource\RandomGenerator\LastNamesFemale.txt" />
     <EmbeddedResource Include="Resource\RandomGenerator\LastNamesMale.txt" />

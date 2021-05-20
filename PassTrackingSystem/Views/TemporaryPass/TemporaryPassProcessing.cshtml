@@ -2,6 +2,7 @@
 <form method="post" asp-controller="TemporaryPass" , asp-action="TemporaryPassProcessing">
     <div class="container-fluid set-min-width">
         <input type="hidden" asp-for="ProcessingTemporaryPass.Id" id="pass-id" />
+        <input type="hidden" asp-for="ProcessingTemporaryPass.VisitorId"/>
         <div class="row">
             <div class="col-md-6">
                 <label asp-for="ProcessingTemporaryPass.ValidWith" class="form-label">Действует с</label>
@@ -37,14 +38,14 @@
             <tbody>
                 <tr>
                     <td>@Model?.ProcessingTemporaryPass?.TemporaryPassIssued?.LastName</td>
-                    <td>@Model?.ProcessingTemporaryPass?.TemporaryPassIssued?.Name</td>                 
+                    <td>@Model?.ProcessingTemporaryPass?.TemporaryPassIssued?.Name</td>
                     <td>@Model?.ProcessingTemporaryPass?.TemporaryPassIssued?.Position</td>
                     <td>@Model?.ProcessingTemporaryPass?.TemporaryPassIssued?.Department?.Value</td>
                 </tr>
             </tbody>
         </table>
     </div>
-   
+
     <div class="py-5 ">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
@@ -53,6 +54,10 @@
 </form>
 <script>
     $('document').ready(function (e) {
-        $('#access-list').load('TemporaryPass/GetAllowedList', { processingPass: $('#pass-id').val()} )
+        $('#access-list').load('@Url.RouteUrl(new
+{
+    controller = nameof(TemporaryPassController).Replace("Controller", ""),
+                       action = nameof(TemporaryPassController.GetAllowedList)
+                   })', { processingPass: $('#pass-id').val() })
     })
 </script>

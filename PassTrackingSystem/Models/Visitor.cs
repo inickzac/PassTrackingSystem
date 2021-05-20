@@ -20,5 +20,7 @@ namespace PassTrackingSystem.Models
         public Document Document { get; set; }
         public IList<TemporaryPass> TemporaryPasses { get; set; }
         public IList<SinglePass> SinglePasses { get; set; }
+        public IList<ShootingPermission> ShootingPermissions { get; set; }
+        public IList<CarPass> CarPasses  { get; set; }
     }
 }
