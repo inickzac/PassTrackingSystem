@@ -131,7 +131,7 @@
                             <p>Действующих: @Model.ValidSinglePasses</p>
                             <p>Действует до: @Model.MaximumUntilSinglePasses</p>
                         </div>
-                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="SinglePass" asp-action="SinglePassProcessing" asp-route-visitorId="@Model.Visitor.Id" asp-route-Id="0" class="card-link">Добавить</a>
                         <a asp-controller="SinglePass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
                             <p>Действующих: @Model.ValidCarPasses</p>
                             <p>Действует до: @Model.MaximumUntilCarPasses</p>
                         </div>
-                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="CarPass" asp-action="CarPassProcessing" asp-route-visitorId="@Model.Visitor.Id" asp-route-Id="0" class="card-link">Добавить</a>
                         <a asp-controller="CarPass" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
                             <p>Действующих: @Model.ValidShootingPermissions</p>
                             <p>Действует до: @Model.MaximumUntilShootingPermissions</p>
                         </div>
-                        <a href="#" class="card-link">Добавить</a>
+                        <a asp-controller="ShootingPermission" asp-action="ShootingPermissionProcessing" asp-route-visitorId="@Model.Visitor.Id" asp-route-Id="0" class="card-link">Добавить</a>
                         <a asp-controller="ShootingPermission" asp-action="ShowAll" asp-route-visitorId="@Model.Visitor.Id" class="card-link">Просматреть все</a>
                     </div>
                 </div>

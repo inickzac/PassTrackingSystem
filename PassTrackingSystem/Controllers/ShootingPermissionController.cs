@@ -27,7 +27,7 @@ namespace PassTrackingSystem.Controllers
             this.employeeRepository = employeeRepository;
         }
 
-        public async Task<ViewResult> ShootingPermissionProcessing(int id)
+        public async Task<IActionResult> ShootingPermissionProcessing(int id, int visitorId)
         {
             ShootingPermission shootingPermission;
             if (id != 0)
@@ -41,9 +41,15 @@ namespace PassTrackingSystem.Controllers
             }
             else
             {
-                shootingPermission = new ShootingPermission();
-                shootingPermission.ValidWith = DateTime.Now;
-                shootingPermission.ValitUntil = DateTime.Now;
+                if (visitorId != 0)
+                {
+                    shootingPermission = new ShootingPermission();
+                    shootingPermission.ValidWith = DateTime.Now;
+                    shootingPermission.ValitUntil = DateTime.Now;
+                    shootingPermission.VisitorId = visitorId;
+                }
+                else return new BadRequestResult();
+               
             }
             return View(new ShootingPermissionVM
             {
@@ -67,14 +73,21 @@ namespace PassTrackingSystem.Controllers
               .First()).ToList());
 
             await passRepository.Update(ProcessingShootingPermission);
-            return RedirectToAction("ShootingPermissionProcessing", ProcessingShootingPermission.Id);
+            int id = ProcessingShootingPermission.Id;
+            return RedirectToAction("ShootingPermissionProcessing", new { id = id });
         }
 
         public async Task<IActionResult> GetAllowedList(int processingPass)
         {
             var pass = await passRepository.GetAll()
                 .Where(v => v.Id == processingPass)
-                .Include(v => v.StationFacilities).FirstAsync();
+                .Include(v => v.StationFacilities).FirstOrDefaultAsync();
+            if (pass == null)
+            {
+                pass = new ShootingPermission();
+                pass.StationFacilities = new List<StationFacility>();
+
+            }
             var allPass = await stationFacilitysRepository.GetAll().ToListAsync();
             var accessPairs = allPass.Select(s => new
             {

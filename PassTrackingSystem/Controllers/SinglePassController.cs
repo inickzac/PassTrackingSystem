@@ -26,7 +26,7 @@ namespace PassTrackingSystem.Controllers
             this.passRepository = passRepository;
         }
 
-        public async Task<ViewResult> SinglePassProcessing(int id)
+        public async Task<IActionResult> SinglePassProcessing(int id, int visitorId)
         {
             SinglePass singlePass;
             if (id != 0)
@@ -40,9 +40,15 @@ namespace PassTrackingSystem.Controllers
             }
             else
             {
-                singlePass = new SinglePass();
-                singlePass.ValidWith = DateTime.Now;
-                singlePass.ValitUntil = DateTime.Now;
+                if (visitorId != 0)
+                {
+                    singlePass = new SinglePass();
+                    singlePass.ValidWith = DateTime.Now;
+                    singlePass.ValitUntil = DateTime.Now;
+                    singlePass.VisitorId = visitorId;
+                }
+                else return new BadRequestResult();
+                
             }
             return View(new SinglePassVM
             {
@@ -64,7 +70,8 @@ namespace PassTrackingSystem.Controllers
               .Where(v => v.Id == id).First()).ToList());
 
             await passRepository.Update(ProcessingSinglePass);
-            return RedirectToAction("SinglePassProcessing", ProcessingSinglePass.Id);
+            int id = ProcessingSinglePass.Id;
+            return RedirectToAction("SinglePassProcessing",  new { id = id });
         }
 
         public async Task<IActionResult> ShowAll(int? visitorId, CommonListQuery options = null)
@@ -86,7 +93,13 @@ namespace PassTrackingSystem.Controllers
         {
             var pass = await passRepository.GetAll()
                 .Where(v => v.Id == processingPass)
-                .Include(v => v.StationFacilities).FirstAsync();
+                .Include(v => v.StationFacilities).FirstOrDefaultAsync();
+            if (pass == null)
+            {
+                pass = new SinglePass();
+                pass.StationFacilities = new List<StationFacility>();
+
+            }
             var allPass = await stationFacilitysRepository.GetAll().ToListAsync();
             var accessPairs = allPass.Select(s => new
             {

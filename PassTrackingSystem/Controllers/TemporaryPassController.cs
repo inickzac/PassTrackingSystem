@@ -65,10 +65,10 @@ namespace PassTrackingSystem.Controllers
                 .First();
 
             ProcessingTemporaryPass.StationFacilities = 
-                await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
+                facilitiesId.Select(id => stationFacilitysRepository.GetAll()
                 .Where(v => v.Id == id)
                .Include(v => v.TemporaryPasses)
-              .First()).ToList());
+              .First()).ToList();
             
             await passRepository.Update(ProcessingTemporaryPass);
             int id = ProcessingTemporaryPass.Id;

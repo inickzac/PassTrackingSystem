@@ -57,7 +57,8 @@ namespace PassTrackingSystem.Controllers
         public async Task<RedirectToActionResult> CarPassProcessing(CarPass ProcessingCarPass)
         {
             await passRepository.Update(ProcessingCarPass);
-            return RedirectToAction( "VisitorProcessing", "VisitorForm", ProcessingCarPass.Id);
+            int id = ProcessingCarPass.Id;
+            return RedirectToAction( "VisitorProcessing", "VisitorForm", new { id = id });
         }
 
         public async Task<IActionResult> ShowAll(int? visitorId, CommonListQuery options = null)
