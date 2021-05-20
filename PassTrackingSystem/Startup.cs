@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,8 +26,13 @@ namespace PassTrackingSystem
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
+            string identityConnection = Configuration.GetConnectionString("IdentityConnection");
             services.AddDbContext<ApplicationDBContext>(options =>
                options.UseSqlServer(connection).EnableSensitiveDataLogging());
+            services.AddDbContext<AppidentityDbContext>(options =>
+              options.UseSqlServer(identityConnection).EnableSensitiveDataLogging());
+            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppidentityDbContext>()
+                .AddDefaultTokenProviders();
             services.AddControllersWithViews();
             services.AddScoped<IGenericRepository<Visitor>, GenericRepository<Visitor>>();
             services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
@@ -53,7 +59,7 @@ namespace PassTrackingSystem
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
