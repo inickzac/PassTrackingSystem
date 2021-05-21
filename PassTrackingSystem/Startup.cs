@@ -31,8 +31,18 @@ namespace PassTrackingSystem
                options.UseSqlServer(connection).EnableSensitiveDataLogging());
             services.AddDbContext<AppidentityDbContext>(options =>
               options.UseSqlServer(identityConnection).EnableSensitiveDataLogging());
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppidentityDbContext>()
+            services.AddIdentity<AppUser, IdentityRole>(op => { op.Password.RequireDigit = false; 
+                op.Password.RequiredLength = 1;
+                op.Password.RequireLowercase = false;
+                op.Password.RequireNonAlphanumeric = false;
+                op.Password.RequireUppercase = false;
+                op.Password.RequireNonAlphanumeric = false;
+                op.Password.RequireLowercase = false;
+            })
+                
+                .AddEntityFrameworkStores<AppidentityDbContext>()
                 .AddDefaultTokenProviders();
+ 
             services.AddControllersWithViews();
             services.AddScoped<IGenericRepository<Visitor>, GenericRepository<Visitor>>();
             services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
@@ -45,6 +55,7 @@ namespace PassTrackingSystem
             services.AddScoped<IGenericRepository<ShootingPermission>, GenericRepository<ShootingPermission>>();
             services.AddScoped<IGenericRepository<CarPass>, GenericRepository<CarPass>>();
             services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
+            services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -100,11 +111,17 @@ namespace PassTrackingSystem
             //});
 
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
+            //});
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
+                    pattern: "{controller=Admin}/{action=Show}/{id=009819b3-57b6-4b35-b530-899e344e7ca1}");
             });
         }
     }

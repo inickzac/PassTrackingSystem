@@ -8,5 +8,6 @@ namespace PassTrackingSystem.Models
 {
     public class AppUser : IdentityUser
     {
+      public int EmployeeId { get; set; }
     }
 }

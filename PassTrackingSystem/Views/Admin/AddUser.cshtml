@@ -1,0 +1,71 @@
+﻿@model UserVM
+@await Html.PartialAsync("_OneItemSupportExtension", new ModalWindowVM())
+<form method="post" asp-controller="Admin" asp-action="Create">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="@Model.Name" class="form-label" style="min-width: 1000px">Имя</label>
+                <input asp-for="@Model.Name" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="Password" class="form-label">Пароль</label>
+                <input asp-for="Password" type="password" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="form-label">Повторить пароль</label>
+                <input type="password" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="@Model.Employee.LastName" class="form-label" style="min-width: 1000px">Фамилия</label>
+                <input asp-for="@Model.Employee.LastName" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="@Model.Employee.Name" class="form-label">Имя</label>
+                <input asp-for="@Model.Employee.Name"  class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="@Model.Employee.Patronymic" class="form-label">Отчество</label>
+                <input asp-for="@Model.Employee.Patronymic"  class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label asp-for="@Model.Employee.Position" class="form-label">Должность</label>
+                <input asp-for="@Model.Employee.Position" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="@Model.Employee.Department.Value" class="form-label">Подразделение</label>
+            <div class="input-group">
+                <select class="form-select combobox-ontime-loader" selected-value="@Model?.Employee?.DepartmentId" id="Documenttype"
+                        aria-label="Example select with button addon" asp-for="@Model.Employee.DepartmentId">
+                </select>
+                <button class='btn btn-outline-secondary one-item-data-request'
+                        extend-button-purpose="Department"
+                        data-bs-target="#exampleModal"
+                        data-bs-toggle="modal" type="button">
+                    <img src='/more-deteils.png'
+                         style="width: 21px;">
+                </button>
+            </div>
+        </div>
+    </div>
+    
+   
+    <div class="py-5">
+        <button type="submit" class="btn btn-success">Отправить</button>
+        <button type="reset" class="btn btn-danger">Очистить</button>
+    </div>
+</form>
+
+

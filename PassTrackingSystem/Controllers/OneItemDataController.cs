@@ -19,9 +19,8 @@ namespace PassTrackingSystem.Controllers
         ApplicationDBContext applicationDBContext;
 
         public OneItemDataController(IGenericRepository<DocumentType> documentTypeRepository, 
-            IGenericRepository<IssuingAuthority> issuingAuthorityRepository, ApplicationDBContext applicationDBContext)
+            IGenericRepository<IssuingAuthority> issuingAuthorityRepository, IGenericRepository<Department> departmentRepository )
         {
-            this.applicationDBContext = applicationDBContext;
             var documentTypeOption = new IoneValueActions
             {
                 GetAll = documentTypeRepository.GetAll().Select(v => v as IOneValueCommon),
@@ -39,11 +38,20 @@ namespace PassTrackingSystem.Controllers
                 DeleteValue = (oneValueObject) => issuingAuthorityRepository.Delete(oneValueObject.Id),
                 OneValueName ="Орган выдавший документ"
             };
+            var departmentOption = new IoneValueActions
+            {
+                GetAll = departmentRepository.GetAll().Select(v => v as IOneValueCommon),
+                UpdateValue = (oneValueObject) => departmentRepository.
+                Update(new Department { Id = oneValueObject.Id, Value = oneValueObject.Value }),
+                DeleteValue = (oneValueObject) => departmentRepository.Delete(oneValueObject.Id),
+                OneValueName = "Орган выдавший документ"
+            };
 
             nameAndActionPairs = new Dictionary<string, IoneValueActions>
             {
                 {"DocumentType", documentTypeOption},
-                {"IssuingAuthority", issuingAuthoritiesOption}
+                {"IssuingAuthority", issuingAuthoritiesOption},
+                 {"Department", departmentOption},
             };
         }
 
@@ -68,7 +76,7 @@ namespace PassTrackingSystem.Controllers
         {
             if (nameAndActionPairs.ContainsKey(oneItemName))
             {
-              return new JsonResult(await nameAndActionPairs[oneItemName].GetAll.ToListAsync());
+                return new JsonResult(await nameAndActionPairs[oneItemName].GetAll.ToListAsync());
             }
             return new JsonResult(new {BadRequest = "BadRequest" });
         }
