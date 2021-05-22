@@ -117,12 +117,20 @@ namespace PassTrackingSystem
             //        name: "default",
             //        pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
             //});
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Admin}/{action=Show}/{id=009819b3-57b6-4b35-b530-899e344e7ca1}");
+                    pattern: "{controller=Admin}/{action=Show}/{id=0}");
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Admin}/{action=ShowAll}/{id?}");
+            //});
         }
     }
 }

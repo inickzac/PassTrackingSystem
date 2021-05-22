@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class TemporaryPassController : Controller
     {
         private readonly IGenericRepository<TemporaryPass> passRepository;

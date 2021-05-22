@@ -35,9 +35,9 @@ namespace PassTrackingSystem.Extensions
                            Expression.Constant(searchTerm, typeof(string)));
                     return query.Where(Expression.Lambda<Func<T, bool>>(body, parameter));
                 }
-                if (source.Type.Equals(typeof(Int32)))
+                if (source.Type.Equals(typeof(int)))
                 {
-                    var body = Expression.Equal(source, Expression.Constant(Int32.Parse(searchTerm)));
+                    var body = Expression.Equal(source, Expression.Constant(int.Parse(searchTerm)));
                     return query.Where(Expression.Lambda<Func<T, bool>>(body, parameter));
                 }
                 throw new InvalidOperationException("type not supported");

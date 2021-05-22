@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PassTrackingSystem.Infrastructure;
@@ -19,21 +20,24 @@ namespace PassTrackingSystem.Controllers
         private readonly IGenericRepository<Visitor> _visitorsRepository;
         private readonly ApplicationDBContext dBContext;
         private UserManager<AppUser> userManager;
+        RoleManager<IdentityRole> roleManager;
 
         public HomeController(ILogger<HomeController> logger, 
             ApplicationDBContext dBContext,
              UserManager<AppUser> userManager,
+             RoleManager<IdentityRole> roleManager,
             IGenericRepository<Visitor> visitorsRepository)
         {
             this.dBContext = dBContext;
             this.userManager= userManager;
+            this.roleManager = roleManager;
             _visitorsRepository = visitorsRepository;
             _logger = logger;
         }
      
         public IActionResult Index(CommonListQuery commonListQuery)
         {
-            var randomDataGenerator = new RandomDataGenerator(dBContext, userManager);
+            var randomDataGenerator = new RandomDataGenerator(dBContext, userManager, roleManager);
             return View(new MainPageVM(_visitorsRepository,commonListQuery));            
         }
 

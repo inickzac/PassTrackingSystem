@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Infrastructure
 {
@@ -12,6 +13,7 @@ namespace PassTrackingSystem.Infrastructure
     {
         private ApplicationDBContext _dBContext;
         private UserManager<AppUser> userManager;
+        private RoleManager<IdentityRole> roleManager;
         private static string[] namesFemales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.NamesFemale.txt");
         private static string[] lastNamesFemales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.LastNamesFemale.txt");
         private static string[] patronymicFemales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.PatronymicFemale.txt");
@@ -23,14 +25,25 @@ namespace PassTrackingSystem.Infrastructure
         private static string[] purposeOfIssuances = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.PurposeOfIssuance.txt");
         private static string[] cameras = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.Cameras.txt");
         private static string[] cars = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.Cars.txt");
-        public RandomDataGenerator(ApplicationDBContext dBContext, UserManager<AppUser> userManager)
+        public RandomDataGenerator(ApplicationDBContext dBContext, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _dBContext = dBContext;
             this.userManager = userManager;
-
-            AddInitDataToDB();
+            this.roleManager = roleManager;
+            AddInitDataToDBAsync();
         }
 
+        private void CreateRole()
+        {
+            
+            if(roleManager.Roles.Any())
+            {
+                _ = roleManager.CreateAsync(new IdentityRole { Name = "Administrator" }).Result;
+                _ = roleManager.CreateAsync(new IdentityRole { Name = "Moderator" }).Result;
+                _ = roleManager.CreateAsync(new IdentityRole { Name = "Operator" }).Result;
+            }
+        }
+        
         private Car CreateCar()
         {
             return new Car
@@ -42,17 +55,24 @@ namespace PassTrackingSystem.Infrastructure
 
         private async void CreateRandomUsers()
         {
-            //var emloyee = _dBContext.Employees.ToArray();
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    await userManager.CreateAsync(new AppUser
-            //    {
-            //        EmployeeId = GetRandomObjectFromCollections(emloyee).Id,
-            //        UserName = Guid.NewGuid().ToString()
-            //    }, "123");
-            //}
+            if (!userManager.Users.Any())
+            {
+                var emloyee = _dBContext.Employees.ToArray();
+                var role = roleManager.Roles.ToArray();
+                for (int i = 0; i < 100; i++)
+                {
+                    var user = new AppUser
+                    {
+                        EmployeeId = GetRandomObjectFromCollections(emloyee).Id,
+                        UserName = Guid.NewGuid().ToString()
+                    };                  
+                    _= userManager.CreateAsync(user, "123").Result;
+                    _= userManager.AddToRoleAsync(user, GetRandomObjectFromCollections(role).Name).Result;
+                } 
+            }
         }
 
+        
         private void CreateCarPasses(int quatity = 3000)
         {
             if (!_dBContext.CarPasses.Any())
@@ -319,7 +339,7 @@ namespace PassTrackingSystem.Infrastructure
         {
             if (values?.Length > 0)
             {
-                return values[new Random().Next(values.Length - 1)];
+                return values[new Random().Next(1,9999999) % values.Length];
             }
             throw new ArgumentNullException("collection must not be empty");
         }
@@ -328,20 +348,20 @@ namespace PassTrackingSystem.Infrastructure
             values.Select(x => new { val = x, rand = new Random().NextDouble() >= 0.5 })
                 .Where(x => x.rand).Select(x => x.val).ToList();
 
-        private void AddInitDataToDB()
+        private void AddInitDataToDBAsync()
         {
+            CreateDepartments();
+            CreateEmployees();
+            CreateRole();
             CreateRandomUsers();
             CreateIssuingAuthority();
             CreateDocumentTypes();
             CreateVisitors(1000);
             CreateStationFacility();
-            CreateDepartments();
-            CreateEmployees();
             CreateSinglePass();
             CreateTemporaryPass();
             CreateShootingPermission();
             CreateCarPasses();
-            CreateRandomUsers();
         }
     }
 

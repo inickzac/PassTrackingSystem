@@ -1,4 +1,4 @@
-﻿@*@model UserVM
+﻿@model UserVM
 
 @{
     ViewData["Title"] = "Home Page";
@@ -6,19 +6,19 @@
 
 <div class="col-12">
     <form asp-action="@nameof(PassTrackingSystem.Controllers.AdminController.ShowAll)"
-          asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
+          asp-controller="@nameof(PassTrackingSystem.Controllers.AdminController).Replace("Controller", "")"
           id="info-option-group" method="get">
         @await Html.PartialAsync("UpperOptionMenu", @Model)
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th scope="col" class="th-sm">id</th>
-                    <th scope="col">Действует с</th>
-                    <th scope="col">Действует по</th>
-                    <th scope="col">Цель выдачи</th>
-                    <th scope="col">Марка автомобиля</th>
-                    <th scope="col">Номерной знак</th>
-                    <th scope="col">Лицо выдавшее пропуск</th>
+                    <th scope="col">Логин</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Отчество</th>
+                    <th scope="col">Подразделение</th>
+                    <th scope="col">Должность</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -28,22 +28,22 @@
                     <tr>
                         <td>@item.Key.Id</td>
                         <td>@item.Key.UserName</td>
-                        <td>@item.</td>
-                        <td>@CarPass?.PurposeOfIssuance</td>
-                        <td>@CarPass?.Car?.CarBrand</td>
-                        <td>@CarPass?.Car?.CarLicensePlate</td>
-                        <td>@CarPass?.CarPassIssued?.LastName @CarPass.CarPassIssued?.Name @CarPass.CarPassIssued?.Patronymic</td>
+                        <td>@item.Value.LastName</td>
+                        <td>@item.Value.Name</td>
+                        <td>@item.Value.Patronymic</td>
+                        <td>@item.Value.Department.Value</td>
+                        <td>@item.Value.Position</td>
                         <td>
-                            <a asp-action="@nameof(PassTrackingSystem.Controllers.CarPassController.CarPassProcessing)"
-                               asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
-                               asp-route-id="@CarPass.Id"
+                            <a asp-action="@nameof(PassTrackingSystem.Controllers.AdminController.Show)"
+                               asp-controller="@nameof(PassTrackingSystem.Controllers.AdminController).Replace("Controller", "")"
+                                asp-route-id="@item.Key.Id"
                                class="btn btn-outline-dark">Подробнее</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-        @await Html.PartialAsync("Pages", @Model.CarPasses.PageDividorInfo)
+        @await Html.PartialAsync("Pages", @Model.PageDividorInfo)
     </form>
 
-</div>*@
+</div>
