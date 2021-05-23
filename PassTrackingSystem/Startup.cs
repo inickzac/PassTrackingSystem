@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,8 +26,23 @@ namespace PassTrackingSystem
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
+            string identityConnection = Configuration.GetConnectionString("IdentityConnection");
             services.AddDbContext<ApplicationDBContext>(options =>
                options.UseSqlServer(connection).EnableSensitiveDataLogging());
+            services.AddDbContext<AppidentityDbContext>(options =>
+              options.UseSqlServer(identityConnection).EnableSensitiveDataLogging());
+            services.AddIdentity<AppUser, IdentityRole>(op => { op.Password.RequireDigit = false; 
+                op.Password.RequiredLength = 1;
+                op.Password.RequireLowercase = false;
+                op.Password.RequireNonAlphanumeric = false;
+                op.Password.RequireUppercase = false;
+                op.Password.RequireNonAlphanumeric = false;
+                op.Password.RequireLowercase = false;
+            })
+                
+                .AddEntityFrameworkStores<AppidentityDbContext>()
+                .AddDefaultTokenProviders();
+ 
             services.AddControllersWithViews();
             services.AddScoped<IGenericRepository<Visitor>, GenericRepository<Visitor>>();
             services.AddScoped<IGenericRepository<Document>, GenericRepository<Document>>();
@@ -39,6 +55,7 @@ namespace PassTrackingSystem
             services.AddScoped<IGenericRepository<ShootingPermission>, GenericRepository<ShootingPermission>>();
             services.AddScoped<IGenericRepository<CarPass>, GenericRepository<CarPass>>();
             services.AddScoped<IGenericRepository<Car>, GenericRepository<Car>>();
+            services.AddScoped<IGenericRepository<Department>, GenericRepository<Department>>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -53,7 +70,7 @@ namespace PassTrackingSystem
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
@@ -94,12 +111,26 @@ namespace PassTrackingSystem
             //});
 
 
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
+            //});
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
+                    pattern: "{controller=Admin}/{action=Show}/{id=0}");
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Admin}/{action=ShowAll}/{id?}");
+            //});
         }
     }
 }

@@ -1,15 +1,19 @@
-﻿using PassTrackingSystem.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using PassTrackingSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Infrastructure
 {
     public class RandomDataGenerator
     {
         private ApplicationDBContext _dBContext;
+        private UserManager<AppUser> userManager;
+        private RoleManager<IdentityRole> roleManager;
         private static string[] namesFemales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.NamesFemale.txt");
         private static string[] lastNamesFemales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.LastNamesFemale.txt");
         private static string[] patronymicFemales = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.PatronymicFemale.txt");
@@ -21,19 +25,54 @@ namespace PassTrackingSystem.Infrastructure
         private static string[] purposeOfIssuances = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.PurposeOfIssuance.txt");
         private static string[] cameras = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.Cameras.txt");
         private static string[] cars = getStringsFromFile(@"PassTrackingSystem.Resource.RandomGenerator.Cars.txt");
-        public RandomDataGenerator(ApplicationDBContext dBContext)
+        public RandomDataGenerator(ApplicationDBContext dBContext, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _dBContext = dBContext;
-
-            AddInitDataToDB();
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+            AddInitDataToDBAsync();
         }
 
+        private void CreateRole()
+        {
+            
+            if(roleManager.Roles.Any())
+            {
+                _ = roleManager.CreateAsync(new IdentityRole { Name = "Administrator" }).Result;
+                _ = roleManager.CreateAsync(new IdentityRole { Name = "Moderator" }).Result;
+                _ = roleManager.CreateAsync(new IdentityRole { Name = "Operator" }).Result;
+            }
+        }
+        
         private Car CreateCar()
         {
-            return new Car {CarBrand =  GetRandomStringFromCollections(cars), 
-            CarLicensePlate =$"{new Random().Next(1000, 9999)} {GenerateSeries()}-{new Random().Next(0, 9)}",            
+            return new Car
+            {
+                CarBrand = GetRandomStringFromCollections(cars),
+                CarLicensePlate = $"{new Random().Next(1000, 9999)} {GenerateSeries()}-{new Random().Next(0, 9)}",
             };
         }
+
+        private async void CreateRandomUsers()
+        {
+            if (!userManager.Users.Any())
+            {
+                var emloyee = _dBContext.Employees.ToArray();
+                var role = roleManager.Roles.ToArray();
+                for (int i = 0; i < 100; i++)
+                {
+                    var user = new AppUser
+                    {
+                        EmployeeId = GetRandomObjectFromCollections(emloyee).Id,
+                        UserName = Guid.NewGuid().ToString()
+                    };                  
+                    _= userManager.CreateAsync(user, "123").Result;
+                    _= userManager.AddToRoleAsync(user, GetRandomObjectFromCollections(role).Name).Result;
+                } 
+            }
+        }
+
+        
         private void CreateCarPasses(int quatity = 3000)
         {
             if (!_dBContext.CarPasses.Any())
@@ -74,7 +113,7 @@ namespace PassTrackingSystem.Infrastructure
                                StationFacilities = GetRandomObjectsFromCollections(fasilitys),
                                ShootingPermissionIssued = GetRandomObjectFromCollections(employees),
                                VisitorId = GetRandomObjectFromCollections(tpes).Id,
-                               CameraType = GetRandomStringFromCollections(cameras),                              
+                               CameraType = GetRandomStringFromCollections(cameras),
                            }); ;
                 }
                 _dBContext.SaveChanges();
@@ -97,13 +136,13 @@ namespace PassTrackingSystem.Infrastructure
                                PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
                                StationFacilities = GetRandomObjectsFromCollections(fasilitys),
                                SinglePassIssued = GetRandomObjectFromCollections(employees),
-                               VisitorId = GetRandomObjectFromCollections(tpes).Id                               
+                               VisitorId = GetRandomObjectFromCollections(tpes).Id
                            }); ;
                 }
                 _dBContext.SaveChanges();
             }
         }
-        private void CreateTemporaryPass(int quatity =3000)
+        private void CreateTemporaryPass(int quatity = 3000)
         {
             if (!_dBContext.TemporaryPasses.Any())
             {
@@ -120,8 +159,8 @@ namespace PassTrackingSystem.Infrastructure
                                PurposeOfIssuance = GetRandomStringFromCollections(purposeOfIssuances),
                                StationFacilities = GetRandomObjectsFromCollections(fasilitys),
                                TemporaryPassIssued = GetRandomObjectFromCollections(employees),
-                               VisitorId = GetRandomObjectFromCollections(tpes).Id                              
-                           });;
+                               VisitorId = GetRandomObjectFromCollections(tpes).Id
+                           }); ;
                 }
                 _dBContext.SaveChanges();
             }
@@ -181,7 +220,7 @@ namespace PassTrackingSystem.Infrastructure
                     }
                     _dBContext.Employees.Add(employee);
                 }
-                _dBContext.SaveChanges(); 
+                _dBContext.SaveChanges();
             }
         }
         private void CreateDocumentTypes()
@@ -240,7 +279,7 @@ namespace PassTrackingSystem.Infrastructure
                     }
                     _dBContext.Visitors.Add(visitor);
                 }
-                _dBContext.SaveChanges(); 
+                _dBContext.SaveChanges();
             }
 
         }
@@ -300,7 +339,7 @@ namespace PassTrackingSystem.Infrastructure
         {
             if (values?.Length > 0)
             {
-                return values[new Random().Next(values.Length - 1)];
+                return values[new Random().Next(1,9999999) % values.Length];
             }
             throw new ArgumentNullException("collection must not be empty");
         }
@@ -309,14 +348,16 @@ namespace PassTrackingSystem.Infrastructure
             values.Select(x => new { val = x, rand = new Random().NextDouble() >= 0.5 })
                 .Where(x => x.rand).Select(x => x.val).ToList();
 
-        private void AddInitDataToDB()
+        private void AddInitDataToDBAsync()
         {
-            CreateIssuingAuthority();
-            CreateDocumentTypes();
-            CreateVisitors(1000);                      
-            CreateStationFacility();
             CreateDepartments();
             CreateEmployees();
+            CreateRole();
+            //CreateRandomUsers();
+            CreateIssuingAuthority();
+            CreateDocumentTypes();
+            CreateVisitors(1000);
+            CreateStationFacility();
             CreateSinglePass();
             CreateTemporaryPass();
             CreateShootingPermission();

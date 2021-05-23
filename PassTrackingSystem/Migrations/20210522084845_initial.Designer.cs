@@ -10,7 +10,7 @@ using PassTrackingSystem.Models;
 namespace PassTrackingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20210518203158_initial")]
+    [Migration("20210522084845_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace PassTrackingSystem.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("PassTrackingSystem.Models.Car", b =>
