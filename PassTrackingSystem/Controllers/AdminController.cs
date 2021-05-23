@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class AdminController : Controller
     {
         private UserManager<AppUser> userManager;
@@ -52,7 +52,7 @@ namespace PassTrackingSystem.Controllers
                 if (user!=null)
                 {
                     await employeeRepository.Update(userVM.Employee);
-                    user.UserName = userVM.AppUser.UserName;
+                    user.UserName = userVM.AppUser.UserName;                  
                     user.EmployeeId = userVM.Employee.Id;
                     var result = await userManager.UpdateAsync(user);
                     if (result.Succeeded)
@@ -66,6 +66,7 @@ namespace PassTrackingSystem.Controllers
             {
                 await employeeRepository.Update(userVM.Employee);
                 userVM.AppUser.Id = Guid.NewGuid().ToString();
+                userVM.AppUser.EmployeeId = userVM.Employee.Id;
                 var result = await userManager.CreateAsync(userVM.AppUser, userVM.Password);
                 if (result.Succeeded)
                 {

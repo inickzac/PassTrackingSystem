@@ -21,18 +21,24 @@ namespace PassTrackingSystem.Controllers
             this.signInManager = signInManager;
         }
 
-        public async Task<IActionResult> LoginAsync(UserVM  userVM, string returnUrl)
+       [HttpPost]
+        public async Task<IActionResult> Login(UserVM  userVM, string returnUrl)
         {
-            var user=  userManager?.FindByNameAsync(userVM.AppUser.UserName );
+            var user= await userManager?.FindByNameAsync(userVM.AppUser.UserName );
             if(user!=null)
             {
               await signInManager.SignOutAsync();
-              var signRes = await signInManager.PasswordSignInAsync(userVM.AppUser, userVM.Password, false, false);
+              var signRes = await signInManager.PasswordSignInAsync(user, userVM.Password, false, false);
                 if(signRes.Succeeded)
                 {
                     return Redirect(returnUrl);
                 }
             }
+            return View();
+        }
+        public async Task<IActionResult> Login(string returnUrl)
+        {
+            ViewBag.returnUrl = returnUrl;
             return View();
         }
     }

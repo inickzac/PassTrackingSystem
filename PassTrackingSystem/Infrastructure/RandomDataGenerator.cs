@@ -353,7 +353,7 @@ namespace PassTrackingSystem.Infrastructure
             CreateDepartments();
             CreateEmployees();
             CreateRole();
-            CreateRandomUsers();
+            //CreateRandomUsers();
             CreateIssuingAuthority();
             CreateDocumentTypes();
             CreateVisitors(1000);
