@@ -16,26 +16,36 @@
                     <th scope="col">Отчество</th>
                     <th scope="col">Место работы</th>
                     <th scope="col">Должность</th>
-                    <th scope="col">Действующие пропуска</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var visitor in Model?.Visitors?.Items)
                 {
-                <tr>
-                    <td>@visitor.Id</td>
-                    <td>@visitor.LastName</td>
-                    <td>@visitor.Name</td>
-                    <td>@visitor.Patronymic</td>
-                    <td>@visitor.PlaceOfWork</td>
-                    <td>@visitor.Position</td>
-                    <td>-</td>
-                    <td><a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
-                           asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                           asp-route-id ="@visitor.Id"
-                           class="btn btn-outline-dark">Подробнее</a></td>
-                </tr>
+                    <tr>
+                        <td>@visitor.Id</td>
+                        <td>@visitor.LastName</td>
+                        <td>@visitor.Name</td>
+                        <td>@visitor.Patronymic</td>
+                        <td>@visitor.PlaceOfWork</td>
+                        <td>@visitor.Position</td>
+                        <td>
+                            <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
+                               asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
+                               asp-route-id="@visitor.Id"
+                               class="btn btn-outline-dark">Подробнее</a>
+                        </td>
+                        @if (Model.ShowAdvancedFeatures)
+                        {
+                            <td>
+                                <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
+                                   asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
+                                   asp-route-id="@visitor.Id"
+                                   class="btn btn-outline-danger">Удалить</a>
+                            </td>
+                        }
+
+                    </tr>
 
                 }
             </tbody>

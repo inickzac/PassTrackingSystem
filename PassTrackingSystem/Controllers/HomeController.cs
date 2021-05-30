@@ -40,7 +40,8 @@ namespace PassTrackingSystem.Controllers
         {
             new RandomDataGenerator(dBContext, userManager, roleManager);
             ViewBag.CurrentPage = "all-HomeController";
-            return View(new MainPageVM(_visitorsRepository,commonListQuery));              
+            return View(new MainPageVM(_visitorsRepository, commonListQuery) 
+            { ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator") });              
         }
 
         public IActionResult Privacy()

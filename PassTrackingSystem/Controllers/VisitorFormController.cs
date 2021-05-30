@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Models;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class VisitorFormController : Controller
     {
         IGenericRepository<Visitor> visitorsRepository;
@@ -42,8 +44,7 @@ namespace PassTrackingSystem.Controllers
                        .Include(v => v.ShootingPermissions)
                        .Include(v => v.CarPasses).ThenInclude(v => v.Car)
                        .FirstAsync();
-            }
-
+            }           
             else 
             { 
                 visitor = new Visitor();
@@ -51,14 +52,26 @@ namespace PassTrackingSystem.Controllers
             }
             return View(new VisitorFormVM
             {
-                Visitor = visitor,
-            });
+                Visitor = visitor, 
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
+        });
         }
-        [HttpPost]
+        [HttpPost, Authorize(Roles ="Moderator, Administrator")]
         public async Task<RedirectToActionResult> VisitorProcessing(Visitor visitor)
         {
             await visitorsRepository.Update(visitor);           
-            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
+            return RedirectToAction(nameof(VisitorFormController.VisitorProcessing), new {id= visitor.Id });
         }
+
+        //[HttpPost]
+        //public async Task<RedirectToActionResult> DeleteVisitor(int id)
+        //{
+        //    if (id!=0)
+        //    {
+        //        await visitorsRepository.Delete(id);
+        //        return RedirectToAction(nameof(HomeController), new { id = visitor.Id }); 
+        //    }
+           
+        //}
     }
 }

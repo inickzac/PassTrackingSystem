@@ -170,10 +170,13 @@
         }
 
     </div>
-    <div class="py-5">
-        <button type="submit" class="btn btn-success">Отправить</button>
-        <button type="reset" class="btn btn-danger">Очистить</button>
-    </div>
+    @if (Model.ShowAdvancedFeatures)
+    {
+        <div class="py-5">
+            <button type="submit" class="btn btn-success">Отправить</button>
+            <button type="reset" class="btn btn-danger">Очистить</button>
+        </div>
+    }
 </form>
 
 
