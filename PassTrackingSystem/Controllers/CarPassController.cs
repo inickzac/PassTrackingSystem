@@ -75,5 +75,36 @@ namespace PassTrackingSystem.Controllers
             var TemporaryPasses = await passes;
             return View(new CarPassVM { CarPasses = await passes, PurposeVisitorId = visitorId });
         }
+
+        public async Task<IActionResult> Document(int passId)
+        {
+            if (passId != 0)
+            {
+                var pass = await passRepository.GetAll()
+                    .Where(p => p.Id == passId)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.DocumentType)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.IssuingAuthority)
+                    .Include(p=> p.Car)
+                    .FirstAsync();
+
+                var documentVM = new GenerateDocumentVM
+                {
+                    Document = pass.Visitor.Document,
+                    Id = pass.Id,
+                    Name = pass.Visitor.Name,
+                    LastName = pass.Visitor.LastName,
+                    Patronymic = pass.Visitor.LastName,
+                    PassType = "Транспортный пропуск",
+                    ValidWith = pass.ValidWith.ToLongDateString(),
+                    ValitUntil = pass.ValitUntil.ToLongDateString(),
+                    PlaceOfWork = pass.Visitor.PlaceOfWork,
+                    Position = pass.Visitor.Position,
+                    PurposeOfIssuance = pass.PurposeOfIssuance,
+                    Car = pass.Car
+                };
+                return View("Document", documentVM);
+            }
+            return BadRequest();
+        }
     }
 }

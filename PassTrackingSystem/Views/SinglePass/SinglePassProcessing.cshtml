@@ -49,6 +49,12 @@
     <div class="py-5 ">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
+        @if (Model.ProcessingSinglePass?.Id != 0)
+        {
+            <a class="btn btn-info"
+               asp-controller=@nameof(SinglePassController).Replace("Controller", "")
+               asp-action="@nameof(SinglePassController.Document)" asp-route-passId="@Model.ProcessingSinglePass.Id">Генерировать документ</a>
+        }
     </div>
 
 </form>

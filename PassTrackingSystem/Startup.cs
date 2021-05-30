@@ -75,12 +75,12 @@ namespace PassTrackingSystem
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //});
 
             //app.UseEndpoints(endpoints =>
             //{
@@ -107,7 +107,7 @@ namespace PassTrackingSystem
             //{
             //    endpoints.MapControllerRoute(
             //        name: "default",
-            //        pattern: "{controller=TemporaryPass}/{action=TemporaryPassProcessing}/{id=4}");
+            //        pattern: "{controller=TemporaryPass}/{action=TemporaryPassProcessing}/{id?}");
             //});
 
 
@@ -131,6 +131,13 @@ namespace PassTrackingSystem
             //        name: "default",
             //        pattern: "{controller=Admin}/{action=ShowAll}/{id?}");
             //});
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=ShootingPermission}/{action=ShootingPermissionProcessing}/{id=100}");
+            });
         }
     }
 }

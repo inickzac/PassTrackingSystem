@@ -111,5 +111,37 @@ namespace PassTrackingSystem.Controllers
                 .ToDictionary(v => v.Facility, i => i.Allow);
             return View(accessPairs);
         }
+
+        public async Task<IActionResult> Document(int passId)
+        {
+            if (passId != 0)
+            {
+                var pass = await passRepository.GetAll()
+                    .Where(p => p.Id == passId)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.DocumentType)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.IssuingAuthority)
+                    .Include(p => p.StationFacilities)
+                    .FirstAsync();
+
+                var documentVM = new GenerateDocumentVM
+                {
+                    Document = pass.Visitor.Document,
+                    Id = pass.Id,
+                    Name = pass.Visitor.Name,
+                    LastName = pass.Visitor.LastName,
+                    Patronymic = pass.Visitor.LastName,
+                    PassType = "Разовый пропуск",
+                    ValidWith = pass.ValidWith.ToString("dd:mm  yyyy-hh-mm"),
+                    ValitUntil = pass.ValitUntil.ToString("dd:mm  yyyy-hh-mm"),
+                    PlaceOfWork = pass.Visitor.PlaceOfWork,
+                    Position = pass.Visitor.Position,
+                    PurposeOfIssuance = pass.PurposeOfIssuance,
+                    StationFacilities = pass.StationFacilities.Select(f => f.Value).ToList()
+                };
+                return View("Document", documentVM);
+            }
+            return BadRequest();
+        }
+
     }
 }
