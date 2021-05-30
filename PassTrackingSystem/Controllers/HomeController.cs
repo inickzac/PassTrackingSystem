@@ -38,8 +38,9 @@ namespace PassTrackingSystem.Controllers
      
         public IActionResult Index(CommonListQuery commonListQuery)
         {
-            var randomDataGenerator = new RandomDataGenerator(dBContext, userManager, roleManager);
-            return View(new MainPageVM(_visitorsRepository,commonListQuery));            
+            new RandomDataGenerator(dBContext, userManager, roleManager);
+            ViewBag.CurrentPage = "all-HomeController";
+            return View(new MainPageVM(_visitorsRepository,commonListQuery));              
         }
 
         public IActionResult Privacy()

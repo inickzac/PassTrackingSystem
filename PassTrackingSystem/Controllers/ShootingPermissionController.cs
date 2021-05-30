@@ -112,6 +112,10 @@ namespace PassTrackingSystem.Controllers
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
 
             var TemporaryPasses = await passes;
+            if(visitorId !=0)
+            {
+                ViewBag.CurrentPage = "all-ShootingPermission";
+            }
             return View(new ShootingPermissionVM { ShootingPermissions = await passes, PurposeVisitorId = visitorId });
         }
 

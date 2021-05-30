@@ -37,14 +37,18 @@ namespace PassTrackingSystem.Controllers
                        .Include(v => v.Document)
                        .ThenInclude(i => i.IssuingAuthority)
                        .Include(v => v.Document.DocumentType)
-                       .Include(v=> v.TemporaryPasses)
+                       .Include(v => v.TemporaryPasses)
                        .Include(v => v.SinglePasses)
                        .Include(v => v.ShootingPermissions)
-                       .Include(v => v.CarPasses).ThenInclude(v=> v.Car)
+                       .Include(v => v.CarPasses).ThenInclude(v => v.Car)
                        .FirstAsync();
             }
 
-            else visitor = new Visitor();
+            else 
+            { 
+                visitor = new Visitor();
+                ViewBag.CurrentPage = "add-VisitorForm";
+            }
             return View(new VisitorFormVM
             {
                 Visitor = visitor,

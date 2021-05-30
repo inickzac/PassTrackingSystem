@@ -71,7 +71,10 @@ namespace PassTrackingSystem.Controllers
                   .ThenInclude(v => v.Department)
                      .SearchByMember(options.SearchСolumn, options.SearchValue)
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
-
+            if (visitorId != 0)
+            {
+                ViewBag.CurrentPage = "all-CarPass";
+            }
             var TemporaryPasses = await passes;
             return View(new CarPassVM { CarPasses = await passes, PurposeVisitorId = visitorId });
         }

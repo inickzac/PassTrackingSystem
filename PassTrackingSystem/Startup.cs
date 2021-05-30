@@ -96,12 +96,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=OneItemData}/{action=ShowOneItemData}/{oneItemTypeName=DocumentType}");
             //});
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=TemporaryPass}/{action=ShowAll}/{id?}");
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=TemporaryPass}/{action=ShowAll}/{id?}");
+            });
 
             //app.UseEndpoints(endpoints =>
             //{
@@ -132,12 +132,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=Admin}/{action=ShowAll}/{id?}");
             //});
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=ShootingPermission}/{action=ShootingPermissionProcessing}/{id=100}");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=ShootingPermission}/{action=ShootingPermissionProcessing}/{id=100}");
+            //});
         }
     }
 }

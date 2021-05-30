@@ -84,7 +84,10 @@ namespace PassTrackingSystem.Controllers
                   .ThenInclude(v => v.Department)
                      .SearchByMember(options.SearchСolumn, options.SearchValue)
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
-
+            if (visitorId != 0)
+            {
+                ViewBag.CurrentPage = "all-SinglePass";
+            }
             var singlePasses = await passes;
             return View(new SinglePassVM { SinglePasses = await passes, PurposeVisitorId = visitorId });
         }

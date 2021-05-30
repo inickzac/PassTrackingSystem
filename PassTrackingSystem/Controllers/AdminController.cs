@@ -40,6 +40,7 @@ namespace PassTrackingSystem.Controllers
                     }
                 }
             }
+            ViewBag.CurrentPage = "add-User";
             return View("AdminProcessing", new UserVM());
         }
 
@@ -84,6 +85,7 @@ namespace PassTrackingSystem.Controllers
                 .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
 
             var users = await PagesDividedQuery;
+            ViewBag.CurrentPage = "all-User";
             var userEmployeePairs = users.Items.Select(u => new
             {
                 employee = employeeRepository

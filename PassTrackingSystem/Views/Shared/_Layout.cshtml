@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <input type="hidden" value="@ViewBag.CurrentPage" id="currentPage"/>
     <header class="navbar navbar-expand-md navbar-dark bd-navbar">
         <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
             <img src="/Logo-ru-ng.png" alt="альтернативный текст" style="width:25%; height:25%;">
@@ -32,7 +33,6 @@
         </form>
     </nav>
 
-
     <div class="container-xxl my-md-4 bd-layout">
         <aside class="bd-sidebar">
             <nav class="collapse bd-links" id="bd-docs-nav" aria-label="Docs navigation">
@@ -46,12 +46,14 @@
                                 <li>
                                     <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
                                        asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                                       asp-route-id="0" class="d-inline-flex align-items-center rounded">Добавить новый</a>
+                                       asp-route-id="0" class="d-inline-flex align-items-center rounded"
+                                       id="add-VisitorForm">Добавить новый</a>
                                 </li>
                                 <li>
                                     <a asp-action="@nameof(PassTrackingSystem.Controllers.HomeController.Index)"
                                        asp-controller="@nameof(PassTrackingSystem.Controllers.HomeController).Replace("Controller", "")"
-                                       class="d-inline-flex align-items-center rounded active" aria-current="page">Просмотреть всех</a>
+                                       class="d-inline-flex align-items-center rounded" aria-current="page"
+                                       id="all-HomeController">Просмотреть всех</a>
                                 </li>
                             </ul>
                         </div>
@@ -62,32 +64,54 @@
                         <div class="collapse show" id="getting-started-collapse">
                             <ul class="list-unstyled fw-normal pb-1 small">
                                 <li class="d-inline-flex align-items-center rounded " aria-current="page">
-                                    <a>Временные пропуска</a>
+                                    <a asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.ShowAll)"
+                                       asp-controller="@nameof(PassTrackingSystem.Controllers.TemporaryPassController).Replace("Controller", "")"
+                                       id="all-TemporaryPass">Временные пропуска </a>
                                 </li>
                                 <li class="d-inline-flex align-items-center rounded " aria-current="page">
-                                    <a>Разовые пропуска</a>
+                                    <a asp-action="@nameof(PassTrackingSystem.Controllers.SinglePassController.ShowAll)"
+                                       asp-controller="@nameof(PassTrackingSystem.Controllers.SinglePassController).Replace("Controller", "")"
+                                       id="all-SinglePass">
+                                        Разовые пропуска
+                                    </a>
                                 </li>
                                 <li class="d-inline-flex align-items-center rounded " aria-current="page">
-                                    <a>Разрешения на съемку</a>
+                                    <a asp-action="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController.ShowAll)"
+                                       asp-controller="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController).Replace("Controller", "")"
+                                       id="all-ShootingPermission">
+                                        Разрешения на съемку
+                                    </a>
                                 </li>
                                 <li class="d-inline-flex align-items-center rounded " aria-current="page">
-                                    <a>Транспортные пропуска</a>
+                                    <a asp-action="@nameof(PassTrackingSystem.Controllers.CarPassController.ShowAll)"
+                                       asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
+                                       id="all-CarPass">
+                                        Транспортные пропуска
+                                    </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     </li>
-                    <button class="btn d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#about-collapse" aria-expanded="false">
+                    <button class="btn d-inline-flex align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#about-collapse" aria-expanded="false">
                         Пользователи
                     </button>
-
-                    <div class="collapse" id="about-collapse">
+                    
+                    <div class="collapse show" id="about-collapse">
                         <ul class="list-unstyled fw-normal pb-1 small">
                             <li class="d-inline-flex align-items-center rounded " aria-current="page">
-                                <a>Добавить</a>
+                                <a asp-action="@nameof(PassTrackingSystem.Controllers.AdminController.Show)"
+                                   asp-controller="@nameof(PassTrackingSystem.Controllers.AdminController).Replace("Controller", "")"
+                                   id="add-User">
+                                    Добавить
+                                </a>
                             </li>
                             <li class="d-inline-flex align-items-center rounded " aria-current="page">
-                                <a>Просматреть все </a>
+                                <a asp-action="@nameof(PassTrackingSystem.Controllers.AdminController.ShowAll)"
+                                   asp-controller="@nameof(PassTrackingSystem.Controllers.AdminController).Replace("Controller", "")"
+                                   id="all-User">
+                                    Просматреть все
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -112,5 +136,9 @@
 
     <footer class="bd-footer p-3 p-md-5 mt-5 bg-light text-center text-sm-start">
     </footer>
+<script>
+    let elem = $('#currentPage').first().val()
+    $(`#${elem}`).first().addClass('active')
+</script>
 </body>
 </html>
