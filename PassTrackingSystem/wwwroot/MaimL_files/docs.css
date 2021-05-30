@@ -1,5 +1,5 @@
 .set-min-width {
-    min-width : 1000px   
+    min-width: 1000px
 }
 
 .modal {
@@ -68,22 +68,7 @@
     position: relative
 }
 
-    .bd-search::after {
-        position: absolute;
-        top: .4rem;
-        right: .4rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 1.5rem;
-        padding-right: .25rem;
-        padding-left: .25rem;
-        font-size: .75rem;
-        color: #6c757d;
-        content: "Ctrl + /";
-        border: 1px solid #dee2e6;
-        border-radius: .125rem
-    }
+
 
 @media (max-width: 767.98px) {
     .bd-search {

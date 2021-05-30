@@ -3,7 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Station passes</title>
-    @*<link rel="canonical" href="https://getbootstrap.com/docs/5.0/getting-started/download/">*@
     <meta http-equiv="Cache-Control" content="private">
     @await Html.PartialAsync("Styles")
     @await Html.PartialAsync("_ValidationScriptsPartial")
@@ -11,33 +10,30 @@
 </head>
 <body>
     <header class="navbar navbar-expand-md navbar-dark bd-navbar">
-        <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
-            <a class="navbar-brand p-0 me-2" href="https://getbootstrap.com/" aria-label="Bootstrap">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="d-block my-1" viewBox="0 0 118 94" role="img"><title>Bootstrap</title><path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path></svg>
-            </a>
+        <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation">          
+            <img src="/Logo-ru-ng.png" alt="альтернативный текст" style="width:25%; height:25%;">
         </nav>
     </header>
     <nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
         <div class="container-xxl d-flex align-items-md-center">
-            <form class="bd-search position-relative ">
-                <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;"><input type="search" class="form-control ds-input" id="search-input" placeholder="Поиск по id" aria-label="Search docs for..." autocomplete="off" data-bd-docs-version="5.0" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-owns="algolia-autocomplete-listbox-0" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: system-ui, -apple-system, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, &quot;Liberation Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: normal; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="ds-dropdown-menu" role="listbox" id="algolia-autocomplete-listbox-0" style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;"><div class="ds-dataset-1"></div></span></span>
-            </form>
-
-            <div class="dropdown ms-3">
-                <button class="btn btn-bd-light dropdown-toggle" id="bd-versions" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                    <span class="d-none d-lg-inline">Разовый пропуск</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-versions">
-                    <li><a class="dropdown-item current" aria-current="true" href="https://getbootstrap.com/docs/5.0/">Разовый пропуск</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/4.6/">v4.6.x</a></li>
-                    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/3.4/">v3.4.1</a></li>
-                    <li><a class="dropdown-item" href="https://getbootstrap.com/2.3.2/">v2.3.2</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/versions/">All versions</a></li>
-                </ul>
+            <div class="input-group ms-3" style="max-width :20%">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon1">Поиск</button>
+                <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
             </div>
-        </div>
+
+            <div class="dropdown ms-3 flex-grow-1">
+                <select class="form-select align" aria-label="Default select example" style="max-width:40%">
+                    <option value="1">Разовый пропуск</option>
+                    <option value="2">Временный пропуск</option>
+                    <option value="3">Транспортный пропуск</option>
+                    <option value="3">Разрешение на съемку</option>
+                </select>
+            </div>
+            <div class="align-content-end">
+                Малышев Вадим Сергеевич
+                <button type="button" class="btn btn-outline-dark" style="margin-left: 1em">Выйти</button>
+            </div>
+        </div>        
     </nav>
 
 
@@ -49,7 +45,6 @@
                         <button class="btn d-inline-flex align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#getting-started-collapse" aria-expanded="true" aria-current="true">
                             Посетитель
                         </button>
-
                         <div class="collapse show" id="getting-started-collapse">
                             <ul class="list-unstyled fw-normal pb-1 small">
                                 <li>
@@ -64,22 +59,46 @@
                                 </li>
                             </ul>
                         </div>
+                    <li class="mb-1">
+                        <button class="btn d-inline-flex align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#getting-started-collapse" aria-expanded="true" aria-current="true">
+                            Пропуска
+                        </button>
+                        <div class="collapse show" id="getting-started-collapse">
+                            <ul class="list-unstyled fw-normal pb-1 small">
+                                <li class="d-inline-flex align-items-center rounded " aria-current="page">
+                                    <a>Временные пропуска</a>
+                                </li>
+                                <li class="d-inline-flex align-items-center rounded " aria-current="page">
+                                    <a>Разовые пропуска</a>
+                                </li>
+                                <li class="d-inline-flex align-items-center rounded " aria-current="page">
+                                    <a>Разрешения на съемку</a>
+                                </li>
+                                <li class="d-inline-flex align-items-center rounded " aria-current="page">
+                                    <a>Транспортные пропуска</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     </li>
                     <button class="btn d-inline-flex align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#about-collapse" aria-expanded="false">
-                        About
+                        Пользователи
                     </button>
 
                     <div class="collapse" id="about-collapse">
                         <ul class="list-unstyled fw-normal pb-1 small">
-                            <li><a href="https://getbootstrap.com/docs/5.0/about/overview/" class="d-inline-flex align-items-center rounded">Overview</a></li>
-                            <li><a href="https://getbootstrap.com/docs/5.0/about/team/" class="d-inline-flex align-items-center rounded">Team</a></li>
-
+                            <li class="d-inline-flex align-items-center rounded " aria-current="page">
+                                <a>Добавить</a>
+                            </li>
+                            <li class="d-inline-flex align-items-center rounded " aria-current="page">
+                                <a>Просматреть все </a>
+                            </li>
                         </ul>
                     </div>
                     <li class="my-3 mx-4 border-top"></li>
                     <li>
-                        <a href="https://getbootstrap.com/docs/5.0/migration/" class="d-inline-flex align-items-center rounded">
-                            Migration
+                        <a class="d-inline-flex align-items-center rounded">
+                            Выйти
                         </a>
                     </li>
                 </ul>

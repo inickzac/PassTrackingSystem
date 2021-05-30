@@ -75,12 +75,12 @@ namespace PassTrackingSystem
 
             app.UseAuthorization();
 
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             //app.UseEndpoints(endpoints =>
             //{
@@ -118,12 +118,12 @@ namespace PassTrackingSystem
             //        pattern: "{controller=CarPass}/{action=CarPassProcessing}/{id=4}");
             //});
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Admin}/{action=Show}/{id=0}");
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Admin}/{action=Show}/{id=0}");
+            //});
 
             //app.UseEndpoints(endpoints =>
             //{
