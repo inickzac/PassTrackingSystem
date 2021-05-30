@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+public enum PurposeInfo {SearchDate, GenerateDocument}
+
 namespace PassTrackingSystem.ViewModels
 {
-    public class GenerateDocumentVM
+    public class CommonInformationVM
     {
         public int Id { get; set; }
         public string CompanyName { get; set; } = "Филиал ОАО ГТД";

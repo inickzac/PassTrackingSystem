@@ -76,7 +76,7 @@ namespace PassTrackingSystem.Controllers
             return View(new CarPassVM { CarPasses = await passes, PurposeVisitorId = visitorId });
         }
 
-        public async Task<IActionResult> Document(int passId)
+        public async Task<IActionResult> Document(int passId, bool itsForDocument = true)
         {
             if (passId != 0)
             {
@@ -87,7 +87,7 @@ namespace PassTrackingSystem.Controllers
                     .Include(p=> p.Car)
                     .FirstAsync();
 
-                var documentVM = new GenerateDocumentVM
+                var documentVM = new CommonInformationVM
                 {
                     Document = pass.Visitor.Document,
                     Id = pass.Id,
@@ -102,7 +102,14 @@ namespace PassTrackingSystem.Controllers
                     PurposeOfIssuance = pass.PurposeOfIssuance,
                     Car = pass.Car
                 };
-                return View("Document", documentVM);
+                if (itsForDocument)
+                {
+                    return View("Document", documentVM);
+                }
+                if (!itsForDocument)
+                {
+                    return View("CommonPassInfo", documentVM);
+                }
             }
             return BadRequest();
         }

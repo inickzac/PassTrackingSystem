@@ -1,34 +1,9 @@
 ﻿@model CommonInformationVM
-@{
-    Layout = "";
-}
 
-<!DOCTYPE html>
-<html lang="ru">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-            crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-</head>
-
-<body style="max-width: 210mm; max-height: 297mm;">
+<div style="max-width: 210mm; max-height: 297mm;">
     <div class="container-fluid">
-        <h2 class="text-center">@Model.CompanyName</h2>
         <h5 class="text-center">@Model.PassType &nbsp №@Model.Id</h5>
-        <div class="row pt-4">
-            <div class="col-3">
-                <div class="card" style="width: 12rem; height: 14rem;">
-                    <div class="card-body"
-                         style="position: absolute; top: 50%; left: 50%;  transform: translate(-50%, -50%);">
-                        <h6>Фото</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
+        <div class="row">          
                 <div class="container-fluid">
                     <div class="col">
                         <div>Фамилия: @Model.LastName</div>
@@ -49,7 +24,6 @@
                         <div>В случае отсутствия фотографии, временный пропуск  действителен только при наличии документа на  основании которого он выписан</div>
                     </div>
                 </div>
-            </div>
         </div>
         <div class="row mt-3">
             <div class="col"> Пропуск выдан на основании: @Model.Document.DocumentType.Value</div>
@@ -113,5 +87,4 @@
             </div>
         }
     </div>
-</body>
-</html>
+</div>

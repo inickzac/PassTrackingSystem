@@ -115,7 +115,7 @@ namespace PassTrackingSystem.Controllers
             return View(accessPairs);
         }
 
-        public async Task<IActionResult> Document(int passId)
+        public async Task<IActionResult> Document(int passId, bool itsForDocument = true)
         {
             if (passId != 0)
             {
@@ -126,7 +126,7 @@ namespace PassTrackingSystem.Controllers
                     .Include(p => p.StationFacilities)
                     .FirstAsync();
 
-                var documentVM = new GenerateDocumentVM
+                var documentVM = new CommonInformationVM
                 {
                     Document = pass.Visitor.Document,
                     Id = pass.Id,
@@ -141,7 +141,14 @@ namespace PassTrackingSystem.Controllers
                     PurposeOfIssuance = pass.PurposeOfIssuance,
                     StationFacilities = pass.StationFacilities.Select(f => f.Value).ToList()
                 };
-                return View("Document", documentVM);
+                if (itsForDocument)
+                {
+                    return View("Document", documentVM);
+                }
+                if (!itsForDocument)
+                {
+                    return View("CommonPassInfo", documentVM);
+                }
             }
             return BadRequest();
         }

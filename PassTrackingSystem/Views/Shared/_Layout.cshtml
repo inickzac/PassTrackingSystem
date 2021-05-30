@@ -6,34 +6,30 @@
     <meta http-equiv="Cache-Control" content="private">
     @await Html.PartialAsync("Styles")
     @await Html.PartialAsync("_ValidationScriptsPartial")
-   
+
 </head>
 <body>
     <header class="navbar navbar-expand-md navbar-dark bd-navbar">
-        <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation">          
+        <nav class="container-xxl flex-wrap flex-md-nowrap" aria-label="Main navigation">
             <img src="/Logo-ru-ng.png" alt="альтернативный текст" style="width:25%; height:25%;">
         </nav>
     </header>
     <nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
-        <div class="container-xxl d-flex align-items-md-center">
-            <div class="input-group ms-3" style="max-width :20%">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon1">Поиск</button>
-                <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-            </div>
-
-            <div class="dropdown ms-3 flex-grow-1">
-                <select class="form-select align" aria-label="Default select example" style="max-width:40%">
-                    <option value="1">Разовый пропуск</option>
-                    <option value="2">Временный пропуск</option>
-                    <option value="3">Транспортный пропуск</option>
-                    <option value="3">Разрешение на съемку</option>
-                </select>
-            </div>
-            <div class="align-content-end">
-                Малышев Вадим Сергеевич
-                <button type="button" class="btn btn-outline-dark" style="margin-left: 1em">Выйти</button>
-            </div>
-        </div>        
+        <form class="container-xxl d-flex align-items-md-center" asp-controller="CommonPassInfo", asp-action="CommonPassInfo">
+                <div class="input-group ms-3" style="max-width :20%">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-pass-search">Поиск</button>
+                    <input type="text" class="form-control" placeholder="" data-val="true" data-val-required="error" name="searchId" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                </div>
+                <div class="dropdown ms-3 flex-grow-1">
+                    <select class="form-select align" name="searchType" aria-label="Default select example" style="max-width:40%">
+                        <option value="1">Разовый пропуск</option>
+                        <option value="2">Временный пропуск</option>
+                        <option value="3">Транспортный пропуск</option>
+                        <option value="4">Разрешение на съемку</option>
+                    </select>
+                </div>
+                @await Component.InvokeAsync("UpperUserComponent")
+        </form>
     </nav>
 
 
