@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Extensions;
 using PassTrackingSystem.Models;
@@ -12,11 +13,12 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class CarPassController : Controller
     {
         private readonly IGenericRepository<CarPass> passRepository;
         private readonly IGenericRepository<Employee> employeeRepository;
-
+        private readonly bool showAdvancedFeatures;
         public CarPassController(IGenericRepository<CarPass> passRepository,
             IGenericRepository<Employee> employeeRepository)
         {
@@ -50,15 +52,22 @@ namespace PassTrackingSystem.Controllers
             return View(new CarPassVM
             {
                 ProcessingCarPass = carPass,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> CarPassProcessing(CarPass ProcessingCarPass)
         {
-            await passRepository.Update(ProcessingCarPass);
-            int id = ProcessingCarPass.Id;
-            return RedirectToAction( "VisitorProcessing", "VisitorForm", new { id = id });
+            ModelState.Remove("ProcessingCarPass.Car.Id");
+            if (ModelState.IsValid)
+            {
+                await passRepository.Update(ProcessingCarPass);
+                int id = ProcessingCarPass.Id;
+                return RedirectToAction("CarPassProcessing", new { id = id }); 
+            }
+            return RedirectToAction(nameof(CarPassController.BadRedirectRequest),
+                    nameof(VisitorFormController));
         }
 
         public async Task<IActionResult> ShowAll(int? visitorId, CommonListQuery options = null)
@@ -76,7 +85,8 @@ namespace PassTrackingSystem.Controllers
                 ViewBag.CurrentPage = "all-CarPass";
             }
             var TemporaryPasses = await passes;
-            return View(new CarPassVM { CarPasses = await passes, PurposeVisitorId = visitorId });
+            return View(new CarPassVM { CarPasses = await passes, PurposeVisitorId = visitorId, 
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator") });
         }
 
         public async Task<IActionResult> Document(int passId, bool itsForDocument = true)
@@ -116,5 +126,17 @@ namespace PassTrackingSystem.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id != 0)
+            {
+                await passRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
     }
 }

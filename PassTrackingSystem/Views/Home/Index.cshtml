@@ -38,10 +38,10 @@
                         @if (Model.ShowAdvancedFeatures)
                         {
                             <td>
-                                <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
-                                   asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                                   asp-route-id="@visitor.Id"
-                                   class="btn btn-outline-danger">Удалить</a>
+                                <button class="btn btn-outline-danger delete-visitor" del-id="@visitor.Id">
+                                    Удалить
+                                </button>
+
                             </td>
                         }
 
@@ -52,5 +52,11 @@
         </table>
         @await Html.PartialAsync("Pages", @Model.Visitors.PageDividorInfo)
     </form>
-
+    <script>
+        $('.delete-visitor').click(function (e) {
+            $.post('@Url.RouteUrl(new { controller = nameof(VisitorFormController).Replace("Controller", ""),
+              action = nameof(VisitorFormController.DeleteVisitor)})', { id: $(this).attr('del-id') }, function () { location.reload()})
+              e.preventDefault()
+        })
+    </script>
 </div>

@@ -44,34 +44,42 @@ namespace PassTrackingSystem.Controllers
                        .Include(v => v.ShootingPermissions)
                        .Include(v => v.CarPasses).ThenInclude(v => v.Car)
                        .FirstAsync();
-            }           
-            else 
-            { 
+            }
+            else
+            {
                 visitor = new Visitor();
                 ViewBag.CurrentPage = "add-VisitorForm";
             }
             return View(new VisitorFormVM
             {
-                Visitor = visitor, 
+                Visitor = visitor,
                 ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
-        });
+            });
         }
-        [HttpPost, Authorize(Roles ="Moderator, Administrator")]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> VisitorProcessing(Visitor visitor)
         {
-            await visitorsRepository.Update(visitor);           
-            return RedirectToAction(nameof(VisitorFormController.VisitorProcessing), new {id= visitor.Id });
+            ModelState.Remove("Visitor.Document.Id");
+            if (ModelState.IsValid)
+            {
+                await visitorsRepository.Update(visitor);
+                return RedirectToAction(nameof(VisitorFormController.VisitorProcessing), new { id = visitor.Id });
+            }
+
+            return RedirectToAction(nameof(VisitorFormController.BadRedirectRequest),
+                nameof(VisitorFormController));
         }
 
-        //[HttpPost]
-        //public async Task<RedirectToActionResult> DeleteVisitor(int id)
-        //{
-        //    if (id!=0)
-        //    {
-        //        await visitorsRepository.Delete(id);
-        //        return RedirectToAction(nameof(HomeController), new { id = visitor.Id }); 
-        //    }
-           
-        //}
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> DeleteVisitor(int id)
+        {
+            if (id != 0)
+            {
+                await visitorsRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
     }
 }

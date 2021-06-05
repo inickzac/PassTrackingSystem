@@ -12,6 +12,6 @@ namespace PassTrackingSystem.Models.Repositoryes
         IQueryable<T> GetAll();
         Task Create(T newDataObject);
         Task Update(T changedDataObject);
-        Task Delete(int id);
+        Task<int> Delete(int id);
     }
 }
