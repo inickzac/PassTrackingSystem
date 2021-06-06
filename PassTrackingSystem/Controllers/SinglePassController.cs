@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Extensions;
 using PassTrackingSystem.Models;
@@ -12,18 +14,21 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class SinglePassController : Controller
     {
         private readonly IGenericRepository<SinglePass> passRepository;
         private readonly IGenericRepository<StationFacility> stationFacilitysRepository;
         private readonly IGenericRepository<Employee> employeeRepository;
+        private readonly UserManager<AppUser> userManager;
         public SinglePassController(IGenericRepository<SinglePass> passRepository,
             IGenericRepository<StationFacility> stationFacilitysRepository,
-            IGenericRepository<Employee> employeeRepository)
+            IGenericRepository<Employee> employeeRepository, UserManager<AppUser> userManager)
         {
             this.employeeRepository = employeeRepository;
             this.stationFacilitysRepository = stationFacilitysRepository;
             this.passRepository = passRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> SinglePassProcessing(int id, int visitorId)
@@ -43,6 +48,7 @@ namespace PassTrackingSystem.Controllers
                 if (visitorId != 0)
                 {
                     singlePass = new SinglePass();
+                    singlePass.SinglePassIssued= await GetRequestUserAsync();
                     singlePass.ValidWith = DateTime.Now;
                     singlePass.ValitUntil = DateTime.Now;
                     singlePass.VisitorId = visitorId;
@@ -53,9 +59,10 @@ namespace PassTrackingSystem.Controllers
             return View(new SinglePassVM
             {
                 ProcessingSinglePass = singlePass,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
         }
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> SinglePassProcessing(SinglePass ProcessingSinglePass,
             List<int> facilitiesId)
         {
@@ -68,7 +75,7 @@ namespace PassTrackingSystem.Controllers
                 await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
                .Include(v => v.SinglePasses)
               .Where(v => v.Id == id).First()).ToList());
-
+            ProcessingSinglePass.SinglePassIssued = await GetRequestUserAsync();
             await passRepository.Update(ProcessingSinglePass);
             int id = ProcessingSinglePass.Id;
             return RedirectToAction("SinglePassProcessing", new { id = id });
@@ -89,7 +96,9 @@ namespace PassTrackingSystem.Controllers
                 ViewBag.CurrentPage = "all-SinglePass";
             }
             var singlePasses = await passes;
-            return View(new SinglePassVM { SinglePasses = await passes, PurposeVisitorId = visitorId });
+            return View(new SinglePassVM { SinglePasses = await passes, PurposeVisitorId = visitorId,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
+            });
         }
 
         public async Task<IActionResult> GetAllowedList(int processingPass)
@@ -154,5 +163,22 @@ namespace PassTrackingSystem.Controllers
             return BadRequest();
         }
 
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id != 0)
+            {
+                await passRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
+
+        private async Task<Employee> GetRequestUserAsync()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            return await employeeRepository.Get(user.EmployeeId);
+        }
     }
 }

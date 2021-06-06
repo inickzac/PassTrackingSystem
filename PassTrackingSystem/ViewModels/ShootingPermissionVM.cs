@@ -18,5 +18,6 @@ namespace PassTrackingSystem.ViewModels
         public PagesDividedList<ShootingPermission> ShootingPermissions { get; set; }
         public ShootingPermission ProcessingShootingPermission { get; set; }
         public int? PurposeVisitorId { get; set; }
+        public bool ShowAdvancedFeatures { get; set; }
     }
 }

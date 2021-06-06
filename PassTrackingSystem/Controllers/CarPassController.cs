@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Extensions;
@@ -18,12 +19,13 @@ namespace PassTrackingSystem.Controllers
     {
         private readonly IGenericRepository<CarPass> passRepository;
         private readonly IGenericRepository<Employee> employeeRepository;
-        private readonly bool showAdvancedFeatures;
+        private readonly UserManager<AppUser> userManager;
         public CarPassController(IGenericRepository<CarPass> passRepository,
-            IGenericRepository<Employee> employeeRepository)
+            IGenericRepository<Employee> employeeRepository, UserManager<AppUser> userManager)
         {
             this.passRepository = passRepository;
             this.employeeRepository = employeeRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> CarPassProcessing(int id, int visitorId)
@@ -43,6 +45,9 @@ namespace PassTrackingSystem.Controllers
                 carPass = new CarPass();
                 if (visitorId != 0)
                 {
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    var employee = await employeeRepository.Get(user.EmployeeId);
+                    carPass.CarPassIssued = employee;
                     carPass.ValidWith = DateTime.Now;
                     carPass.ValitUntil = DateTime.Now;
                     carPass.VisitorId = visitorId;
@@ -50,7 +55,7 @@ namespace PassTrackingSystem.Controllers
                 else return new BadRequestResult();
             }
             return View(new CarPassVM
-            {
+            {                
                 ProcessingCarPass = carPass,
                 ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
@@ -62,6 +67,9 @@ namespace PassTrackingSystem.Controllers
             ModelState.Remove("ProcessingCarPass.Car.Id");
             if (ModelState.IsValid)
             {
+                var user = await userManager.GetUserAsync(HttpContext.User);
+                var employee = await employeeRepository.Get(user.EmployeeId);
+                ProcessingCarPass.CarPassIssued = employee;
                 await passRepository.Update(ProcessingCarPass);
                 int id = ProcessingCarPass.Id;
                 return RedirectToAction("CarPassProcessing", new { id = id }); 

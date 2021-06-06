@@ -138,6 +138,13 @@ namespace PassTrackingSystem
             //        name: "default",
             //        pattern: "{controller=ShootingPermission}/{action=ShootingPermissionProcessing}/{id=100}");
             //});
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Account}/{action=Logout}/{id?}");
+            //});
         }
     }
 }

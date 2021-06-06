@@ -25,29 +25,43 @@
             <tbody>
                 @foreach (var ShootingPermission in Model.ShootingPermissions.Items)
                 {
-                    <tr>
-                        <td>@ShootingPermission.Id</td>
-                        <td>@ShootingPermission.ValidWith.ToShortDateString()</td>
-                        <td>@ShootingPermission.ValitUntil.ToShortDateString()</td>
-                        <td>@ShootingPermission.ShootingPurpose</td>
+                <tr>
+                    <td>@ShootingPermission.Id</td>
+                    <td>@ShootingPermission.ValidWith.ToShortDateString()</td>
+                    <td>@ShootingPermission.ValitUntil.ToShortDateString()</td>
+                    <td>@ShootingPermission.ShootingPurpose</td>
+                    <td>
+                        @foreach (var item in ShootingPermission.StationFacilities)
+                        {
+                            <text>@item.Value<br></text>
+                        }
+                    </td>
+                    <td>@ShootingPermission.ShootingPermissionIssued?.LastName @ShootingPermission.ShootingPermissionIssued?.Name @ShootingPermission?.ShootingPermissionIssued?.Patronymic</td>
+                    <td>
+                        <a asp-action="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController.ShootingPermissionProcessing)"
+                           asp-controller="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController).Replace("Controller", "")"
+                           asp-route-id="@ShootingPermission.Id"
+                           class="btn btn-outline-dark">Подробнее</a>
+                    </td>
+                    @if (Model.ShowAdvancedFeatures)
+                    {
                         <td>
-                            @foreach (var item in ShootingPermission.StationFacilities)
-                            {
-                                <text>@item.Value<br></text>
-                            }
+                            <button class="btn btn-outline-danger delete" del-id="@ShootingPermission.Id">
+                                Удалить
+                            </button>
                         </td>
-                        <td>@ShootingPermission.ShootingPermissionIssued.LastName @ShootingPermission.ShootingPermissionIssued.Name @ShootingPermission.ShootingPermissionIssued.Patronymic</td>
-                        <td>
-                            <a asp-action="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController.ShootingPermissionProcessing)"
-                               asp-controller="@nameof(PassTrackingSystem.Controllers.ShootingPermissionController).Replace("Controller", "")"
-                               asp-route-id="@ShootingPermission.Id"
-                               class="btn btn-outline-dark">Подробнее</a>
-                        </td>
-                    </tr>
+                    }
+                </tr>
                 }
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.ShootingPermissions.PageDividorInfo)
     </form>
-
+    <script>
+        $('.delete').click(function (e) {
+            $.post('@Url.RouteUrl(new { controller = nameof(ShootingPermissionController).Replace("Controller", ""),
+              action = nameof(ShootingPermissionController.Delete)})', { id: $(this).attr('del-id') }, function () { location.reload()})
+              e.preventDefault()
+        })
+    </script>
 </div>

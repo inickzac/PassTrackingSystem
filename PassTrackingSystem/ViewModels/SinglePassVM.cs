@@ -18,5 +18,6 @@ namespace PassTrackingSystem.ViewModels
         public PagesDividedList<SinglePass> SinglePasses { get; set; }
         public SinglePass ProcessingSinglePass { get; set; }
         public int? PurposeVisitorId { get; set; }
+        public bool ShowAdvancedFeatures { get; set; }
     }
 }

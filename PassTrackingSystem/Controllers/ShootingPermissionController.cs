@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Extensions;
 using PassTrackingSystem.Models;
@@ -12,19 +14,22 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class ShootingPermissionController : Controller
     {
         private readonly IGenericRepository<ShootingPermission> passRepository;
         private readonly IGenericRepository<StationFacility> stationFacilitysRepository;
         private readonly IGenericRepository<Employee> employeeRepository;
+        private readonly UserManager<AppUser> userManager;
 
         public ShootingPermissionController(IGenericRepository<ShootingPermission> passRepository,
-            IGenericRepository<StationFacility> stationFacilitysRepository, 
+            IGenericRepository<StationFacility> stationFacilitysRepository, UserManager<AppUser> userManager,
             IGenericRepository<Employee> employeeRepository)
         {
             this.passRepository = passRepository;
             this.stationFacilitysRepository = stationFacilitysRepository;
             this.employeeRepository = employeeRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> ShootingPermissionProcessing(int id, int visitorId)
@@ -42,39 +47,47 @@ namespace PassTrackingSystem.Controllers
             else
             {
                 if (visitorId != 0)
-                {
+                {                    
                     shootingPermission = new ShootingPermission();
                     shootingPermission.ValidWith = DateTime.Now;
                     shootingPermission.ValitUntil = DateTime.Now;
                     shootingPermission.VisitorId = visitorId;
+                    shootingPermission.ShootingPermissionIssued =await GetRequestUserAsync();
                 }
                 else return new BadRequestResult();
-               
+
             }
             return View(new ShootingPermissionVM
             {
                 ProcessingShootingPermission = shootingPermission,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> ShootingPermissionProcessing(ShootingPermission ProcessingShootingPermission,
             List<int> facilitiesId)
         {
-            await passRepository.Update(ProcessingShootingPermission);
-            passRepository.GetAll().Where(v => v.Id == ProcessingShootingPermission.Id).
-                Include(v => v.StationFacilities)
-                .First();
+            if (ModelState.IsValid)
+            {
+                await passRepository.Update(ProcessingShootingPermission);
+                passRepository.GetAll().Where(v => v.Id == ProcessingShootingPermission.Id).
+                    Include(v => v.StationFacilities)
+                    .First();
 
-            ProcessingShootingPermission.StationFacilities =
-                await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
-                .Where(v => v.Id == id)
-               .Include(v => v.ShootingPermissions)
-              .First()).ToList());
+                ProcessingShootingPermission.StationFacilities =
+                    await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
+                    .Where(v => v.Id == id)
+                   .Include(v => v.ShootingPermissions)
+                  .First()).ToList());
 
-            await passRepository.Update(ProcessingShootingPermission);
-            int id = ProcessingShootingPermission.Id;
-            return RedirectToAction("ShootingPermissionProcessing", new { id = id });
+                ProcessingShootingPermission.ShootingPermissionIssued = await GetRequestUserAsync();
+                await passRepository.Update(ProcessingShootingPermission);
+                int id = ProcessingShootingPermission.Id;
+                return RedirectToAction("ShootingPermissionProcessing", new { id = id });
+            }
+            return RedirectToAction(nameof(CarPassController.BadRedirectRequest),
+                       nameof(VisitorFormController));
         }
 
         public async Task<IActionResult> GetAllowedList(int processingPass)
@@ -112,11 +125,16 @@ namespace PassTrackingSystem.Controllers
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
 
             var TemporaryPasses = await passes;
-            if(visitorId !=0)
+            if (visitorId != 0)
             {
                 ViewBag.CurrentPage = "all-ShootingPermission";
             }
-            return View(new ShootingPermissionVM { ShootingPermissions = await passes, PurposeVisitorId = visitorId });
+            return View(new ShootingPermissionVM
+            {
+                ShootingPermissions = await passes,
+                PurposeVisitorId = visitorId,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
+            });
         }
 
         public async Task<IActionResult> Document(int passId, bool itsForDocument = true)
@@ -156,6 +174,24 @@ namespace PassTrackingSystem.Controllers
                 }
             }
             return BadRequest();
+        }
+
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id != 0)
+            {
+                await passRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
+    
+        private async Task<Employee> GetRequestUserAsync()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            return await employeeRepository.Get(user.EmployeeId);
         }
     }
 }

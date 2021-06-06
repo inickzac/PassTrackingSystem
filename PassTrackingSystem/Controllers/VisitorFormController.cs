@@ -28,7 +28,6 @@ namespace PassTrackingSystem.Controllers
             this.issuingAuthoritiesRepository = issuingAuthoritiesRepository;
         }
 
-        [HttpGet]
         public async Task<ViewResult> VisitorProcessing(int id)
         {
             Visitor visitor;

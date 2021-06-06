@@ -43,11 +43,25 @@
                                asp-route-id="@singlePass.Id"
                                class="btn btn-outline-dark">Подробнее</a>
                         </td>
+                        @if (Model.ShowAdvancedFeatures)
+                        {
+                            <td>
+                                <button class="btn btn-outline-danger delete" del-id="@singlePass.Id">
+                                    Удалить
+                                </button>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.SinglePasses.PageDividorInfo)
     </form>
-
+    <script>
+        $('.delete').click(function (e) {
+            $.post('@Url.RouteUrl(new { controller = nameof(SinglePassController).Replace("Controller", ""),
+              action = nameof(SinglePassController.Delete)})', { id: $(this).attr('del-id') }, function () { location.reload()})
+              e.preventDefault()
+        })
+    </script>
 </div>
