@@ -1,0 +1,7 @@
+﻿<div class="align-content-end">
+    @Model
+    <a class="btn btn-outline-dark" style="margin-left: 1em"
+       asp-controller=@nameof(AccountController).Replace("Controller", "")
+       asp-action="@nameof(AccountController.Logout)">Выйти</a>
+</div>
+

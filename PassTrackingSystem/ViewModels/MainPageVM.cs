@@ -33,5 +33,7 @@ namespace PassTrackingSystem.ViewModels
             };        
         } 
         public PagesDividedList<Visitor> Visitors { get; set; }
+        public bool ShowAdvancedFeatures { get; set; }
+
     }
 }

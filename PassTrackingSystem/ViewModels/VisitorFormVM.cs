@@ -21,6 +21,8 @@ namespace PassTrackingSystem.ViewModels
         public int AllCarPasses { get => Visitor?.CarPasses?.Count ?? 0; }
         public int ValidCarPasses { get => Visitor?.CarPasses?.Where(v => v?.ValitUntil > DateTime.Now).Count() ?? 0; }
         public string MaximumUntilCarPasses { get => CalculateCurentDate(Visitor?.CarPasses?.Max(v => v?.ValitUntil)); }
+        public bool ShowAdvancedFeatures { get; set; }
+
 
         private string CalculateCurentDate(DateTime? date)
         {

@@ -49,6 +49,13 @@
     <div class="py-5 ">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
+        @if(Model.ProcessingTemporaryPass?.Id!=0)
+        {
+            <a class="btn btn-info"
+               asp-controller=@nameof(TemporaryPassController).Replace("Controller", "")
+               asp-action="@nameof(TemporaryPassController.Document)" asp-route-passId="@Model.ProcessingTemporaryPass.Id">Генерировать документ</a>
+        }
+
     </div>
 
 </form>

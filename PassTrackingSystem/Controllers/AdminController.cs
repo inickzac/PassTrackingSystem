@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         private UserManager<AppUser> userManager;
@@ -40,6 +40,7 @@ namespace PassTrackingSystem.Controllers
                     }
                 }
             }
+            ViewBag.CurrentPage = "add-User";
             return View("AdminProcessing", new UserVM());
         }
 
@@ -84,6 +85,7 @@ namespace PassTrackingSystem.Controllers
                 .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
 
             var users = await PagesDividedQuery;
+            ViewBag.CurrentPage = "all-User";
             var userEmployeePairs = users.Items.Select(u => new
             {
                 employee = employeeRepository
@@ -112,6 +114,23 @@ namespace PassTrackingSystem.Controllers
             {
                 await userManager.AddToRolesAsync(user, new List<string> { "Operator" });
             }
+        }
+
+        [HttpPost, Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id != "")
+                {
+                    var user = await userManager.GetUserAsync(HttpContext.User);
+                    if (user.Id != id)
+                    {
+                        await userManager.DeleteAsync(await userManager.FindByIdAsync(id));
+                    }
+                } 
+            }
+            return new OkResult();
         }
     }
 }

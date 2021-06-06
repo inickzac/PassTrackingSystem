@@ -1,0 +1,90 @@
+﻿@model CommonInformationVM
+
+<div style="max-width: 210mm; max-height: 297mm;">
+    <div class="container-fluid">
+        <h5 class="text-center">@Model.PassType &nbsp №@Model.Id</h5>
+        <div class="row">          
+                <div class="container-fluid">
+                    <div class="col">
+                        <div>Фамилия: @Model.LastName</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Имя: @Model.Name</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Отчество: @Model.Patronymic</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Место работы: @Model.PlaceOfWork</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Должность: @Model.Position</div>
+                    </div>
+                    <div class="col my-2">
+                        <div>В случае отсутствия фотографии, временный пропуск  действителен только при наличии документа на  основании которого он выписан</div>
+                    </div>
+                </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col"> Пропуск выдан на основании: @Model.Document.DocumentType.Value</div>
+        </div>
+        <div class="row my-1">
+            <div class="col-4"> Серия: @Model.Document.Series, Номер: @Model.Document.Number</div>
+        </div>
+        <div class="row my-1">
+            <div class="col">Кем выдан: @Model.Document.IssuingAuthority.Value </div>
+        </div>
+        <div class="row my-1">
+            <div class="col">Дата выдачи: @Model.Document.DateOfIssue.ToShortDateString() </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">Пропуск действует с: @Model.ValidWith </div>
+        </div>
+        <div class="row my-1">
+            <div class="col">Пропуск действует до: @Model.ValitUntil </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">Цель выдачи: @Model.PurposeOfIssuance</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">Дополнительная информация:  </div>
+        </div>
+        <div class="row my-1 fixed-bottom mt-3">
+            <div class="col">Дата выдачи: 12.12.2020 </div>
+        </div>
+        @if (Model?.StationFacilities?.Count > 0)
+        {
+            <div class="row mt-3">
+                <div class="col">
+                    Обьекты для посещения: @foreach (var item in Model.StationFacilities)
+                    {
+                        @item <text>, </text>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.CameraType))
+        {
+            <div class="row">
+                <div class="col">
+                    Модель камеры: @Model.CameraType
+                </div>
+            </div>
+        }
+
+        @if (Model.Car != null)
+        {
+            <div class="row">
+                <div class="col">
+                    Марка автомобиля: @Model.Car.CarBrand
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Номерной знак: @Model.Car.CarLicensePlate
+                </div>
+            </div>
+        }
+    </div>
+</div>

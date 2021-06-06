@@ -1,0 +1,117 @@
+﻿@model CommonInformationVM
+@{
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+
+<body style="max-width: 210mm; max-height: 297mm;">
+    <div class="container-fluid">
+        <h2 class="text-center">@Model.CompanyName</h2>
+        <h5 class="text-center">@Model.PassType &nbsp №@Model.Id</h5>
+        <div class="row pt-4">
+            <div class="col-3">
+                <div class="card" style="width: 12rem; height: 14rem;">
+                    <div class="card-body"
+                         style="position: absolute; top: 50%; left: 50%;  transform: translate(-50%, -50%);">
+                        <h6>Фото</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="container-fluid">
+                    <div class="col">
+                        <div>Фамилия: @Model.LastName</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Имя: @Model.Name</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Отчество: @Model.Patronymic</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Место работы: @Model.PlaceOfWork</div>
+                    </div>
+                    <div class="col my-1">
+                        <div>Должность: @Model.Position</div>
+                    </div>
+                    <div class="col my-2">
+                        <div>В случае отсутствия фотографии, временный пропуск  действителен только при наличии документа на  основании которого он выписан</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col"> Пропуск выдан на основании: @Model.Document.DocumentType.Value</div>
+        </div>
+        <div class="row my-1">
+            <div class="col-4"> Серия: @Model.Document.Series, Номер: @Model.Document.Number</div>
+        </div>
+        <div class="row my-1">
+            <div class="col">Кем выдан: @Model.Document.IssuingAuthority.Value </div>
+        </div>
+        <div class="row my-1">
+            <div class="col">Дата выдачи: @Model.Document.DateOfIssue.ToShortDateString() </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">Пропуск действует с: @Model.ValidWith </div>
+        </div>
+        <div class="row my-1">
+            <div class="col">Пропуск действует до: @Model.ValitUntil </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">Цель выдачи: @Model.PurposeOfIssuance</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">Дополнительная информация:  </div>
+        </div>
+        <div class="row my-1 fixed-bottom mt-3">
+            <div class="col">Дата выдачи: 12.12.2020 </div>
+        </div>
+        @if (Model?.StationFacilities?.Count > 0)
+        {
+            <div class="row mt-3">
+                <div class="col">
+                    Обьекты для посещения: @foreach (var item in Model.StationFacilities)
+                    {
+                        @item <text>, </text>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.CameraType))
+        {
+            <div class="row">
+                <div class="col">
+                    Модель камеры: @Model.CameraType
+                </div>
+            </div>
+        }
+
+        @if (Model.Car != null)
+        {
+            <div class="row">
+                <div class="col">
+                    Марка автомобиля: @Model.Car.CarBrand
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    Номерной знак: @Model.Car.CarLicensePlate
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>

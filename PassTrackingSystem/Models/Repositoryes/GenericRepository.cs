@@ -30,10 +30,10 @@ namespace PassTrackingSystem.Models.Repositoryes
             return context.SaveChangesAsync();
         }
 
-        public virtual Task Delete(int id)
+        public virtual async Task<int> Delete(int id)
         {
-            context.Remove(Get(id));
-            return context.SaveChangesAsync();
+            context.Remove(await Get(id));
+            return await context.SaveChangesAsync();
         }
 
         public virtual Task Update(T changedDataObject)
@@ -41,6 +41,5 @@ namespace PassTrackingSystem.Models.Repositoryes
             context.Update<T>(changedDataObject); 
             return context.SaveChangesAsync();
         }
-    
     }
 }

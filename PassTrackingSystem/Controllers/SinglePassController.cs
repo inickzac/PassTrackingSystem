@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Extensions;
 using PassTrackingSystem.Models;
@@ -12,18 +14,21 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class SinglePassController : Controller
     {
         private readonly IGenericRepository<SinglePass> passRepository;
         private readonly IGenericRepository<StationFacility> stationFacilitysRepository;
         private readonly IGenericRepository<Employee> employeeRepository;
+        private readonly UserManager<AppUser> userManager;
         public SinglePassController(IGenericRepository<SinglePass> passRepository,
             IGenericRepository<StationFacility> stationFacilitysRepository,
-            IGenericRepository<Employee> employeeRepository)
+            IGenericRepository<Employee> employeeRepository, UserManager<AppUser> userManager)
         {
             this.employeeRepository = employeeRepository;
             this.stationFacilitysRepository = stationFacilitysRepository;
             this.passRepository = passRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> SinglePassProcessing(int id, int visitorId)
@@ -43,19 +48,21 @@ namespace PassTrackingSystem.Controllers
                 if (visitorId != 0)
                 {
                     singlePass = new SinglePass();
+                    singlePass.SinglePassIssued= await GetRequestUserAsync();
                     singlePass.ValidWith = DateTime.Now;
                     singlePass.ValitUntil = DateTime.Now;
                     singlePass.VisitorId = visitorId;
                 }
                 else return new BadRequestResult();
-                
+
             }
             return View(new SinglePassVM
             {
                 ProcessingSinglePass = singlePass,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
         }
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> SinglePassProcessing(SinglePass ProcessingSinglePass,
             List<int> facilitiesId)
         {
@@ -68,10 +75,10 @@ namespace PassTrackingSystem.Controllers
                 await Task.Run(() => facilitiesId.Select(id => stationFacilitysRepository.GetAll()
                .Include(v => v.SinglePasses)
               .Where(v => v.Id == id).First()).ToList());
-
+            ProcessingSinglePass.SinglePassIssued = await GetRequestUserAsync();
             await passRepository.Update(ProcessingSinglePass);
             int id = ProcessingSinglePass.Id;
-            return RedirectToAction("SinglePassProcessing",  new { id = id });
+            return RedirectToAction("SinglePassProcessing", new { id = id });
         }
 
         public async Task<IActionResult> ShowAll(int? visitorId, CommonListQuery options = null)
@@ -84,9 +91,14 @@ namespace PassTrackingSystem.Controllers
                   .ThenInclude(v => v.Department)
                      .SearchByMember(options.SearchСolumn, options.SearchValue)
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
-
+            if (visitorId != 0)
+            {
+                ViewBag.CurrentPage = "all-SinglePass";
+            }
             var singlePasses = await passes;
-            return View(new SinglePassVM { SinglePasses = await passes, PurposeVisitorId = visitorId });
+            return View(new SinglePassVM { SinglePasses = await passes, PurposeVisitorId = visitorId,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
+            });
         }
 
         public async Task<IActionResult> GetAllowedList(int processingPass)
@@ -110,6 +122,63 @@ namespace PassTrackingSystem.Controllers
             })
                 .ToDictionary(v => v.Facility, i => i.Allow);
             return View(accessPairs);
+        }
+
+        public async Task<IActionResult> Document(int passId, bool itsForDocument=true)
+        {
+            if (passId != 0)
+            {
+                var pass = await passRepository.GetAll()
+                    .Where(p => p.Id == passId)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.DocumentType)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.IssuingAuthority)
+                    .Include(p => p.StationFacilities)
+                    .FirstAsync();
+
+                var documentVM = new CommonInformationVM
+                {
+                    Document = pass.Visitor.Document,
+                    Id = pass.Id,
+                    Name = pass.Visitor.Name,
+                    LastName = pass.Visitor.LastName,
+                    Patronymic = pass.Visitor.LastName,
+                    PassType = "Разовый пропуск",
+                    ValidWith = pass.ValidWith.ToString("dd:mm  yyyy-hh-mm"),
+                    ValitUntil = pass.ValitUntil.ToString("dd:mm  yyyy-hh-mm"),
+                    PlaceOfWork = pass.Visitor.PlaceOfWork,
+                    Position = pass.Visitor.Position,
+                    PurposeOfIssuance = pass.PurposeOfIssuance,
+                    StationFacilities = pass.StationFacilities.Select(f => f.Value).ToList()
+                };
+                if (itsForDocument)
+                {
+                    return View("Document", documentVM);
+                }
+                if (!itsForDocument)
+                {
+                    return View("CommonPassInfo", documentVM);
+                }
+
+            }
+            return BadRequest();
+        }
+
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id != 0)
+            {
+                await passRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
+
+        private async Task<Employee> GetRequestUserAsync()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            return await employeeRepository.Get(user.EmployeeId);
         }
     }
 }

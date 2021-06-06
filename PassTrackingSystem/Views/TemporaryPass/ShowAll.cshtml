@@ -35,19 +35,33 @@
                             {
                                 <text>@item.Value<br></text>
                             }
-                    </td>
-                    <td>@temporaryPass.TemporaryPassIssued.LastName @temporaryPass.TemporaryPassIssued.Name @temporaryPass.TemporaryPassIssued.Patronymic</td>
-                    <td>
-                        <a asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.TemporaryPassProcessing)"
-                           asp-controller="@nameof(PassTrackingSystem.Controllers.TemporaryPassController).Replace("Controller", "")"
-                           asp-route-id="@temporaryPass.Id"
-                           class="btn btn-outline-dark">Подробнее</a>
-                    </td>
-                </tr>
-            }
+                        </td>
+                        <td>@temporaryPass?.TemporaryPassIssued?.LastName @temporaryPass?.TemporaryPassIssued?.Name @temporaryPass.TemporaryPassIssued?.Patronymic</td>
+                        <td>
+                            <a asp-action="@nameof(PassTrackingSystem.Controllers.TemporaryPassController.TemporaryPassProcessing)"
+                               asp-controller="@nameof(PassTrackingSystem.Controllers.TemporaryPassController).Replace("Controller", "")"
+                               asp-route-id="@temporaryPass.Id"
+                               class="btn btn-outline-dark">Подробнее</a>
+                        </td>
+                        @if (Model.ShowAdvancedFeatures)
+                        {
+                            <td>
+                                <button class="btn btn-outline-danger delete" del-id="@temporaryPass.Id">
+                                    Удалить
+                                </button>
+                            </td>
+                        }
+                    </tr>
+                }
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.TemporaryPasses.PageDividorInfo)
     </form>
-
+    <script>
+        $('.delete').click(function (e) {
+            $.post('@Url.RouteUrl(new { controller = nameof(TemporaryPassController).Replace("Controller", ""),
+              action = nameof(TemporaryPassController.Delete)})', { id: $(this).attr('del-id') }, function () { location.reload()})
+              e.preventDefault()
+        })
+    </script>
 </div>

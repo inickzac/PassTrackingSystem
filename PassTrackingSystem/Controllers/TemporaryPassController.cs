@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Extensions;
@@ -20,13 +21,15 @@ namespace PassTrackingSystem.Controllers
         private readonly IGenericRepository<TemporaryPass> passRepository;
         private readonly IGenericRepository<StationFacility> stationFacilitysRepository;
         private readonly IGenericRepository<Employee> employeeRepository;
+        private readonly UserManager<AppUser> userManager;
         public TemporaryPassController(IGenericRepository<TemporaryPass> passRepository,
             IGenericRepository<StationFacility> stationFacilitysRepository,
-            IGenericRepository<Employee> employeeRepository)
+            IGenericRepository<Employee> employeeRepository, UserManager<AppUser> userManager)
         {
             this.employeeRepository = employeeRepository;
             this.stationFacilitysRepository = stationFacilitysRepository;
             this.passRepository = passRepository;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> TemporaryPassProcessing(int id, int visitorId)
@@ -46,6 +49,7 @@ namespace PassTrackingSystem.Controllers
                 if (visitorId != 0)
                 {
                     temporaryPass = new TemporaryPass();
+                    temporaryPass.TemporaryPassIssued =await GetRequestUserAsync();
                     temporaryPass.ValidWith = DateTime.Now;
                     temporaryPass.ValitUntil = DateTime.Now;
                     temporaryPass.VisitorId = visitorId;
@@ -55,9 +59,10 @@ namespace PassTrackingSystem.Controllers
             return View(new TemporaryPassVM
             {
                 ProcessingTemporaryPass = temporaryPass,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
         }
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> TemporaryPassProcessing(TemporaryPass ProcessingTemporaryPass,
             List<int> facilitiesId)
         {
@@ -72,6 +77,7 @@ namespace PassTrackingSystem.Controllers
                .Include(v => v.TemporaryPasses)
               .First()).ToList();
 
+            ProcessingTemporaryPass.TemporaryPassIssued =await GetRequestUserAsync();
             await passRepository.Update(ProcessingTemporaryPass);
             int id = ProcessingTemporaryPass.Id;
             return RedirectToAction("TemporaryPassProcessing", new { id = id });
@@ -87,9 +93,13 @@ namespace PassTrackingSystem.Controllers
                   .ThenInclude(v => v.Department)
                      .SearchByMember(options.SearchСolumn, options.SearchValue)
                         .OrderByMember("Id", true), options.CurrentPage, options.PageSize));
-
+            if (visitorId != 0)
+            {
+                ViewBag.CurrentPage = "all-TemporaryPass";
+            }
             var TemporaryPasses = await passes;
-            return View(new TemporaryPassVM { TemporaryPasses = await passes, PurposeVisitorId = visitorId });
+            return View(new TemporaryPassVM { TemporaryPasses = await passes, PurposeVisitorId = visitorId,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator") });
         }
 
         public async Task<IActionResult> GetAllowedList(int processingPass)
@@ -115,6 +125,59 @@ namespace PassTrackingSystem.Controllers
             return View(accessPairs);
         }
 
+        public async Task<IActionResult> Document(int passId, bool itsForDocument = true)
+        {
+            if (passId != 0)
+            {
+                var pass = await passRepository.GetAll()
+                    .Where(p => p.Id == passId)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.DocumentType)
+                    .Include(p => p.Visitor).ThenInclude(v => v.Document).ThenInclude(d => d.IssuingAuthority)
+                    .Include(p => p.StationFacilities)
+                    .FirstAsync();
 
+                var documentVM = new CommonInformationVM
+                {
+                    Document = pass.Visitor.Document,
+                    Id = pass.Id,
+                    Name = pass.Visitor.Name,
+                    LastName = pass.Visitor.LastName,
+                    Patronymic = pass.Visitor.LastName,
+                    PassType = "Временный пропуск",
+                    ValidWith = pass.ValidWith.ToShortDateString(),
+                    ValitUntil = pass.ValitUntil.ToShortDateString(),
+                    PlaceOfWork = pass.Visitor.PlaceOfWork,
+                    Position = pass.Visitor.Position,
+                    PurposeOfIssuance = pass.PurposeOfIssuance,
+                    StationFacilities = pass.StationFacilities.Select(f => f.Value).ToList()
+                };
+                if (itsForDocument)
+                {
+                    return View("Document", documentVM);
+                }
+                if (!itsForDocument)
+                {
+                    return View("CommonPassInfo", documentVM);
+                }
+            }
+            return BadRequest();
+        }
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id != 0)
+            {
+                await passRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
+
+        private async Task<Employee> GetRequestUserAsync()
+        {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+            return await employeeRepository.Get(user.EmployeeId);
+        }
     }
 }

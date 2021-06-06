@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PassTrackingSystem.Models;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class VisitorFormController : Controller
     {
         IGenericRepository<Visitor> visitorsRepository;
@@ -26,7 +28,6 @@ namespace PassTrackingSystem.Controllers
             this.issuingAuthoritiesRepository = issuingAuthoritiesRepository;
         }
 
-        [HttpGet]
         public async Task<ViewResult> VisitorProcessing(int id)
         {
             Visitor visitor;
@@ -37,24 +38,47 @@ namespace PassTrackingSystem.Controllers
                        .Include(v => v.Document)
                        .ThenInclude(i => i.IssuingAuthority)
                        .Include(v => v.Document.DocumentType)
-                       .Include(v=> v.TemporaryPasses)
+                       .Include(v => v.TemporaryPasses)
                        .Include(v => v.SinglePasses)
                        .Include(v => v.ShootingPermissions)
-                       .Include(v => v.CarPasses).ThenInclude(v=> v.Car)
+                       .Include(v => v.CarPasses).ThenInclude(v => v.Car)
                        .FirstAsync();
             }
-
-            else visitor = new Visitor();
+            else
+            {
+                visitor = new Visitor();
+                ViewBag.CurrentPage = "add-VisitorForm";
+            }
             return View(new VisitorFormVM
             {
                 Visitor = visitor,
+                ShowAdvancedFeatures = HttpContext.User.IsInRole("Administrator") || HttpContext.User.IsInRole("Moderator")
             });
         }
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
         public async Task<RedirectToActionResult> VisitorProcessing(Visitor visitor)
         {
-            await visitorsRepository.Update(visitor);           
-            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
+            ModelState.Remove("Visitor.Document.Id");
+            if (ModelState.IsValid)
+            {
+                await visitorsRepository.Update(visitor);
+                return RedirectToAction(nameof(VisitorFormController.VisitorProcessing), new { id = visitor.Id });
+            }
+
+            return RedirectToAction(nameof(VisitorFormController.BadRedirectRequest),
+                nameof(VisitorFormController));
         }
+
+        [HttpPost, Authorize(Roles = "Moderator, Administrator")]
+        public async Task<IActionResult> DeleteVisitor(int id)
+        {
+            if (id != 0)
+            {
+                await visitorsRepository.Delete(id);
+            }
+            return new OkResult();
+        }
+
+        public IActionResult BadRedirectRequest() => BadRequest();
     }
 }

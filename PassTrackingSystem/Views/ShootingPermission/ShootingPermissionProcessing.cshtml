@@ -57,6 +57,12 @@
     <div class="py-5 ">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
+        @if (Model.ProcessingShootingPermission?.Id != 0)
+        {
+            <a class="btn btn-info"
+               asp-controller=@nameof(ShootingPermissionController).Replace("Controller", "")
+               asp-action="@nameof(ShootingPermissionController.Document)" asp-route-passId="@Model.ProcessingShootingPermission.Id">Генерировать документ</a>
+        }
     </div>
 
 </form>

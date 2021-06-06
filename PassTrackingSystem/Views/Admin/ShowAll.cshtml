@@ -36,8 +36,13 @@
                         <td>
                             <a asp-action="@nameof(PassTrackingSystem.Controllers.AdminController.Show)"
                                asp-controller="@nameof(PassTrackingSystem.Controllers.AdminController).Replace("Controller", "")"
-                                asp-route-id="@item.Key.Id"
+                               asp-route-id="@item.Key.Id"
                                class="btn btn-outline-dark">Подробнее</a>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-danger delete" del-id="@item.Key.Id">
+                                Удалить
+                            </button>
                         </td>
                     </tr>
                 }
@@ -45,5 +50,11 @@
         </table>
         @await Html.PartialAsync("Pages", @Model.PageDividorInfo)
     </form>
-
+    <script>
+        $('.delete').click(function (e) {
+            $.post('@Url.RouteUrl(new { controller = nameof(AdminController).Replace("Controller", ""),
+              action = nameof(AdminController.Delete)})', { id: $(this).attr('del-id') }, function () { location.reload()})
+              e.preventDefault()
+        })
+    </script>
 </div>

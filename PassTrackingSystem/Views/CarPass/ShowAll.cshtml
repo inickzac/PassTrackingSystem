@@ -26,25 +26,39 @@
             <tbody>
                 @foreach (var CarPass in Model.CarPasses.Items)
                 {
-                <tr>
-                    <td>@CarPass.Id</td>
-                    <td>@CarPass?.ValidWith.ToShortDateString()</td>
-                    <td>@CarPass?.ValitUntil.ToShortDateString()</td>
-                    <td>@CarPass?.PurposeOfIssuance</td>
-                    <td>@CarPass?.Car?.CarBrand</td>
-                    <td>@CarPass?.Car?.CarLicensePlate</td>
-                    <td>@CarPass?.CarPassIssued?.LastName @CarPass.CarPassIssued?.Name @CarPass.CarPassIssued?.Patronymic</td>
-                    <td>
-                        <a asp-action="@nameof(PassTrackingSystem.Controllers.CarPassController.CarPassProcessing)"
-                           asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
-                           asp-route-id="@CarPass.Id"
-                           class="btn btn-outline-dark">Подробнее</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>@CarPass.Id</td>
+                        <td>@CarPass?.ValidWith.ToShortDateString()</td>
+                        <td>@CarPass?.ValitUntil.ToShortDateString()</td>
+                        <td>@CarPass?.PurposeOfIssuance</td>
+                        <td>@CarPass?.Car?.CarBrand</td>
+                        <td>@CarPass?.Car?.CarLicensePlate</td>
+                        <td>@CarPass?.CarPassIssued?.LastName @CarPass.CarPassIssued?.Name @CarPass.CarPassIssued?.Patronymic</td>
+                        <td>
+                            <a asp-action="@nameof(PassTrackingSystem.Controllers.CarPassController.CarPassProcessing)"
+                               asp-controller="@nameof(PassTrackingSystem.Controllers.CarPassController).Replace("Controller", "")"
+                               asp-route-id="@CarPass.Id"
+                               class="btn btn-outline-dark">Подробнее</a>
+                        </td>
+                        @if (Model.ShowAdvancedFeatures)
+                        {
+                            <td>
+                                <button class="btn btn-outline-danger delete" del-id="@CarPass.Id">
+                                    Удалить
+                                </button>
+                            </td>
+                        }
+                    </tr>
                 }
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.CarPasses.PageDividorInfo)
     </form>
-
+    <script>
+        $('.delete').click(function (e) {
+            $.post('@Url.RouteUrl(new { controller = nameof(CarPassController).Replace("Controller", ""),
+              action = nameof(CarPassController.Delete)})', { id: $(this).attr('del-id') }, function () { location.reload()})
+              e.preventDefault()
+        })
+    </script>
 </div>

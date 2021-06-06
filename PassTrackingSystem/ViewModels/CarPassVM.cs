@@ -18,5 +18,6 @@ namespace PassTrackingSystem.ViewModels
         public PagesDividedList<CarPass> CarPasses { get; set; }
         public CarPass ProcessingCarPass{ get; set; }
         public int? PurposeVisitorId { get; set; }
+        public bool ShowAdvancedFeatures { get; set; }
     }
 }

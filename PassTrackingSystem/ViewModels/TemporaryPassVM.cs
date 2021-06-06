@@ -18,5 +18,6 @@ namespace PassTrackingSystem.ViewModels
         public PagesDividedList<TemporaryPass> TemporaryPasses { get; set; }
         public TemporaryPass ProcessingTemporaryPass { get; set; }
         public int? PurposeVisitorId { get; set; }
+        public bool ShowAdvancedFeatures { get; set; }
     }
 }

@@ -41,5 +41,11 @@ namespace PassTrackingSystem.Controllers
             ViewBag.returnUrl = returnUrl;
             return View();
         }
+
+        public async Task<RedirectToActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction(nameof(HomeController.Index), nameof(HomeController).Replace("Controller", ""));
+        }
     }
 }

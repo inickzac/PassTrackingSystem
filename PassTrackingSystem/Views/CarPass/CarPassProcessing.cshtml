@@ -12,7 +12,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <label asp-for="ProcessingCarPass.Car.CarLicensePlate" class="form-label">Действует с</label>
+                <label asp-for="ProcessingCarPass.Car.CarLicensePlate" class="form-label">Номерной знак</label>
                 <input asp-for="ProcessingCarPass.Car.CarLicensePlate" class="form-control">
             </div>
         </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="row">
             <div class="col-md-7">
-                <label asp-for="ProcessingCarPass.PurposeOfIssuance" class="form-label">Цель съемки</label>
+                <label asp-for="ProcessingCarPass.PurposeOfIssuance" class="form-label">Цель выдачи</label>
                 <textarea asp-for="ProcessingCarPass.PurposeOfIssuance" class="form-control" rows="8"></textarea>
             </div>
         </div>
@@ -64,6 +64,12 @@
     <div class="py-5 ">
         <button type="submit" class="btn btn-success">Отправить</button>
         <button type="reset" class="btn btn-danger">Очистить</button>
+        @if (Model.ProcessingCarPass?.Id != 0)
+        {
+            <a class="btn btn-info"
+               asp-controller=@nameof(CarPassController).Replace("Controller", "")
+               asp-action="@nameof(CarPassController.Document)" asp-route-passId="@Model.ProcessingCarPass.Id">Генерировать документ</a>
+        }
     </div>
 
 </form>
