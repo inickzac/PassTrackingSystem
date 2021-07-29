@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PassTrackingSystem.Models;
 using PassTrackingSystem.ViewModels;
@@ -9,33 +10,40 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private UserManager<AppUser> userManager;
         private SignInManager<AppUser> signInManager;
 
-        public AccountController(UserManager<AppUser> userManager, 
+        public AccountController(UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
-       [HttpPost]
-        public async Task<IActionResult> Login(UserVM  userVM, string returnUrl)
+        [HttpPost, AllowAnonymous]
+        public async Task<IActionResult> Login(UserVM userVM, string returnUrl)
         {
-            var user= await userManager?.FindByNameAsync(userVM.AppUser.UserName );
-            if(user!=null)
+           AppUser user=null;
+            if (userVM?.AppUser?.UserName != null)
             {
-              await signInManager.SignOutAsync();
-              var signRes = await signInManager.PasswordSignInAsync(user, userVM.Password, false, false);
-                if(signRes.Succeeded)
+                user = await userManager?.FindByNameAsync(userVM?.AppUser?.UserName);
+            }
+            if (user != null)
+            {
+                await signInManager.SignOutAsync();
+                var signRes = await signInManager.PasswordSignInAsync(user, userVM?.Password, false, false);
+                if (signRes.Succeeded)
                 {
                     return Redirect(returnUrl);
                 }
             }
+            ViewBag.ErrorMessage = "Неправильный логин или пароль";
             return View();
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;

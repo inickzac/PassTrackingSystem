@@ -92,7 +92,7 @@ namespace PassTrackingSystem.Controllers
                  .GetAll()
                  .Where(e => u.EmployeeId == e.Id)
                  .Include(v => v.Department)
-                 .First(),
+                 .FirstOrDefault(),
                 user = u
             })
                  .ToDictionary(k => k.user, v => v.employee);

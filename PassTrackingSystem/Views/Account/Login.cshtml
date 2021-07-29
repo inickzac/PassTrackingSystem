@@ -26,6 +26,12 @@
                             <label for="exampleInputPassword1" class="form-label">Пароль</label>
                             <input type="password" asp-for="@Model.Password" class="form-control" id="exampleInputPassword1">
                         </div>
+                        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                        {                            
+                            <div>
+                                <text style="color: red">@ViewBag.ErrorMessage</text>
+                            </div>
+                        }
                         <button type="submit" class="btn btn-primary">Войти</button>
                     </form>
                 </div>

@@ -87,6 +87,11 @@ namespace PassTrackingSystem.Controllers
         {
             var query = visitorId == null ? passRepository.GetAll() : passRepository.GetAll()
                 .Where(v => v.VisitorId == visitorId);
+            if (options.SearchСolumn == nameof(ShootingPermission.StationFacilities))
+            {
+                query = query.Where(t => t.StationFacilities.Any(f => f.Value.Contains(options.SearchValue)));
+                options.SearchСolumn = "";
+            }
             var passes = Task.Run(() => new PagesDividedList<TemporaryPass>(query
                   .Include(v => v.StationFacilities)
                   .Include(v => v.TemporaryPassIssued)

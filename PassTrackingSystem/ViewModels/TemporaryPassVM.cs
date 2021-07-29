@@ -13,7 +13,11 @@ namespace PassTrackingSystem.ViewModels
         public Dictionary<string, string> HeadNames { get; set; } =
             new Dictionary<string, string> {
                 { "id", "Id" },
-                { "Значение",  "Value"},
+                { "Действует с",  nameof(TemporaryPass.ValidWith)},
+                { "Действует до",  nameof(TemporaryPass.ValitUntil)},
+                { "Пропуск выдал",  nameof(TemporaryPass.TemporaryPassIssued)},
+                { "Цель выдачи",  nameof(TemporaryPass.PurposeOfIssuance)},
+                { "Места для посещения",  nameof(TemporaryPass.StationFacilities)},
             };
         public PagesDividedList<TemporaryPass> TemporaryPasses { get; set; }
         public TemporaryPass ProcessingTemporaryPass { get; set; }
