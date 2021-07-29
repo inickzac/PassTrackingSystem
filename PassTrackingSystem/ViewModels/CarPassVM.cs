@@ -13,7 +13,12 @@ namespace PassTrackingSystem.ViewModels
         public Dictionary<string, string> HeadNames { get; set; } =
             new Dictionary<string, string> {
                 { "id", "Id" },
-                { "Значение",  "Value"},
+                { "Действует с",  nameof(CarPass.ValidWith)},
+                { "Действует до",  nameof(CarPass.ValitUntil)},
+                { "Пропуск выдал",  nameof(CarPass.CarPassIssued)},
+                { "Цель выдачи",  nameof(CarPass.PurposeOfIssuance)},
+                { "Номерной знак",  nameof(CarPass.Car.CarLicensePlate)},
+                { "Марка автомобиля",  nameof(CarPass.Car.CarBrand)},
             };
         public PagesDividedList<CarPass> CarPasses { get; set; }
         public CarPass ProcessingCarPass{ get; set; }

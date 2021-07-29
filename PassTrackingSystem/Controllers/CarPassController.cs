@@ -71,8 +71,7 @@ namespace PassTrackingSystem.Controllers
                 var employee = await employeeRepository.Get(user.EmployeeId);
                 ProcessingCarPass.CarPassIssued = employee;
                 await passRepository.Update(ProcessingCarPass);
-                int id = ProcessingCarPass.Id;
-                return RedirectToAction("CarPassProcessing", new { id = id }); 
+                return RedirectToAction("CarPassProcessing", new { id = ProcessingCarPass.Id }); 
             }
             return RedirectToAction(nameof(CarPassController.BadRedirectRequest),
                     nameof(VisitorFormController));
@@ -82,6 +81,16 @@ namespace PassTrackingSystem.Controllers
         {
             var query = visitorId == null ? passRepository.GetAll() : passRepository.GetAll()
                 .Where(v => v.VisitorId == visitorId);
+            if(options.SearchСolumn == nameof(CarPass.Car.CarBrand))
+            {
+                query = query.Where(p => p.Car.CarBrand.Contains(options.SearchValue));
+                options.SearchСolumn = "";
+            }
+            if (options.SearchСolumn == nameof(CarPass.Car.CarLicensePlate))
+            {
+                query = query.Where(p => p.Car.CarLicensePlate.Contains(options.SearchValue));
+                options.SearchСolumn = "";
+            }
             var passes = Task.Run(() => new PagesDividedList<CarPass>(query
                 .Include(v => v.Car)
                   .Include(v => v.CarPassIssued)

@@ -56,7 +56,7 @@
         $("#modal-body").load('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
                          action = nameof(OneItemDataController.ShowOneItemData)
                      })', options, function () {
-            onModalDataLoaded()         
+            onModalDataLoaded()
         })
     }
 
@@ -119,19 +119,31 @@
                     })
             }
         })
+        $('.delete').click(function (e) {
+            let idInner = $(this).parent().siblings('.id-outer').text()
+            $.post('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
+                         action = nameof(OneItemDataController.Delete)
+                     })', { oneItemName: $("#modal-body").attr('purposeMenu'), id: idInner },
+                    function (e) {
+                        $($(`#${$('#modal-body').attr('attachedSelector')}`)).removeClass('loaded')
+                        updateComboBoxes()
+                        updateModalWindow()
+                    })
+                  e.preventDefault()
+        })
     }
     function initInnerModal() {
         $('.more-details-inner').click(function (e) {
             let valueInner = $(this).parent().siblings('.value-outer')
             let idInner = $(this).parent().siblings('.id-outer')
             $('#modal-inner-value').val(valueInner.text())
-            $('#modal-inner-save').click(function (e) {
+            $('#modal-inner-save').click(function () {
                 let id= idInner.text()
                 $('#modal-inner-save').unbind()
                 $.post('@Url.RouteUrl(new { controller = nameof(OneItemDataController).Replace("Controller", ""),
                          action = nameof(OneItemDataController.AddOneItem)
                      })', { oneItemName: $("#modal-body").attr('purposeMenu'), value: $('#modal-inner-value').val() , id: id },
-                    function (e) {
+                    function () {
                         $($(`#${$('#modal-body').attr('attachedSelector')}`)).removeClass('loaded')
                         updateComboBoxes()
                         updateModalWindow()

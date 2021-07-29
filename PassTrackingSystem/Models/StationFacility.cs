@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PassTrackingSystem.Models
 {
-    public class StationFacility
+    public class StationFacility : IOneValueCommon
     {
         public int Id { get; set; }
         [Required]

@@ -12,8 +12,12 @@ namespace PassTrackingSystem.ViewModels
         public CommonListQuery Options { get; set; }
         public Dictionary<string, string> HeadNames { get; set; } =
             new Dictionary<string, string> {
-                { "id", "Id" },
-                { "Значение",  "Value"},
+               { "id", "Id" },
+                { "Действует с",  nameof(SinglePass.ValidWith)},
+                { "Действует до",  nameof(SinglePass.ValitUntil)},
+                { "Пропуск выдал",  nameof(SinglePass.SinglePassIssued)},
+                { "Цель выдачи",  nameof(SinglePass.PurposeOfIssuance)},
+                { "Места для посещения",  nameof(SinglePass.StationFacilities)},
             };
         public PagesDividedList<SinglePass> SinglePasses { get; set; }
         public SinglePass ProcessingSinglePass { get; set; }

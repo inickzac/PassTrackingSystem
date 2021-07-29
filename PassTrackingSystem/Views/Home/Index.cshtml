@@ -20,32 +20,36 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var visitor in Model?.Visitors?.Items)
+                @if (Model?.Visitors?.Items != null)
                 {
-                    <tr>
-                        <td>@visitor.Id</td>
-                        <td>@visitor.LastName</td>
-                        <td>@visitor.Name</td>
-                        <td>@visitor.Patronymic</td>
-                        <td>@visitor.PlaceOfWork</td>
-                        <td>@visitor.Position</td>
-                        <td>
-                            <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
-                               asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
-                               asp-route-id="@visitor.Id"
-                               class="btn btn-outline-dark">Подробнее</a>
-                        </td>
-                        @if (Model.ShowAdvancedFeatures)
-                        {
+                    @foreach (var visitor in Model?.Visitors?.Items)
+                    {
+                        <tr>
+                            <td>@visitor.Id</td>
+                            <td>@visitor.LastName</td>
+                            <td>@visitor.Name</td>
+                            <td>@visitor.Patronymic</td>
+                            <td>@visitor.PlaceOfWork</td>
+                            <td>@visitor.Position</td>
                             <td>
-                                <button class="btn btn-outline-danger delete-visitor" del-id="@visitor.Id">
-                                    Удалить
-                                </button>
-
+                                <a asp-action="@nameof(PassTrackingSystem.Controllers.VisitorFormController.VisitorProcessing)"
+                                   asp-controller="@nameof(PassTrackingSystem.Controllers.VisitorFormController).Replace("Controller", "")"
+                                   asp-route-id="@visitor.Id"
+                                   class="btn btn-outline-dark">Подробнее</a>
                             </td>
-                        }
-                    </tr>
+                            @if (Model.ShowAdvancedFeatures)
+                            {
+                                <td>
+                                    <button class="btn btn-outline-danger delete-visitor" del-id="@visitor.Id">
+                                        Удалить
+                                    </button>
+
+                                </td>
+                            }
+                        </tr>
+                    }
                 }
+
             </tbody>
         </table>
         @await Html.PartialAsync("Pages", @Model.Visitors.PageDividorInfo)

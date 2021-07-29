@@ -18,5 +18,6 @@ namespace PassTrackingSystem.ViewModels
                 { "Значение",  "Value"},
             };  
         public int SelectedItem { get; set; }
+        public bool ShowAdvancedFeatures { get; set; }
     }
 }
